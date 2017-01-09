@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props" Condition="Exists('packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CC646AC7-0A8E-4B38-8075-E51C40113C71}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Elevator</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\DXTKGui\BaseGraphics\FontSet.cpp" />
+    <ClCompile Include="source\DXTKGui\BaseGraphics\GraphicsAsset.cpp" />
+    <ClCompile Include="source\DXTKGui\BaseGraphics\PrimitiveShapes.cpp" />
+    <ClCompile Include="source\DXTKGui\BaseGraphics\Sprite.cpp" />
+    <ClCompile Include="source\DXTKGui\Controllers\KeyboardController.cpp" />
+    <ClCompile Include="source\DXTKGui\Controllers\MouseController.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\Button.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\CheckBox.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\ComboBox.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\Dialog.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\GUIControl.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\GUIFactory.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\ListBox.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\ScrollBar.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\TextLabel.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\TexturePanel.cpp" />
+    <ClCompile Include="source\DXTKGui\Effects\ScreenTransitions.cpp" />
+    <ClCompile Include="source\DXTKGui\Effects\TransitionEffects.cpp" />
+    <ClCompile Include="source\Engine\Camera.cpp" />
+    <ClCompile Include="source\Engine\GameEngine.cpp" />
+    <ClCompile Include="source\Engine\GraphicsEngine.cpp" />
+    <ClCompile Include="source\Engine\Input.cpp" />
+    <ClCompile Include="source\Engine\main.cpp" />
+    <ClCompile Include="source\GameObjects\Building.cpp" />
+    <ClCompile Include="source\GameObjects\CallButtons.cpp" />
+    <ClCompile Include="source\GameObjects\Elevator.cpp" />
+    <ClCompile Include="source\GameObjects\Floor.cpp" />
+    <ClCompile Include="source\GameObjects\Rider.cpp" />
+    <ClCompile Include="source\Managers\GameManager.cpp" />
+    <ClCompile Include="source\Managers\GFXAssetManager.cpp" />
+    <ClCompile Include="source\pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\DXTKGui\BaseGraphics\FontSet.h" />
+    <ClInclude Include="source\DXTKGui\BaseGraphics\GraphicsAsset.h" />
+    <ClInclude Include="source\DXTKGui\BaseGraphics\IElement2D.h" />
+    <ClInclude Include="source\DXTKGui\BaseGraphics\PrimitiveShapes.h" />
+    <ClInclude Include="source\DXTKGui\BaseGraphics\screen.h" />
+    <ClInclude Include="source\DXTKGui\BaseGraphics\Sprite.h" />
+    <ClInclude Include="source\DXTKGui\Controllers\KeyboardController.h" />
+    <ClInclude Include="source\DXTKGui\Controllers\MouseController.h" />
+    <ClInclude Include="source\DXTKGui\Controls\Button.h" />
+    <ClInclude Include="source\DXTKGui\Controls\CheckBox.h" />
+    <ClInclude Include="source\DXTKGui\Controls\ComboBox.h" />
+    <ClInclude Include="source\DXTKGui\Controls\Dialog.h" />
+    <ClInclude Include="source\DXTKGui\Controls\GUIControl.h" />
+    <ClInclude Include="source\DXTKGui\Controls\GUIFactory.h" />
+    <ClInclude Include="source\DXTKGui\Controls\ListBox.h" />
+    <ClInclude Include="source\DXTKGui\Controls\ScrollBar.h" />
+    <ClInclude Include="source\DXTKGui\Controls\TextLabel.h" />
+    <ClInclude Include="source\DXTKGui\Controls\TexturePanel.h" />
+    <ClInclude Include="source\DXTKGui\Effects\ScreenTransitions.h" />
+    <ClInclude Include="source\DXTKGui\Effects\TransitionEffects.h" />
+    <ClInclude Include="source\DXTKGui\GuiAssets.h" />
+    <ClInclude Include="source\DXTKGui\StringHelper.h" />
+    <ClInclude Include="source\Engine\Camera.h" />
+    <ClInclude Include="source\Engine\GameEngine.h" />
+    <ClInclude Include="source\Engine\GraphicsEngine.h" />
+    <ClInclude Include="source\Engine\Input.h" />
+    <ClInclude Include="source\GameObjects\Building.h" />
+    <ClInclude Include="source\GameObjects\CallButtons.h" />
+    <ClInclude Include="source\GameObjects\Elevator.h" />
+    <ClInclude Include="source\GameObjects\Floor.h" />
+    <ClInclude Include="source\GameObjects\Rider.h" />
+    <ClInclude Include="source\globals.h" />
+    <ClInclude Include="source\Managers\GameManager.h" />
+    <ClInclude Include="source\Managers\GFXAssetManager.h" />
+    <ClInclude Include="source\pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="assets\AssetManifest.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets')" />
+    <Import Project="packages\pugixml.1.8.0\build\native\pugixml.targets" Condition="Exists('packages\pugixml.1.8.0\build\native\pugixml.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props'))" />
+    <Error Condition="!Exists('packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets'))" />
+    <Error Condition="!Exists('packages\pugixml.1.8.0\build\native\pugixml.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\pugixml.1.8.0\build\native\pugixml.targets'))" />
+  </Target>
+</Project>
