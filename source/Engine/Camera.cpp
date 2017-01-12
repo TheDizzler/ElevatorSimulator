@@ -58,9 +58,9 @@ RECT* Camera::viewportWorldBoundary() {
 		screenToWorld(Vector2(viewportWidth, viewportHeight));
 
 	RECT* rect = new RECT{
-	(int) viewportCorner->x, (int) viewportCorner->y,
-	(int) (viewportBottomCorner->x - viewportCorner->x),
-	(int) (viewportBottomCorner->y - viewportCorner->y)};
+		(int) viewportCorner->x, (int) viewportCorner->y,
+		(int) (viewportBottomCorner->x - viewportCorner->x),
+		(int) (viewportBottomCorner->y - viewportCorner->y)};
 
 	delete viewportCorner;
 	delete viewportBottomCorner;

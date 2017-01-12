@@ -6,11 +6,16 @@
 
 		<sprite name="Rider" file="Rider.dds" />
 
-		<spritesheet name="Elevator Objects" file="Call Buttons Sheet.dds">
-			<sprite name="Call Buttons Off/Off" x="2" y="2" width="22" height="32" />
-			<sprite name="Call Buttons Off/On" x="26" y="2" width="22" height="32" />
-			<sprite name="Call Buttons On/Off" x="50" y="2" width="22" height="32" />
-			<sprite name="Call Buttons On/On" x="74" y="2" width="22" height="32" />
+		<spritesheet name="Elevator Objects" file="Elevator Sheet.dds">
+			<sprite name="Call Buttons Off/Off" set="Call Buttons" x="2" y="2" width="22" height="32" />
+			<sprite name="Call Buttons Off/On" set="Call Buttons" x="26" y="2" width="22" height="32" />
+			<sprite name="Call Buttons On/Off" set="Call Buttons" x="50" y="2" width="22" height="32" />
+			<sprite name="Call Buttons On/On" set="Call Buttons" x="74" y="2" width="22" height="32" />
+
+			<sprite name="Elevator Door Frame" set="Elevator Door" x="0" y="37" width="64" height="80" />
+			<sprite name="Elevator Door Closed" set="Elevator Door" x="65" y="37" width="64" height="80" />
+			<sprite name="Elevator Door Left" set="Elevator Door" x="128" y="37" width="33" height="80" />
+			<sprite name="Elevator Door Right" set="Elevator Door" x="164" y="37" width="33" height="80" />
 		</spritesheet>
 
 	</gfx>

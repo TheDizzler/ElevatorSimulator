@@ -2,7 +2,9 @@
 
 #include "../Engine/GameEngine.h"
 #include "Building.h"
-Elevator::Elevator(const Vector2& shaftTop, unsigned short numFloors) {
+Elevator::Elevator(const Vector2& top, unsigned short numFloors) {
+
+	shaftTop = top;
 
 	floors = new bool[numFloors];
 	for (int i = 0; i < numFloors; ++i)
@@ -39,6 +41,15 @@ void Elevator::callElevatorTo(unsigned short destinationFloor) {
 		wakeUp();
 
 	}
+}
+
+const Vector2& Elevator::getPosition() const {
+
+	return shaftTop;
+}
+
+const int Elevator::getWidth() const {
+	return shaft->getWidth();
 }
 
 void Elevator::wakeUp() {

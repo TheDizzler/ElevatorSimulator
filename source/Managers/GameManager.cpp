@@ -76,9 +76,24 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 	keyTracker.Update(state);
 	if (keyTracker.IsKeyReleased(Keyboard::Escape))
 		GameEngine::showWarningDialog(L"Really Exit?", L"Exit?");
+
+	Vector2 cameraMove = Vector2::Zero;
+	if (state.A)
+		cameraMove.x -= 500 * deltaTime;
+	if (state.D)
+		cameraMove.x += 500 * deltaTime;
+	if (state.W)
+		cameraMove.y -= 500 * deltaTime;
+	if (state.S)
+		cameraMove.y += 500 * deltaTime;
+	camera->moveCamera(cameraMove, false);
+
 	float mouseWheelDelta = mouse->scrollWheelValue();
 	if (mouseWheelDelta != 0)
-		camera->adjustZoom(mouseWheelDelta/10);
+		camera->adjustZoom(mouseWheelDelta / 10);
+
+
+	building->update(deltaTime);
 }
 
 

@@ -13,6 +13,8 @@ public:
 
 	void callElevatorTo(unsigned short destinationFloor); 
 
+	const Vector2& getPosition() const;
+	const int getWidth() const;
 private:
 
 	unique_ptr<RectangleFrame> shaft;
@@ -28,5 +30,7 @@ private:
 
 	// tells elevator to get ready to move
 	void wakeUp();
+
+	Vector2 shaftTop;
 
 };

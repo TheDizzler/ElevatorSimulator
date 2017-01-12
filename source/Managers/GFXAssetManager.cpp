@@ -75,6 +75,19 @@ GraphicsAsset* const GFXAssetManager::getAsset(const char_t* assetName) {
 	return assetMap[assetName].get();
 }
 
+shared_ptr<AssetSet> const GFXAssetManager::getAssetSet(const char_t* setName) {
+
+	if (setMap.find(setName) == setMap.end()) {
+		wostringstream ws;
+		ws << "Cannot find asset set: " << setName << "\n";
+		OutputDebugString(ws.str().c_str());
+		return NULL;
+	}
+
+	return setMap[setName];
+}
+
+
 #include "../DXTKGui/StringHelper.h"
 bool GFXAssetManager::getGFXAssetsFromXML(ComPtr<ID3D11Device> device) {
 
@@ -87,21 +100,31 @@ bool GFXAssetManager::getGFXAssetsFromXML(ComPtr<ID3D11Device> device) {
 	for (xml_node spriteNode = gfxAssetsNode.child("sprite"); spriteNode;
 		spriteNode = spriteNode.next_sibling("sprite")) {
 
+
 		string file_s = gfxDir + spriteNode.attribute("file").as_string();
 		const char_t* file = file_s.c_str();
 		const char_t* name = spriteNode.attribute("name").as_string();
 		string check = name;
 
-		unique_ptr<GraphicsAsset> guiAsset;
-		guiAsset.reset(new GraphicsAsset());
-		if (!guiAsset->load(device, StringHelper::convertCharStarToWCharT(file))) {
+		unique_ptr<GraphicsAsset> gfxAsset;
+		gfxAsset.reset(new GraphicsAsset());
+		if (!gfxAsset->load(device, StringHelper::convertCharStarToWCharT(file))) {
 			wstringstream wss;
 			wss << "Unable to load texture file: " << file;
 			MessageBox(0, wss.str().c_str(), L"Critical error", MB_OK);
 			return false;
 		}
 
-		assetMap[check] = move(guiAsset);
+		if (spriteNode.attribute("set")) {
+			string setName = spriteNode.attribute("set").as_string();
+			if (setMap.find(setName) == setMap.end()) {
+				// new set
+				setMap[setName] = make_shared<AssetSet>(setName.c_str());
+			}
+			setMap[setName]->addAsset(check, move(gfxAsset));
+
+		} else
+			assetMap[check] = move(gfxAsset);
 	}
 
 
@@ -162,10 +185,44 @@ bool GFXAssetManager::getGFXAssetsFromXML(ComPtr<ID3D11Device> device) {
 			spriteAsset.reset(new GraphicsAsset());
 			spriteAsset->loadAsPartOfSheet(masterAsset->getTexture(), position, size);
 
-			assetMap[name] = move(spriteAsset);
+			if (spriteNode.attribute("set")) {
+				string setName = spriteNode.attribute("set").as_string();
+				if (setMap.find(setName) == setMap.end()) {
+					// new set
+					setMap[setName] = make_shared<AssetSet>(setName.c_str());
+				}
+				setMap[setName]->addAsset(name, move(spriteAsset));
+
+			} else
+				assetMap[name] = move(spriteAsset);
 		}
 
 	}
 
 	return true;
+}
+/**** ***** GFXAssetManager END ***** ****/
+
+
+
+/**** ***** AssetSet START***** ****/
+AssetSet::AssetSet(const char_t* name) {
+	setName = name;
+}
+
+void AssetSet::addAsset(string assetName, unique_ptr<GraphicsAsset> asset) {
+
+	assetMap[assetName] = move(asset);
+}
+
+GraphicsAsset* const AssetSet::getAsset(const char_t* assetName) {
+
+	if (assetMap.find(assetName) == assetMap.end()) {
+		wostringstream ws;
+		ws << "Cannot find asset file: " << assetName << " in " << setName << "\n";
+		OutputDebugString(ws.str().c_str());
+		return NULL;
+	}
+
+	return assetMap[assetName].get();
 }
