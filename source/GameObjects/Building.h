@@ -43,15 +43,15 @@ public:
 private:
 
 	vector<Rider*> riders;
-	unique_ptr<Elevator> elevator;
+	shared_ptr<Elevator> elevator;
 
 	unique_ptr<RectangleFrame> outline;
-	vector<unique_ptr<Floor> > floors;
+	vector<shared_ptr<Floor> > floors;
 
 	void generateRider();
 
 
 	//Vector2 riderStart;
-	Floor* riderStartFloor;
+	shared_ptr<Floor> riderStartFloor;
 
 };

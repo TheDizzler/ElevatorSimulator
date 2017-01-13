@@ -69,11 +69,27 @@ RECT* Camera::viewportWorldBoundary() {
 }
 
 
-void Camera::centerOn(Vector2 pos, bool clampToBuilding) {
+void Camera::centerOn(Vector2 pos, bool showWholeBuilding) {
 
-	if (clampToBuilding)
-		buildingClampedPosition(pos);
+	if (showWholeBuilding) {
+		int widthDif = buildingWidth - viewX;
+		int heightDif = buildingHeight - viewY;
+		if (widthDif > heightDif) {
 
+			/*while (buildingWidth > viewX*2)
+				adjustZoom(-.00001);*/
+			zoom = (viewportWidth / buildingWidth);
+			viewX = (viewportWidth / zoom / 2);
+			viewY = (viewportHeight / zoom / 2);
+
+		} else {
+			zoom = (viewportHeight / buildingHeight);
+			viewX = (viewportWidth / zoom / 2);
+			viewY = (viewportHeight / zoom / 2);
+
+		}
+
+	}
 	position = pos;
 }
 

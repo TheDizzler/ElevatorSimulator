@@ -12,7 +12,7 @@ public:
 	~CallButtons();
 
 
-	void callElevatorToThisFloor(bool goingUp);
+	void pushUpButton();
 
 private:
 

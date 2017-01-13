@@ -13,7 +13,7 @@ GameManager::~GameManager() {
 }
 
 #include "../DXTKGui/GuiAssets.h"
-
+USHORT NUM_FLOORS = 6;
 bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr<MouseController> ms) {
 
 	device = dvc;
@@ -54,7 +54,7 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
 	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
-	camera->centerOn(buildingCenter, false);
+	camera->centerOn(buildingCenter, true);
 
 	return true;
 }

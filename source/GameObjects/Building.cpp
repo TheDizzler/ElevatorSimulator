@@ -42,7 +42,7 @@ Building::Building(unsigned short numFloors) {
 	Vector2 shaftTop = BuildingData::BUILDING_POSITION;
 	shaftTop.x += BuildingData::BUILDING_LENGTH / 2;
 
-	elevator = make_unique<Elevator>(shaftTop, numFloors);
+	elevator = make_shared<Elevator>(shaftTop, numFloors);
 
 
 	Vector2 floorPos = BuildingData::BUILDING_POSITION;
@@ -50,19 +50,16 @@ Building::Building(unsigned short numFloors) {
 
 	for (int floorNum = 1; floorNum <= numFloors; ++floorNum) {
 
-		unique_ptr<Floor> floor;
-		floor.reset(new Floor(floorNum, floorPos, elevator.get()));
+		shared_ptr<Floor> floor = make_shared<Floor>(floorNum, floorPos, elevator);
 		floors.push_back(move(floor));
 
 		floorPos.y -= BuildingData::FLOOR_HEIGHT;
 	}
 
+	elevator->setFloors(floors);
 
-	
 
-
-	riderStartFloor = floors[0].get();
-	//riderStart.y += BuildingData::BUILDING_HEIGHT - BuildingData::BUILDING_WALL_THICKNESS / 2;
+	riderStartFloor = floors[0];
 
 	generateRider();
 }
@@ -82,17 +79,18 @@ void Building::update(double deltaTime) {
 	// update floors
 	for each (auto& floor in floors)
 		floor->update(deltaTime);
-//update riders
-
+	//update riders
+	for each (Rider* rider in riders)
+		rider->update(deltaTime);
 
 // update elevator
-
+	elevator->update(deltaTime);
 
 }
 
 void Building::draw(SpriteBatch* batch) {
 
-	
+
 
 	// draw elevator
 	elevator->draw(batch);
@@ -100,7 +98,7 @@ void Building::draw(SpriteBatch* batch) {
 	for each (auto& floor in floors)
 		floor->draw(batch);
 
-	
+
 
 	// draw riders
 	for each (Rider* rider in riders)
@@ -116,9 +114,9 @@ void Building::generateRider() {
 
 	unsigned short destinationFloor = 2;
 
-	Rider* rider = new Rider(destinationFloor);
-	rider->setSprite(GameManager::gfxAssets->getAsset("Rider"));
-	rider->setFloor(riderStartFloor);
+	Rider* rider = new Rider(GameManager::gfxAssets->getAsset("Rider"), riderStartFloor, destinationFloor);
+	//rider->setSprite(GameManager::gfxAssets->getAsset("Rider"));
+	//rider->setFloor(riderStartFloor);
 
 	riders.push_back(rider);
 }

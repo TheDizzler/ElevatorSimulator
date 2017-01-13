@@ -6,24 +6,30 @@
 
 class Floor {
 public:
-	Floor(USHORT floorNum, Vector2 floorPosition, const Elevator* const elevator);
+	Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elevator);
 	~Floor();
 
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
+	int callButtonLocation();
+
 	Vector2 position;
 
 	bool elevatorArrived = false;
+	USHORT floorNumber;
+
+
+	void pushUpButton();
 
 private:
 
 	unique_ptr<Line> line; // this is the floor
 	unique_ptr<CallButtons> callButtons;
 
-	const Elevator* elevator;
-	USHORT floorNumber;
+	shared_ptr<Elevator> elevator;
+	
 
 	shared_ptr<AssetSet> elevatorAssets;
 

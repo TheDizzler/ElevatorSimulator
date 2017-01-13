@@ -1,19 +1,20 @@
 #include "Floor.h"
 
 #include "../Managers/GameManager.h"
-Floor::Floor(USHORT floorNum, Vector2 floorPosition, const Elevator* const elev) {
+Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) {
 
 	line.reset(GameManager::guiFactory->createLine(
 		floorPosition, Vector2(BuildingData::BUILDING_LENGTH, 2)));
 
 	elevator = elev;
+	floorNumber = floorNum;
 
 	elevatorAssets = GameManager::gfxAssets->getAssetSet("Elevator Door");
 
 
 	doorFrame = make_unique<Sprite>();
 	doorFrame->load(elevatorAssets->getAsset("Elevator Door Frame"));
-	Vector2 doorpos(elevator->getPosition().x + elevator->getWidth() / 2,
+	Vector2 doorpos(elevator->getShaftPosition().x + elevator->getWidth() / 2,
 		floorPosition.y - doorFrame->getHeight() / 2 + 2);
 	doorFrame->setPosition(doorpos);
 
@@ -45,7 +46,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, const Elevator* const elev)
 	callButtons.reset(new CallButtons());
 
 	Vector2 buttonpos = floorPosition;
-	buttonpos.x = elevator->getPosition().x - 25;
+	buttonpos.x = elevator->getShaftPosition().x - 25;
 	buttonpos.y -= 32;
 	callButtons->setPosition(buttonpos);
 	position = floorPosition;
@@ -115,4 +116,14 @@ void Floor::draw(SpriteBatch* batch) {
 	doorFrame->draw(batch);
 	callButtons->draw(batch);
 
+}
+
+int Floor::callButtonLocation() {
+	return callButtons->getPosition().x;
+}
+
+void Floor::pushUpButton() {
+
+	callButtons->pushUpButton();
+	elevator->callElevatorTo(floorNumber, true);
 }

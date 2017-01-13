@@ -40,7 +40,7 @@ bool MouseController::loadMouseIcon(GUIFactory* guiFactory,
 	}
 
 	Sprite::load(mouseAsset);
-
+	setOrigin(Vector2::Zero);
 	return true;
 }
 

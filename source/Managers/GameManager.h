@@ -63,7 +63,5 @@ private:
 
 	unique_ptr<Building> building;
 
-	USHORT NUM_FLOORS = 6;
-
 	shared_ptr<Camera> camera;
 };
