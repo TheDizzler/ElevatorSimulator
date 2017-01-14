@@ -24,6 +24,7 @@ void Dialog::initialize(GraphicsAsset* pixelAsset,
 	panel->setTint(Color(0, 1, 1, 1));
 	frame.reset(new RectangleFrame(pixelAsset));
 	bgSprite.reset(new RectangleSprite(pixelAsset));
+	bgSprite->setTint(panel->getTint());
 	titleSprite.reset(new RectangleSprite(pixelAsset));
 	titleSprite->setTint(Color(1, 1, 1, 1));
 	buttonFrameSprite.reset(new RectangleSprite(pixelAsset));
@@ -149,14 +150,18 @@ void Dialog::calculateDialogTextPos() {
 	//		break the text down into multiple lines
 		wstring newText = L"";
 
+
+		// how long line length?
+		int maxLineLength = dialogFrameSize.x - scrollBarBuffer - (dialogTextMargin.x * 2);
+
+
 		int i = 0;
 		int textLength = wcslen(dialogText->getText());
 		bool scrollbarAdded = false;
 		bool done = false;
 		while (i < textLength) {
 			wstring currentLine = L"";
-			while (dialogText->measureString(currentLine).x + (dialogTextMargin.x * 2)
-				< dialogFrameSize.x - scrollBarBuffer) {
+			while (dialogText->measureString(currentLine).x < maxLineLength) {
 
 				currentLine += dialogText->getText()[i++];
 				if (i >= textLength) {
@@ -164,6 +169,10 @@ void Dialog::calculateDialogTextPos() {
 					break;
 				}
 			}
+
+			// how long is currentLine?
+			int currentLength = dialogText->measureString(currentLine).x;
+
 			if (!done) {
 				wchar_t ch = currentLine[currentLine.length() - 1];
 				int back = 0;
@@ -171,7 +180,18 @@ void Dialog::calculateDialogTextPos() {
 
 					++back;
 					--i;
-					ch = currentLine[currentLine.length() - back - 1];
+					// check to see if word is too long for line
+					int nextChar = currentLine.length() - back - 1;
+					if (nextChar < 0) {
+						/* this means current word is too long for line
+							(i.e. narrow dialog box or ridiculously long word) */
+						// TODO: hyphenate word and put rest on next line
+						int newback = currentLength - maxLineLength;
+						i += (back - newback);
+						back = newback;
+						break;
+					}
+					ch = currentLine[nextChar];
 				}
 				currentLine.erase(currentLine.end() - back, currentLine.end());
 			}
@@ -181,8 +201,10 @@ void Dialog::calculateDialogTextPos() {
 			// If text is getting too long, restart and adjust for scrollbar
 			if (!scrollbarAdded
 				&& dialogText->measureString(newText).y + dialogTextMargin.y * 2
-				> dialogFrameSize.y) {
+					> dialogFrameSize.y) {
+
 				scrollBarBuffer = panel->getScrollBarSize().x;
+				maxLineLength = dialogFrameSize.x - scrollBarBuffer - (dialogTextMargin.x * 2);
 				i = 0;
 				newText = L"";
 				scrollbarAdded = true;
@@ -203,6 +225,8 @@ void Dialog::calculateDialogTextPos() {
 	else
 		dialogpos.y = dialogFramePosition.y;
 	dialogText->setPosition(dialogpos);
+	Color tint = dialogText->getTint();
+	formattedText.setTint(tint);
 	formattedText.setPosition(dialogpos);
 
 	panel->setDimensions(dialogFramePosition, dialogFrameSize);
@@ -506,6 +530,8 @@ void Dialog::setPosition(const Vector2& newPosition) {
 
 	Vector2 moveBy = newPosition - position;
 	GUIControl::setPosition(newPosition);
+	dialogFramePosition += moveBy;
+	titleFramePosition += moveBy;
 	frame->moveBy(moveBy);
 	bgSprite->moveBy(moveBy);
 	titleSprite->moveBy(moveBy);
@@ -607,6 +633,8 @@ void Dialog::setDraggedPosition(Vector2& newPosition) {
 
 	Vector2 moveBy = newPosition - position;
 	GUIControl::setPosition(newPosition);
+	dialogFramePosition += moveBy;
+	titleFramePosition += moveBy;
 	frame->moveBy(moveBy);
 	bgSprite->moveBy(moveBy);
 	titleSprite->moveBy(moveBy);

@@ -40,7 +40,6 @@ bool GraphicsEngine::initD3D(HWND h) {
 
 	initializeViewport();
 
-	//camera.reset(new Camera(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT));
 	camera = make_shared<Camera>(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT);
 	camera->viewport = &viewport;
 	deviceContext->RSSetViewports(1, viewport.Get11());

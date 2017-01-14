@@ -7,6 +7,7 @@
 
 #include "../Managers/GameManager.h"
 
+extern unique_ptr<GUIOverlay> guiOverlay;
 
 /** The engine to connect higher level game code to the low level
 	graphic and OS software. This class should be reusable for any 2D game,
@@ -51,6 +52,8 @@ public:
 		return false;
 	}
 
+	
+
 	static void showErrorDialog(wstring message, wstring title) {
 		errorDialog->open();
 		errorDialog->setTitle(title);
@@ -62,7 +65,7 @@ public:
 		warningDialog->open();
 		warningDialog->setTitle(title);
 		warningDialog->setText(message);
-		warningDialog->setTextTint(Color(1, 0, 0, 1));
+		warningDialog->setTextTint(Color(1, 1, 1, 1));
 		showDialog = warningDialog.get();
 	}
 private:

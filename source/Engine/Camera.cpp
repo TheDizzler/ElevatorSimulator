@@ -11,7 +11,30 @@ Camera::Camera(int vwprtWdth, int vwprtHght) {
 	position = Vector2::Zero;
 }
 
+Camera::Camera(const Vector2& viewport) {
+
+	zoom = 1.0f;
+
+	viewportWidth = viewport.x;
+	viewportHeight = viewport.y;
+	viewportCenter = Vector3(viewportWidth * .5, viewportHeight * .5, 0);
+
+	position = Vector2::Zero;
+}
+
 Camera::~Camera() {
+}
+
+void Camera::updateViewport(const Vector2& viewport, bool zoomToFit) {
+
+	viewportWidth = viewport.x;
+	viewportHeight = viewport.y;
+	viewportCenter = Vector3(viewportWidth * .5, viewportHeight * .5, 0);
+
+	viewX = (viewportWidth / zoom / 2);
+	viewY = (viewportHeight / zoom / 2);
+	if (zoomToFit)
+		zoomToFitBuilding();
 }
 
 void Camera::setBuilding(Building* bldng) {
@@ -20,9 +43,6 @@ void Camera::setBuilding(Building* bldng) {
 
 	buildingWidth = BuildingData::BUILDING_LENGTH;
 	buildingHeight = BuildingData::BUILDING_HEIGHT;
-
-	viewX = (viewportWidth / zoom / 2);
-	viewY = (viewportHeight / zoom / 2);
 
 }
 
@@ -72,22 +92,7 @@ RECT* Camera::viewportWorldBoundary() {
 void Camera::centerOn(Vector2 pos, bool showWholeBuilding) {
 
 	if (showWholeBuilding) {
-		int widthDif = buildingWidth - viewX;
-		int heightDif = buildingHeight - viewY;
-		if (widthDif > heightDif) {
-
-			/*while (buildingWidth > viewX*2)
-				adjustZoom(-.00001);*/
-			zoom = (viewportWidth / buildingWidth);
-			viewX = (viewportWidth / zoom / 2);
-			viewY = (viewportHeight / zoom / 2);
-
-		} else {
-			zoom = (viewportHeight / buildingHeight);
-			viewX = (viewportWidth / zoom / 2);
-			viewY = (viewportHeight / zoom / 2);
-
-		}
+		zoomToFitBuilding();
 
 	}
 	position = pos;
@@ -103,6 +108,22 @@ Vector2* Camera::screenToWorld(Vector2 screenPosition) {
 }
 
 
+
+void Camera::zoomToFitBuilding() {
+	int widthDif = buildingWidth - viewX;
+	int heightDif = buildingHeight - viewY;
+	if (widthDif > heightDif) {
+		zoom = (viewportWidth / buildingWidth);
+		viewX = (viewportWidth / zoom / 2);
+		viewY = (viewportHeight / zoom / 2);
+
+	} else {
+		zoom = (viewportHeight / buildingHeight);
+		viewX = (viewportWidth / zoom / 2);
+		viewY = (viewportHeight / zoom / 2);
+
+	}
+}
 
 void Camera::buildingClampedPosition(Vector2& position) {
 

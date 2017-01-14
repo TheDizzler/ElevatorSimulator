@@ -20,6 +20,7 @@
 #include <SpriteBatch.h>
 #include <Audio.h>
 #include <pugixml.hpp>
+#include <list>
 
 #include "DXTKGui\Controls\GUIFactory.h"
 

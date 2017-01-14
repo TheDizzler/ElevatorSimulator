@@ -1,5 +1,7 @@
 #include "GameEngine.h"
 
+unique_ptr<GUIOverlay> guiOverlay;
+
 unique_ptr<Dialog> GameEngine::errorDialog;
 unique_ptr<Dialog> GameEngine::warningDialog;
 Dialog* GameEngine::showDialog = NULL;
@@ -49,6 +51,10 @@ bool GameEngine::initEngine(HWND hw, HINSTANCE hInstance) {
 		MessageBox(0, L"Stage Initialization Failed", L"Error", MB_OK);
 		return false;
 	}
+
+	guiOverlay = make_unique<GUIOverlay>();
+	Vector2 viewarea = guiOverlay->getPlayArea(); // for some reason this step is necessary
+	camera->updateViewport(viewarea, true);
 
 	ShowCursor(false);
 
@@ -153,6 +159,8 @@ void GameEngine::update(double deltaTime) {
 		showDialog->update(deltaTime);
 	} else
 		game->update(deltaTime, keys.get(), mouse.get());
+
+	guiOverlay->update(deltaTime);
 }
 
 
@@ -171,6 +179,7 @@ void GameEngine::render(double deltaTime) {
 
 	batch->Begin(SpriteSortMode_Deferred);
 	{
+		guiOverlay->draw(batch.get());
 		showDialog->draw(batch.get());
 		mouse->draw(batch.get());
 	}

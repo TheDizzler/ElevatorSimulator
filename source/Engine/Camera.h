@@ -9,7 +9,11 @@ https://roguesharp.wordpress.com/2014/07/13/tutorial-5-creating-a-2d-camera-with
 class Camera {
 public:
 	Camera(int viewportWidth, int viewportHeight);
+	Camera(const Vector2& viewport);
 	~Camera();
+
+	void updateViewport(const Vector2& viewport, bool zoomToFitBuilding);
+
 
 	Viewport* viewport;
 	Vector2 position;
@@ -43,6 +47,7 @@ private:
 
 	Building* building = NULL;
 
+	void zoomToFitBuilding();
 	void buildingClampedPosition(Vector2& position);
 	Vector2* screenToWorld(Vector2 screenPosition);
 };

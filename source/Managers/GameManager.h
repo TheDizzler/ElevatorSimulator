@@ -2,6 +2,7 @@
 #pragma once
 
 #include "GFXAssetManager.h"
+#include "GUIOverlay.h"
 
 #include "../Engine/Camera.h"
 #include "../GameObjects/Building.h"
@@ -49,6 +50,7 @@ public:
 
 	static unique_ptr<GUIFactory> guiFactory;
 	static unique_ptr<GFXAssetManager> gfxAssets;
+	
 private:
 
 	Screen* currentScreen = 0;
@@ -61,7 +63,10 @@ private:
 	shared_ptr<MouseController> mouse;
 	ComPtr<ID3D11Device> device;
 
+
 	unique_ptr<Building> building;
 
 	shared_ptr<Camera> camera;
+
+	
 };

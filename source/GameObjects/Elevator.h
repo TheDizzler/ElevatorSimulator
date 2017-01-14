@@ -1,8 +1,6 @@
 #include "../pch.h"
 #pragma once
 
-#include <list>
-
 class Elevator;
 class Floor;
 
@@ -58,8 +56,6 @@ private:
 	Vector2 shaftTop;
 
 	float moveSpeed = 50;
-
-	unique_ptr<Dialog> queueListDialog;
 
 };
 

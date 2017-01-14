@@ -27,7 +27,7 @@ public:
 	void setCloseTransition(TransitionEffects::TransitionEffect* effect);
 
 	void setTitle(wstring text, const Vector2& scale = Vector2(1.5, 1.5),
-		const pugi::char_t* font = "Default Font", Color color = Color(0, 0, 0, 1));
+		const pugi::char_t* font = "Default Font", Color color = Color(1, .5, 0, 1));
 	virtual void setText(wstring text) override;
 
 	/* Works in the y dimension. x dimension gets uppity. */

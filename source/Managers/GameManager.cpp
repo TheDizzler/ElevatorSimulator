@@ -3,6 +3,7 @@
 unique_ptr<GUIFactory> GameManager::guiFactory;
 unique_ptr<GFXAssetManager> GameManager::gfxAssets;
 
+
 #include "../Engine/GameEngine.h"
 GameManager::GameManager(GameEngine* gmngn) {
 	gameEngine = gmngn;
@@ -54,7 +55,10 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
 	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
-	camera->centerOn(buildingCenter, true);
+	camera->centerOn(buildingCenter, false);
+
+	
+	
 
 	return true;
 }
@@ -104,6 +108,7 @@ void GameManager::draw(SpriteBatch* batch) {
 		currentScreen->draw(batch);*/
 
 	building->draw(batch);
+	
 }
 
 void GameManager::loadLevel(string levelName) {

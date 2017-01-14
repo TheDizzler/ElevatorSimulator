@@ -20,16 +20,6 @@ Elevator::Elevator(const Vector2& top, unsigned short numFloors) {
 	carPos.x += (BuildingData::SHAFT_WIDTH - carDimensions.x) / 2;
 	car.reset(GameManager::guiFactory->createRectangleFrame(carPos, carDimensions));
 
-
-	queueListDialog.reset(GameManager::guiFactory->createDialog(true));
-	Vector2 dialogPos, dialogSize;
-	dialogSize = Vector2(Globals::WINDOW_WIDTH / 2, Globals::WINDOW_HEIGHT / 2);
-	dialogPos = dialogSize;
-	dialogPos.x -= dialogSize.x / 2;
-	dialogPos.y -= dialogSize.y / 2;
-	queueListDialog->setDimensions(dialogPos, dialogSize);
-	queueListDialog->open();
-
 }
 
 Elevator::~Elevator() {
@@ -54,7 +44,7 @@ void Elevator::update(double deltaTime) {
 
 
 	}
-	queueListDialog->update(deltaTime);
+	
 }
 
 
@@ -63,7 +53,7 @@ void Elevator::draw(SpriteBatch* batch) {
 	car->draw(batch);
 	shaft->draw(batch);
 
-	queueListDialog->draw(batch);
+	
 }
 
 
@@ -142,11 +132,8 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 			break;
 	}
 
-	wostringstream wss;
-	wss << "StopQueue \n";
-	for each (shared_ptr<Floor> floor in stopQueue)
-		wss << floor->floorNumber << "\n";
-	queueListDialog->setText(wss.str());
+	guiOverlay->updateQueueDisplay(stopQueue);
+	
 }
 
 const Vector2& Elevator::getShaftPosition() const {
