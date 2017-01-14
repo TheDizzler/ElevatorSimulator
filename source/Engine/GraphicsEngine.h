@@ -5,8 +5,6 @@
 #include "Camera.h"
 
 
-using namespace std;
-
 
 class GraphicsEngine {
 public:

@@ -393,7 +393,7 @@ Dialog* GUIFactory::createDialog(bool movable, const char_t* fontName) {
 GraphicsAsset* GUIFactory::createTextureFromIElement2D(
 	IElement2D* control, Color bgColor) {
 
-	int buffer = 5; // padding to give a bit of lee-way to prevent tearing
+	int buffer = 20; // padding to give a bit of lee-way to prevent tearing
 
 	RECT rect;
 	GetClientRect(hwnd, &rect);

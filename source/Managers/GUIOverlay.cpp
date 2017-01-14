@@ -5,21 +5,21 @@
 #include "../Globals.h"
 GUIOverlay::GUIOverlay() {
 
-	elevatorQueueDialog.reset(GameManager::guiFactory->createDialog(true));
+	elevatorQueueDialog.reset(GameManager::guiFactory->createDialog(false));
 	Vector2 dialogPos, dialogSize;
-	dialogSize = Vector2(Globals::WINDOW_WIDTH / 2, Globals::WINDOW_HEIGHT / 2);
+	dialogSize = Vector2(Globals::WINDOW_WIDTH / 6, Globals::WINDOW_HEIGHT);
 	dialogPos = Vector2(Globals::WINDOW_WIDTH - dialogSize.x, 0);
 	elevatorQueueDialog->setDimensions(dialogPos, dialogSize);
 	elevatorQueueDialog->setTint(Color(1, 0, 0));
 	
 	
-	unique_ptr<Button> quitButton2;
+	/*unique_ptr<Button> quitButton2;
 	quitButton2.reset(GameManager::guiFactory->createButton());
 	quitButton2->setText(L"Confirm");
 	elevatorQueueDialog->setConfirmButton(move(quitButton2));
-	elevatorQueueDialog->setCancelButton(L"Cancel");
+	elevatorQueueDialog->setCancelButton(L"Cancel");*/
 
-	elevatorQueueDialog->setTitle(L"Test");
+	elevatorQueueDialog->setTitle(L"No");
 	elevatorQueueDialog->setText(L"Temp Messsage");
 	
 

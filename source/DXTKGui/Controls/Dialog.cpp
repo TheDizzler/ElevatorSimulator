@@ -174,6 +174,7 @@ void Dialog::calculateDialogTextPos() {
 			int currentLength = dialogText->measureString(currentLine).x;
 
 			if (!done) {
+				// go through currentLine until a whitespace is found and add a newline char before it
 				wchar_t ch = currentLine[currentLine.length() - 1];
 				int back = 0;
 				while (!isspace(ch)) {
@@ -184,11 +185,19 @@ void Dialog::calculateDialogTextPos() {
 					int nextChar = currentLine.length() - back - 1;
 					if (nextChar < 0) {
 						/* this means current word is too long for line
-							(i.e. narrow dialog box or ridiculously long word) */
+							(i.e. stupidly narrow dialog box or ridiculously long word) */
 						// TODO: hyphenate word and put rest on next line
-						int newback = currentLength - maxLineLength;
-						i += (back - newback);
-						back = newback;
+						int excessLength = currentLength - maxLineLength;
+						int o = currentLine.length();
+						while (excessLength > 0) {
+							wstring choppedWord = currentLine.substr(0, --o);
+							excessLength = dialogText->measureString(choppedWord).x - maxLineLength;
+						}
+						// should have a nicely fiting word chunk now (no hypen)
+						i += o;
+						back -= o;
+						/*i += (back - newback);
+						back = newback;*/
 						break;
 					}
 					ch = currentLine[nextChar];
@@ -201,7 +210,7 @@ void Dialog::calculateDialogTextPos() {
 			// If text is getting too long, restart and adjust for scrollbar
 			if (!scrollbarAdded
 				&& dialogText->measureString(newText).y + dialogTextMargin.y * 2
-					> dialogFrameSize.y) {
+			> dialogFrameSize.y) {
 
 				scrollBarBuffer = panel->getScrollBarSize().x;
 				maxLineLength = dialogFrameSize.x - scrollBarBuffer - (dialogTextMargin.x * 2);
@@ -226,7 +235,7 @@ void Dialog::calculateDialogTextPos() {
 		dialogpos.y = dialogFramePosition.y;
 	dialogText->setPosition(dialogpos);
 	Color tint = dialogText->getTint();
-	formattedText.setTint(tint);
+	formattedText.setTint(dialogText->getTint());
 	formattedText.setPosition(dialogpos);
 
 	panel->setDimensions(dialogFramePosition, dialogFrameSize);

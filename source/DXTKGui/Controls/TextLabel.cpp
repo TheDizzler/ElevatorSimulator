@@ -170,7 +170,6 @@ const Vector2& TextLabel::getPosition() const {
 
 
 int const TextLabel::getWidth() const {
-
 	return hitArea->size.x;
 }
 
