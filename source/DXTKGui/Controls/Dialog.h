@@ -103,12 +103,12 @@ private:
 	//ClickAction result = NONE;
 
 	Vector2 size;
-	Vector2 titleFrameSize = Vector2(0, 40);
+	Vector2 titleFrameSize = Vector2(0, 0);
 	Vector2 titleFramePosition;
 	Vector2 dialogFrameSize;
 	Vector2 dialogFramePosition;
 	Vector2 buttonFramePosition;
-	Vector2 buttonFrameSize = Vector2(0, 50);
+	Vector2 buttonFrameSize = Vector2(0, 0);
 
 	int frameThickness = 2;
 	int buttonMargin = 10; // space between edge of dialog box and button edge

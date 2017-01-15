@@ -19,7 +19,7 @@ GUIOverlay::GUIOverlay() {
 	elevatorQueueDialog->setConfirmButton(move(quitButton2));
 	elevatorQueueDialog->setCancelButton(L"Cancel");*/
 
-	elevatorQueueDialog->setTitle(L"No");
+	//elevatorQueueDialog->setTitle(L"No");
 	elevatorQueueDialog->setText(L"Temp Messsage");
 	
 
