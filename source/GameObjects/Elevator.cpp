@@ -11,14 +11,10 @@ Elevator::Elevator(const Vector2& top, unsigned short numFloors) {
 		floors[i] = false;*/
 
 	Vector2 shaftDimensions = Vector2(BuildingData::SHAFT_WIDTH, BuildingData::FLOOR_HEIGHT*numFloors);
-	shaft.reset(GameManager::guiFactory->createRectangleFrame(
+	shaft.reset(guiFactory->createRectangleFrame(
 		shaftTop, shaftDimensions, BuildingData::SHAFT_WALL_THICKNESS, Color(.5, 0, .5, 1)));
 
-	Vector2 carDimensions = Vector2(BuildingData::SHAFT_WIDTH - BuildingData::SHAFT_WALL_THICKNESS * 2,
-		BuildingData::FLOOR_HEIGHT / 2);
-	Vector2 carPos = shaftTop;
-	carPos.x += (BuildingData::SHAFT_WIDTH - carDimensions.x) / 2;
-	car.reset(GameManager::guiFactory->createRectangleFrame(carPos, carDimensions));
+
 
 }
 
@@ -32,6 +28,18 @@ void Elevator::setFloors(vector<shared_ptr<Floor>> flrs) {
 	floors = flrs;
 		//for each (shared_ptr<Floor> floor in floors)
 			//floorMap[floor] = false;
+
+	Vector2 carDimensions = Vector2(BuildingData::SHAFT_WIDTH - BuildingData::SHAFT_WALL_THICKNESS * 2,
+		BuildingData::FLOOR_HEIGHT / 2);
+	currentFloor = floors.end();
+	Vector2 carPos = (*--currentFloor)->position;
+	carPos.x = shaft->getPosition().x + (BuildingData::SHAFT_WIDTH - carDimensions.x) / 2;
+	car.reset(guiFactory->createRectangleFrame(carPos, carDimensions));
+	car->setOrigin(Vector2(0, carDimensions.y));
+	wostringstream wss;
+	wss << (*currentFloor)->floorNumber;
+	guiOverlay->updateFloorDisplay(wss.str());
+
 }
 
 
@@ -41,10 +49,30 @@ void Elevator::update(double deltaTime) {
 		case Waiting:
 			// do nothing ?
 			break;
+		case GoingDown:
+		case GoingUp:
+			Vector2 direction = Vector2(0, nextStop->position.y - getCarPosition().y);
+			direction.Normalize();
+			car->moveBy(direction*moveSpeed*deltaTime);
 
+			if ((*currentFloor) == nextStop && abs(car->getPosition().y - nextStop->position.y) < 2) {
+
+				nextStop->elevatorArrived();
+				state = State::DoorsOpening;
+
+			} else if (car->getPosition().y > (*currentFloor)->position.y) {
+				--currentFloor;
+				wostringstream wss;
+				wss << (*currentFloor)->floorNumber;
+				guiOverlay->updateFloorDisplay(wss.str());
+
+			}
+			break;
 
 	}
-	
+
+
+
 }
 
 
@@ -53,43 +81,39 @@ void Elevator::draw(SpriteBatch* batch) {
 	car->draw(batch);
 	shaft->draw(batch);
 
-	
+
 }
 
 
 
 void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 
-	//floorCalls[newFloorToQueue->floorNumber] = true;
 
-	shared_ptr<Floor> nextFloor = floors[newFloorNumberToQueue];
-	/*for each (shared_ptr<Floor> floor in floors) {
-		if (floor.get() == newFloorToQueue) {
-			nextFloor = floor;
-			break;
-		}
-	}*/
-
+	shared_ptr<Floor> nextFloor = floors[newFloorNumberToQueue - 1];
 
 	switch (state) {
 		case Waiting:
 
 			//wakeUp(floor);
-			nextStop = nextFloor;
-			stopQueue.push_front(nextFloor);
+			if (nextFloor->position.y < getCarPosition().y) {
+				state = GoingDown;
+				nextStop = nextFloor;
+				stopQueue.push_front(nextFloor);
+			} else if (nextFloor->position.y > getCarPosition().y) {
+				state = GoingUp;
+				nextStop = nextFloor;
+				stopQueue.push_front(nextFloor);
+			} else {
+				state = State::DoorsOpening;
+				nextFloor->elevatorArrived();
+			}
+
+
 			break;
 		case GoingUp:	// if car going up
 			if (riderGoingUp) {
 			// if car is below rider location
 				if (nextFloor->position.y < car->getPosition().y) {
-					// add to appriopriate place in queue
-					/*for each (shared_ptr<Floor> floor in upList) {
-						if (floor->floorNumber > nextFloor->floorNumber) {
-
-
-						}
-
-					}*/
 
 					// add to queue and sort
 					stopQueue.push_front(nextFloor);
@@ -97,14 +121,14 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 						return a->floorNumber < b->floorNumber; });
 				} else { // missed it...
 					// rider below car: place in up queue for later
-					upList.push_front(nextFloor);
-					upList.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
+					upQueue.push_front(nextFloor);
+					upQueue.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
 						return a->floorNumber < b->floorNumber; });
 				}
 			} else {
 				// place in to down queue
-				downList.push_front(nextFloor);
-				downList.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
+				downQueue.push_front(nextFloor);
+				downQueue.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
 					return a->floorNumber > b->floorNumber; });
 			}
 			break;
@@ -117,14 +141,14 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 					stopQueue.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
 						return a->floorNumber > b->floorNumber; });
 				} else { // missed it...
-					downList.push_front(nextFloor);
-					downList.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
+					downQueue.push_front(nextFloor);
+					downQueue.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
 						return a->floorNumber > b->floorNumber; });
 				}
 			} else {
 				// rider below car: place in up queue for later
-				upList.push_front(nextFloor);
-				upList.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
+				upQueue.push_front(nextFloor);
+				upQueue.sort([](const shared_ptr<Floor> a, const shared_ptr<Floor> b) {
 					return a->floorNumber < b->floorNumber; });
 
 			}
@@ -132,8 +156,9 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 			break;
 	}
 
-	guiOverlay->updateQueueDisplay(stopQueue);
-	
+	guiOverlay->updateStopQueue(stopQueue);
+	guiOverlay->updateUpQueue(upQueue);
+	guiOverlay->updateDownQueue(downQueue);
 }
 
 const Vector2& Elevator::getShaftPosition() const {

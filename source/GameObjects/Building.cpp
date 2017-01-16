@@ -33,7 +33,7 @@ Building::Building(unsigned short numFloors) {
 	BuildingData::BuildingData(numFloors);
 
 	// construct building
-	outline.reset(GameManager::guiFactory->createRectangleFrame(
+	outline.reset(guiFactory->createRectangleFrame(
 		BuildingData::BUILDING_POSITION,
 		Vector2(BuildingData::BUILDING_LENGTH, BuildingData::BUILDING_HEIGHT), BuildingData::BUILDING_WALL_THICKNESS));
 
@@ -114,8 +114,8 @@ void Building::generateRider() {
 
 	unsigned short destinationFloor = 2;
 
-	Rider* rider = new Rider(GameManager::gfxAssets->getAsset("Rider"), riderStartFloor, destinationFloor);
-	//rider->setSprite(GameManager::gfxAssets->getAsset("Rider"));
+	Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, destinationFloor);
+	//rider->setSprite(gfxAssets->getAsset("Rider"));
 	//rider->setFloor(riderStartFloor);
 
 	riders.push_back(rider);

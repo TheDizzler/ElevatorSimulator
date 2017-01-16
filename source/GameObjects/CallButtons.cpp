@@ -1,9 +1,9 @@
 #include "CallButtons.h"
 
-#include "../Managers/GameManager.h"
+#include "../Engine/GameEngine.h"
 CallButtons::CallButtons(bool hasUpButton, bool hasDownButton) : Sprite() {
 
-	gfxSet = GameManager::gfxAssets->getAssetSet("Call Buttons");
+	gfxSet = gfxAssets->getAssetSet("Call Buttons");
 	load(gfxSet->getAsset("Call Buttons Off/Off"));
 }
 

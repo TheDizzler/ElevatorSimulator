@@ -1,15 +1,16 @@
 #include "Floor.h"
 
-#include "../Managers/GameManager.h"
+//#include "../Managers/GameManager.h"
+#include "../Engine/GameEngine.h"
 Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) {
 
-	line.reset(GameManager::guiFactory->createLine(
+	line.reset(guiFactory->createLine(
 		floorPosition, Vector2(BuildingData::BUILDING_LENGTH, 2)));
 
 	elevator = elev;
 	floorNumber = floorNum;
 
-	elevatorAssets = GameManager::gfxAssets->getAssetSet("Elevator Door");
+	elevatorAssets = gfxAssets->getAssetSet("Elevator Door");
 
 
 	doorFrame = make_unique<Sprite>();
@@ -50,6 +51,15 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	buttonpos.y -= 32;
 	callButtons->setPosition(buttonpos);
 	position = floorPosition;
+
+	Vector2 labelPos = Vector2(floorPosition.x + 32, floorPosition.y - BuildingData::FLOOR_HEIGHT / 2);
+	floorLabel.reset(guiFactory->createTextLabel(labelPos));
+	wostringstream wss;
+	wss << floorNumber << " at " << floorPosition.y;
+	floorLabel->setText(wss);
+	floorLabel->setTint(Color(0, 0, 0));
+	floorLabel->moveBy(Vector2(0, -floorLabel->getHeight() / 2));
+
 }
 
 Floor::~Floor() {
@@ -97,11 +107,11 @@ void Floor::update(double deltaTime) {
 
 		case closed:
 
-			if (elevatorArrived) {
+			if (elevatorOnFloor) {
 				doorState = opening;
 				door1 = doorLeft.get();
 				door2 = doorRight.get();
-				elevatorArrived = false;
+				elevatorOnFloor = false;
 			}
 			break;
 	}
@@ -115,6 +125,7 @@ void Floor::draw(SpriteBatch* batch) {
 		door2->draw(batch);
 	doorFrame->draw(batch);
 	callButtons->draw(batch);
+	floorLabel->draw(batch);
 
 }
 
@@ -126,4 +137,10 @@ void Floor::pushUpButton() {
 
 	callButtons->pushUpButton();
 	elevator->callElevatorTo(floorNumber, true);
+}
+
+void Floor::elevatorArrived() {
+
+	elevatorOnFloor = true;
+
 }

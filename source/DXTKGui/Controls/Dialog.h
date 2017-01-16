@@ -11,7 +11,7 @@
 class Dialog : public GUIControlBox {
 public:
 
-	Dialog(HWND hwnd, bool movable);
+	Dialog(HWND hwnd, bool movable, bool centerText = false);
 	~Dialog();
 
 	void initialize(GraphicsAsset* pixelAsset,
@@ -141,6 +141,7 @@ private:
 
 	Vector2 pressedPosition;
 	bool movable = false;
+	bool centerText = false;
 
 	TransitionEffects::TransitionEffect* openTransition = NULL;
 	TransitionEffects::TransitionEffect* closeTransition = NULL;

@@ -25,7 +25,7 @@ public:
 private:
 
 	enum State {
-		GoingDown, GoingUp, Waiting, Loading
+		GoingDown, GoingUp, Waiting, DoorsOpening, DoorsClosing, Loading
 	};
 
 	unique_ptr<RectangleFrame> shaft;
@@ -39,14 +39,16 @@ private:
 	list<shared_ptr<Floor> > stopQueue;
 
 	/* Floors with riders waiting to go up that IS NOT in the stopQueue. */
-	list<shared_ptr<Floor> > upList;
+	list<shared_ptr<Floor> > upQueue;
 	/* Floors with riders waiting to go down that IS NOT in the stopQueue. */
-	list<shared_ptr<Floor> > downList;
+	list<shared_ptr<Floor> > downQueue;
 
 	State state = Waiting;
 
 	// use LERP for movement between floors!
-	float currentLocation = 0;
+	//float currentLocation = 0;
+	/* The current floor that the car is travelling through. */
+	vector<shared_ptr<Floor>>::iterator currentFloor;
 
 	shared_ptr<Floor> nextStop = NULL;
 

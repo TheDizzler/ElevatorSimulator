@@ -1,9 +1,10 @@
 #include "Dialog.h"
 
 
-Dialog::Dialog(HWND h, bool canMove) {
+Dialog::Dialog(HWND h, bool canMove, bool centerTxt) {
 	hwnd = h;
 	movable = canMove;
+	centerText = centerTxt;
 }
 
 Dialog::~Dialog() {
@@ -225,9 +226,13 @@ void Dialog::calculateDialogTextPos() {
 		dialogtextsize = formattedText.measureString();
 	}
 
-	Vector2 dialogpos =
-		Vector2(dialogFramePosition.x +
-		(dialogFrameSize.x - dialogtextsize.x - scrollBarBuffer) / 2, 0);
+	Vector2 dialogpos;
+	if (centerText) {
+		dialogpos = Vector2(dialogFramePosition.x +
+			(dialogFrameSize.x - dialogtextsize.x - scrollBarBuffer) / 2, 0);
+	} else {
+		dialogpos = dialogFramePosition + dialogTextMargin;
+	}
 
 	if (dialogtextsize.y < dialogFrameSize.y)
 		dialogpos.y = dialogFramePosition.y + (dialogFrameSize.y - dialogtextsize.y) / 2;

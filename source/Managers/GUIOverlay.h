@@ -11,12 +11,19 @@ public:
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
+	void updateFloorDisplay(wstring floorNumber);
 
-	void updateQueueDisplay(list<shared_ptr<Floor> > list);
+	void updateStopQueue(list<shared_ptr<Floor> > list);
+	void updateUpQueue(list<shared_ptr<Floor> > list);
+	void updateDownQueue(list<shared_ptr<Floor> > list);
 	/* get area not covered by GUI */
 	const Vector2& getPlayArea() const;
 
 private:
-	unique_ptr<Dialog> elevatorQueueDialog;
+	unique_ptr<Dialog> stopQueueDialog;
+	unique_ptr<Dialog> upQueueDialog;
+	unique_ptr<Dialog> downQueueDialog;
+
+	unique_ptr<Dialog> currentFloorDisplay;
 
 };

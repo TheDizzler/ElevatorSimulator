@@ -14,3 +14,4 @@ An experiment in elevator management and test of my GUI toolkit.
 >- ~~dialog text area should expand to fill all dialog if title and button area not used~~
 >- force minimum size for dialog box
 >- ~~tearing on panel texture~~ (changed buffer in GUIFactory::createTextureFromIElement2D() to 20 from 5)
+>- ~~dialog able to print non-centerd text~~

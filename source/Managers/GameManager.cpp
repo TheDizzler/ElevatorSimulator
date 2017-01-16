@@ -1,8 +1,5 @@
 #include "GameManager.h"
 
-unique_ptr<GUIFactory> GameManager::guiFactory;
-unique_ptr<GFXAssetManager> GameManager::gfxAssets;
-
 
 #include "../Engine/GameEngine.h"
 GameManager::GameManager(GameEngine* gmngn) {
@@ -13,36 +10,14 @@ GameManager::GameManager(GameEngine* gmngn) {
 GameManager::~GameManager() {
 }
 
-#include "../DXTKGui/GuiAssets.h"
+
 USHORT NUM_FLOORS = 6;
 bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr<MouseController> ms) {
 
 	device = dvc;
 	mouse = ms;
 
-	// get graphical assets from xml file
-	docAssMan.reset(new pugi::xml_document());
-	if (!docAssMan->load_file(GUIAssets::assetManifestFile)) {
-		MessageBox(0, L"Could not read AssetManifest file!",
-			L"Fatal Read Error!", MB_OK);
-		return false;
-	}
-
-	xml_node guiAssetsNode = docAssMan->child("root").child("gui");
-	xml_node gfxAssetNode = docAssMan->child("root").child("gfx");
-	gfxAssets.reset(new GFXAssetManager(gfxAssetNode));
-	if (!gfxAssets->initialize(device)) {
-		MessageBox(0, L"Failed to load GFX Assets.", L"Fatal Error", MB_OK);
-		return false;
-	}
-
-	guiFactory.reset(new GUIFactory(hwnd, guiAssetsNode));
-	if (!guiFactory->initialize(device, gameEngine->getDeviceContext(),
-		gameEngine->getSwapChain(), gameEngine->getSpriteBatch(), mouse)) {
-
-		MessageBox(0, L"Failed to load GUIFactory", L"Fatal Error", MB_OK);
-		return false;
-	}
+	
 	gameEngine->constructErrorDialogs();
 
 	if (!mouse->loadMouseIcon(guiFactory.get(), "Mouse Arrow")) {
@@ -57,8 +32,6 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
 	camera->centerOn(buildingCenter, false);
 
-	
-	
 
 	return true;
 }

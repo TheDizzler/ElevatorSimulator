@@ -1,6 +1,8 @@
 #include "GameEngine.h"
 
 unique_ptr<GUIOverlay> guiOverlay;
+unique_ptr<GUIFactory> guiFactory;
+unique_ptr<GFXAssetManager> gfxAssets;
 
 unique_ptr<Dialog> GameEngine::errorDialog;
 unique_ptr<Dialog> GameEngine::warningDialog;
@@ -17,7 +19,7 @@ GameEngine::~GameEngine() {
 		audioEngine->Suspend();
 }
 
-
+#include "../DXTKGui/GuiAssets.h"
 bool GameEngine::initEngine(HWND hw, HINSTANCE hInstance) {
 
 	hwnd = hw;
@@ -47,12 +49,39 @@ bool GameEngine::initEngine(HWND hw, HINSTANCE hInstance) {
 		return false;
 	}
 
+	// get graphical assets from xml file
+	docAssMan.reset(new pugi::xml_document());
+	if (!docAssMan->load_file(GUIAssets::assetManifestFile)) {
+		MessageBox(0, L"Could not read AssetManifest file!",
+			L"Fatal Read Error!", MB_OK);
+		return false;
+	}
+
+	xml_node guiAssetsNode = docAssMan->child("root").child("gui");
+	guiFactory = make_unique<GUIFactory>(hwnd, guiAssetsNode);
+	if (!guiFactory->initialize(device, deviceContext,
+		swapChain, batch.get(), mouse)) {
+
+		MessageBox(0, L"Failed to load GUIFactory", L"Fatal Error", MB_OK);
+		return false;
+	}
+
+	xml_node gfxAssetNode = docAssMan->child("root").child("gfx");
+	gfxAssets.reset(new GFXAssetManager(gfxAssetNode));
+	if (!gfxAssets->initialize(device)) {
+		MessageBox(0, L"Failed to load GFX Assets.", L"Fatal Error", MB_OK);
+		return false;
+	}
+
+
+	guiOverlay = make_unique<GUIOverlay>();
+
 	if (!initStage()) {
 		MessageBox(0, L"Stage Initialization Failed", L"Error", MB_OK);
 		return false;
 	}
 
-	guiOverlay = make_unique<GUIOverlay>();
+	
 	Vector2 viewarea = guiOverlay->getPlayArea(); // for some reason this step is necessary
 	camera->updateViewport(viewarea, true);
 
@@ -88,7 +117,7 @@ bool GameEngine::initStage() {
 
 void GameEngine::constructErrorDialogs() {
 
-	errorDialog.reset(GameManager::guiFactory->createDialog(true));
+	errorDialog.reset(guiFactory->createDialog(true, true));
 	Vector2 dialogPos, dialogSize;
 	dialogSize = Vector2(Globals::WINDOW_WIDTH / 2, Globals::WINDOW_HEIGHT / 2);
 	dialogPos = dialogSize;
@@ -97,7 +126,7 @@ void GameEngine::constructErrorDialogs() {
 	errorDialog->setDimensions(dialogPos, dialogSize);
 	errorDialog->setTint(Color(0, 120, 207));
 	unique_ptr<Button> quitButton;
-	quitButton.reset(GameManager::guiFactory->createButton());
+	quitButton.reset(guiFactory->createButton());
 	quitButton->setText(L"Exit Program");
 	quitButton->setOnClickListener(new QuitButtonListener(this));
 	errorDialog->setCancelButton(move(quitButton));
@@ -107,14 +136,13 @@ void GameEngine::constructErrorDialogs() {
 	scrollBarDesc.upPressedButtonImage = "ScrollBar Up Pressed Custom";
 	scrollBarDesc.trackImage = "ScrollBar Track Custom";
 	scrollBarDesc.scrubberImage = "Scrubber Custom";*/
-	warningDialog.reset(GameManager::guiFactory->createDialog(true));
-
+	warningDialog.reset(guiFactory->createDialog(true, true));
 	warningDialog->setDimensions(dialogPos, dialogSize);
 	//warningDialog->setScrollBar(scrollBarDesc);
 	warningDialog->setTint(Color(0, 120, 207));
 	warningDialog->setCancelButton(L"Continue");
 	unique_ptr<Button> quitButton2;
-	quitButton2.reset(GameManager::guiFactory->createButton());
+	quitButton2.reset(guiFactory->createButton());
 	quitButton2->setText(L"Exit Program");
 	quitButton2->setOnClickListener(new QuitButtonListener(this));
 	warningDialog->setConfirmButton(move(quitButton2));
@@ -154,7 +182,7 @@ void GameEngine::update(double deltaTime) {
 
 	mouse->saveMouseState();
 	keys->saveKeyboardState();
-	//GameManager::guiFactory->updateMouse();
+	//guiFactory->updateMouse();
 	if (showDialog->isOpen) {
 		showDialog->update(deltaTime);
 	} else

@@ -5,9 +5,13 @@
 #include "GraphicsEngine.h"
 #include "Input.h"
 
+#include "../Managers/GUIOverlay.h"
+#include "../Managers/GFXAssetManager.h"
 #include "../Managers/GameManager.h"
 
 extern unique_ptr<GUIOverlay> guiOverlay;
+extern unique_ptr<GUIFactory> guiFactory;
+extern unique_ptr<GFXAssetManager> gfxAssets;
 
 /** The engine to connect higher level game code to the low level
 	graphic and OS software. This class should be reusable for any 2D game,
@@ -71,7 +75,9 @@ public:
 private:
 
 	unique_ptr<AudioEngine> audioEngine;
-	std::unique_ptr<GameManager> game;
+	unique_ptr<GameManager> game;
+
+	unique_ptr<xml_document> docAssMan;
 
 	void update(double time);
 

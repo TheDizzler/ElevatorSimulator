@@ -50,7 +50,7 @@ void Rider::update(double deltaTime) {
 			} else {
 
 				Vector2 newpos = pos;
-				Vector2 dir = Vector2(buttonLoc-pos.x, 0);
+				Vector2 dir = Vector2(buttonLoc - pos.x, 0);
 				dir.Normalize();
 				newpos += dir*moveSpeed*deltaTime;
 				sprite->setPosition(newpos);

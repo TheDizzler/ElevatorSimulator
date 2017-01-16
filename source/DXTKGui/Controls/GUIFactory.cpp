@@ -380,9 +380,9 @@ ComboBox* GUIFactory::createComboBox(const Vector2& position,
 	return combobox;
 }
 
-Dialog* GUIFactory::createDialog(bool movable, const char_t* fontName) {
+Dialog* GUIFactory::createDialog(bool movable, bool centerText, const char_t* fontName) {
 
-	Dialog* dialog = new Dialog(hwnd, movable);
+	Dialog* dialog = new Dialog(hwnd, movable, centerText);
 	dialog->initializeControl(this, mouseController);
 	dialog->initialize(getAsset("White Pixel"), fontName);
 	return dialog;

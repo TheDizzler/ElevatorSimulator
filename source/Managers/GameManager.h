@@ -1,8 +1,6 @@
 #include "../pch.h"
 #pragma once
 
-#include "GFXAssetManager.h"
-#include "GUIOverlay.h"
 
 #include "../Engine/Camera.h"
 #include "../GameObjects/Building.h"
@@ -47,9 +45,6 @@ public:
 	size_t getSelectedDisplayIndex();
 	size_t getSelectedDisplayModeIndex();
 
-
-	static unique_ptr<GUIFactory> guiFactory;
-	static unique_ptr<GFXAssetManager> gfxAssets;
 	
 private:
 
@@ -57,7 +52,7 @@ private:
 	Screen* switchTo = NULL;
 	Screen* lastScreen = 0;
 
-	unique_ptr<xml_document> docAssMan;
+	
 
 	GameEngine* gameEngine;
 	shared_ptr<MouseController> mouse;

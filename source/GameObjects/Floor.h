@@ -17,11 +17,13 @@ public:
 
 	Vector2 position;
 
-	bool elevatorArrived = false;
 	USHORT floorNumber;
 
 
 	void pushUpButton();
+
+	bool elevatorOnFloor = false;
+	void elevatorArrived();
 
 private:
 
@@ -38,6 +40,8 @@ private:
 	unique_ptr<Sprite> doorLeft;
 	unique_ptr<Sprite> doorRight;
 
+
+	unique_ptr<TextLabel> floorLabel;
 
 
 	Sprite* door1;
