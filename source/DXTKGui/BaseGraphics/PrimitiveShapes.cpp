@@ -274,41 +274,41 @@ void TriangleFrame::setDimensions(const Vector2& p1, const Vector2& p2,
 	originLine2 = originLine1;
 	originLine3 = originLine1;
 
-
+	lengthBuffer = 0;
 	Vector2 diff = point1 - point2;
 	float length = sqrt(diff.x * diff.x + diff.y * diff.y);
 	lineRECT1.left = 0;
 	lineRECT1.top = 0;
-	lineRECT1.right = length;
+	lineRECT1.right = length + lengthBuffer;
 	lineRECT1.bottom = thickness;
 
 	diff = point2 - point3;
 	length = sqrt(diff.x * diff.x + diff.y * diff.y);
 	lineRECT2.left = 0;
 	lineRECT2.top = 0;
-	lineRECT2.right = length;
+	lineRECT2.right = length + lengthBuffer;
 	lineRECT2.bottom = thickness;
 
 	diff = point3 - point1;
 	length = sqrt(diff.x * diff.x + diff.y * diff.y);
 	lineRECT3.left = 0;
 	lineRECT3.top = 0;
-	lineRECT3.right = length;
+	lineRECT3.right = length + lengthBuffer;
 	lineRECT3.bottom = thickness;
 }
 
 void TriangleFrame::draw(SpriteBatch* batch) {
 
 	batch->Draw(pixel.Get(), point1, &lineRECT1,
-		Color(0, 0, 0), angle1to2, originLine1, scale,
+		tint, angle1to2, originLine1, scale,
 		SpriteEffects_None, 0.0f);
 
 	batch->Draw(pixel.Get(), point2, &lineRECT2,
-		Color(0, .5, 1), angle2to3, originLine2, scale,
+		tint, angle2to3, originLine2, scale,
 		SpriteEffects_None, 0.0f);
 
 	batch->Draw(pixel.Get(), point3, &lineRECT3,
-		Color(1, .5, .5), angle3to1, originLine3, scale,
+		tint, angle3to1, originLine3, scale,
 		SpriteEffects_None, 0.0f);
 }
 
@@ -373,19 +373,19 @@ void TriangleFrame::setScale(const Vector2& scl) {
 
 	Vector2 diff = point1 - point2;
 	float length = sqrt(diff.x * diff.x + diff.y * diff.y);
-	lineRECT1.right = length;
+	lineRECT1.right = length + lengthBuffer;
 	lineRECT1.bottom *= scl.x;
 
 	diff = point2 - point3;
 	length = sqrt(diff.x * diff.x + diff.y * diff.y);
-	lineRECT2.right = length;
+	lineRECT2.right = length + lengthBuffer;
 	lineRECT2.bottom *= scl.x;
 
 	diff = point3 - point1;
 	length = sqrt(diff.x * diff.x + diff.y * diff.y);
 	lineRECT3.left = 0;
 	lineRECT3.top = 0;
-	lineRECT3.right = length;
+	lineRECT3.right = length + lengthBuffer;
 	lineRECT3.bottom *= scl.x;
 
 	setPosition(origpos);

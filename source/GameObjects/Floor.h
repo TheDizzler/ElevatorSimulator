@@ -3,6 +3,16 @@
 
 #include "CallButtons.h"
 
+class IndicatorLight {
+public:
+	IndicatorLight();
+	~IndicatorLight();
+
+	void draw(SpriteBatch* batch);
+
+private:
+
+};
 
 class Floor {
 public:
@@ -20,29 +30,28 @@ public:
 	USHORT floorNumber;
 
 
-	void pushUpButton();
+	void pushUpButton(Rider* rider);
 
 	bool elevatorOnFloor = false;
 	void elevatorArrived();
+	void elevatorApproaching(bool riderGoingUp);
 
 private:
+
+	vector<Rider*> ridersWaiting;
 
 	unique_ptr<Line> line; // this is the floor
 	unique_ptr<CallButtons> callButtons;
 
 	shared_ptr<Elevator> elevator;
-	
 
-	shared_ptr<AssetSet> elevatorAssets;
+
+	shared_ptr<AssetSet> elevatorDoorAssets;
 
 	unique_ptr<Sprite> doorFrame;
 	unique_ptr<Sprite> doorsClosed;
 	unique_ptr<Sprite> doorLeft;
 	unique_ptr<Sprite> doorRight;
-
-
-	unique_ptr<TextLabel> floorLabel;
-
 
 	Sprite* door1;
 	Sprite* door2 = NULL;
@@ -51,6 +60,21 @@ private:
 		closed, opening, open, closing
 	};
 	DoorState doorState = closed;
+
+	shared_ptr<AssetSet> indicatorAssets;
+
+	unique_ptr<Sprite> upIndicatorOn;
+	unique_ptr<Sprite> upIndicatorOff;
+	unique_ptr<Sprite> downIndicatorOn;
+	unique_ptr<Sprite> downIndicatorOff;
+
+	Vector2 indicatorScale;
+
+	Sprite* upIndicatorLight;
+	Sprite* downIndicatorLight;
+
+	unique_ptr<TextLabel> floorLabel;
+
 
 	double timeToOpen = 2.0;
 	double timeOpening = 0.0;

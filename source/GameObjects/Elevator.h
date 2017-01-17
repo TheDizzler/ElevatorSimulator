@@ -3,6 +3,18 @@
 
 class Elevator;
 class Floor;
+class Rider;
+
+struct Stop {
+
+	Stop(shared_ptr<Floor> stop, bool riderGoingUp) : floor(stop), goingUp(riderGoingUp) {
+	}
+	~Stop() {
+	}
+	shared_ptr<Floor> floor;
+	bool goingUp;
+
+};
 
 
 class Elevator {
@@ -14,7 +26,7 @@ public:
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
-	
+
 
 	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
 
@@ -36,12 +48,15 @@ private:
 	vector<shared_ptr<Floor>> floors;
 
 	/* Current going to list. */
-	list<shared_ptr<Floor> > stopQueue;
+	//list<shared_ptr<Floor> > stopQueue;
+	list<shared_ptr<Stop>> stopQueue;
 
 	/* Floors with riders waiting to go up that IS NOT in the stopQueue. */
-	list<shared_ptr<Floor> > upQueue;
+	//list<shared_ptr<Floor> > upQueue;
+	list<shared_ptr<Stop>> upQueue;
 	/* Floors with riders waiting to go down that IS NOT in the stopQueue. */
-	list<shared_ptr<Floor> > downQueue;
+	//list<shared_ptr<Floor> > downQueue;
+	list<shared_ptr<Stop>> downQueue;
 
 	State state = Waiting;
 
@@ -50,14 +65,17 @@ private:
 	/* The current floor that the car is travelling through. */
 	vector<shared_ptr<Floor>>::iterator currentFloor;
 
-	shared_ptr<Floor> nextStop = NULL;
+	//shared_ptr<Floor> nextStop = NULL;
+	shared_ptr<Stop> nextStop = NULL;
 
 	// tells elevator to get ready to move
-	void wakeUp(shared_ptr<Floor> nextFloor);
+	//void wakeUp(shared_ptr<Floor> nextFloor);
 
 	Vector2 shaftTop;
 
 	float moveSpeed = 50;
+
+	vector<Rider*> ridersRiding;
 
 };
 

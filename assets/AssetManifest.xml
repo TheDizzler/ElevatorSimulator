@@ -12,6 +12,11 @@
 			<sprite name="Call Buttons On/Off" set="Call Buttons" x="50" y="2" width="22" height="32" />
 			<sprite name="Call Buttons On/On" set="Call Buttons" x="74" y="2" width="22" height="32" />
 
+			<sprite name="Direction Indicator Up On" set="Direction Indicators" x="100" y="1" width="42" height="17" />
+			<sprite name="Direction Indicator Up Off" set="Direction Indicators" x="146" y="1" width="42" height="17" />
+			<sprite name="Direction Indicator Down On" set="Direction Indicators" x="100" y="20" width="42" height="17" />
+			<sprite name="Direction Indicator Down Off" set="Direction Indicators" x="146" y="20" width="42" height="17" />
+
 			<sprite name="Elevator Door Frame" set="Elevator Door" x="0" y="37" width="64" height="80" />
 			<sprite name="Elevator Door Closed" set="Elevator Door" x="65" y="37" width="64" height="80" />
 			<sprite name="Elevator Door Left" set="Elevator Door" x="128" y="37" width="33" height="80" />

@@ -13,9 +13,9 @@ public:
 
 	void updateFloorDisplay(wstring floorNumber);
 
-	void updateStopQueue(list<shared_ptr<Floor> > list);
-	void updateUpQueue(list<shared_ptr<Floor> > list);
-	void updateDownQueue(list<shared_ptr<Floor> > list);
+	void updateStopQueue(list<shared_ptr<Stop>>  list);
+	void updateUpQueue(list<shared_ptr<Stop>>  list);
+	void updateDownQueue(list<shared_ptr<Stop>>  list);
 	/* get area not covered by GUI */
 	const Vector2& getPlayArea() const;
 

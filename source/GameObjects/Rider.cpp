@@ -13,6 +13,49 @@ Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> floor, unsigned short de
 Rider::~Rider() {
 }
 
+void Rider::enterElevator(Elevator* awaitingElevator) {
+
+	riderState = RiderState::EnteringElevator;
+	originalPosition = sprite->getPosition();
+	wayPoint = Vector2(awaitingElevator->getCarPosition().x + awaitingElevator->getWidth(), originalPosition.y);
+}
+
+
+void Rider::update(double deltaTime) {
+
+	switch (riderState) {
+		case GoingToElevator:
+		{
+			int buttonLoc = currentFloor->callButtonLocation();
+			Vector2 pos = sprite->getPosition();
+			if (abs(buttonLoc - pos.x) <= 15) {
+				riderState = WaitingForElevator;
+				currentFloor->pushUpButton(this);
+			} else {
+
+				Vector2 newpos = pos;
+				Vector2 dir = Vector2(buttonLoc - pos.x, 0);
+				dir.Normalize();
+				newpos += dir*moveSpeed*deltaTime;
+				sprite->setPosition(newpos);
+				
+			}
+			break;
+		}
+		case EnteringElevator:
+			sprite->setPosition(Vector2::Lerp(
+
+
+			break;
+
+	}
+}
+
+
+void Rider::draw(SpriteBatch* batch) {
+	sprite->draw(batch);
+}
+
 
 void Rider::setFloor(shared_ptr<Floor> floor) {
 
@@ -29,8 +72,8 @@ void Rider::setDestinationFloor(unsigned short destination) {
 	finalDestination = destination;
 	if (finalDestination != currentFloor->floorNumber) {
 		// setPathTo callButton
-		currentDestination = sprite->getPosition();
-		currentDestination.x = currentFloor->callButtonLocation();
+		wayPoint = sprite->getPosition();
+		wayPoint.x = currentFloor->callButtonLocation();
 		riderState = GoingToElevator;
 	} else {
 		// set path to destination room
@@ -38,29 +81,4 @@ void Rider::setDestinationFloor(unsigned short destination) {
 	}
 }
 
-void Rider::update(double deltaTime) {
 
-	switch (riderState) {
-		case GoingToElevator:
-			int buttonLoc = currentFloor->callButtonLocation();
-			Vector2 pos = sprite->getPosition();
-			if (abs(buttonLoc - pos.x) <= 15) {
-				riderState = WaitingForElevator;
-				currentFloor->pushUpButton();
-			} else {
-
-				Vector2 newpos = pos;
-				Vector2 dir = Vector2(buttonLoc - pos.x, 0);
-				dir.Normalize();
-				newpos += dir*moveSpeed*deltaTime;
-				sprite->setPosition(newpos);
-				break;
-			}
-
-
-	}
-}
-
-void Rider::draw(SpriteBatch* batch) {
-	sprite->draw(batch);
-}

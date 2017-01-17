@@ -70,25 +70,27 @@ void GUIOverlay::updateFloorDisplay(wstring floorNumber) {
 	currentFloorDisplay->setText(floorNumber);
 }
 
-void GUIOverlay::updateStopQueue(list<shared_ptr<Floor>> stopQueue) {
+#include "../GameObjects/Elevator.h"
+void GUIOverlay::updateStopQueue(list<shared_ptr<Stop>> stopQueue) {
 
 	wostringstream wss;
-	for each (shared_ptr<Floor> floor in stopQueue)
-		wss << floor->floorNumber << "\n";
+	//for each (shared_ptr<Floor> floor in stopQueue)
+	for each (auto& stop in stopQueue)
+		wss << stop->floor->floorNumber << "\n";
 	stopQueueDialog->setText(wss.str());
 }
 
-void GUIOverlay::updateUpQueue(list<shared_ptr<Floor>> upQueue) {
+void GUIOverlay::updateUpQueue(list<shared_ptr<Stop>>  upQueue) {
 	wostringstream wss;
-	for each (shared_ptr<Floor> floor in upQueue)
-		wss << floor->floorNumber << "\n";
+	for each (auto& stop in upQueue)
+		wss << stop->floor->floorNumber << "\n";
 	upQueueDialog->setText(wss.str());
 }
 
-void GUIOverlay::updateDownQueue(list<shared_ptr<Floor>> downQueue) {
+void GUIOverlay::updateDownQueue(list<shared_ptr<Stop>>  downQueue) {
 	wostringstream wss;
-	for each (shared_ptr<Floor> floor in downQueue)
-		wss << floor->floorNumber << "\n";
+	for each (auto& stop in downQueue)
+		wss << stop->floor->floorNumber << "\n";
 	downQueueDialog->setText(wss.str());
 }
 

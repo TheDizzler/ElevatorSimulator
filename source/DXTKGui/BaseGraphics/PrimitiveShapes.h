@@ -73,6 +73,7 @@ private:
 };
 
 
+/** Lines don't cross so it looks a little funny...*/
 class TriangleFrame : public IElement2D {
 public:
 	TriangleFrame(GraphicsAsset* pixelAsset);
@@ -111,6 +112,7 @@ private:
 	float angle1to2, angle2to3, angle3to1;
 
 	float rotation = 0.0f;
+	int lengthBuffer;
 
 	Vector2 scale = Vector2(1, 1);
 	Color tint;

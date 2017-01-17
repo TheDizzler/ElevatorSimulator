@@ -10,22 +10,22 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	elevator = elev;
 	floorNumber = floorNum;
 
-	elevatorAssets = gfxAssets->getAssetSet("Elevator Door");
+	elevatorDoorAssets = gfxAssets->getAssetSet("Elevator Door");
 
 
 	doorFrame = make_unique<Sprite>();
-	doorFrame->load(elevatorAssets->getAsset("Elevator Door Frame"));
+	doorFrame->load(elevatorDoorAssets->getAsset("Elevator Door Frame"));
 	Vector2 doorpos(elevator->getShaftPosition().x + elevator->getWidth() / 2,
 		floorPosition.y - doorFrame->getHeight() / 2 + 2);
 	doorFrame->setPosition(doorpos);
 
 
 	doorsClosed = make_unique<Sprite>();
-	doorsClosed->load(elevatorAssets->getAsset("Elevator Door Closed"));
+	doorsClosed->load(elevatorDoorAssets->getAsset("Elevator Door Closed"));
 	doorsClosed->setPosition(doorpos);
 
 	doorLeft = make_unique<Sprite>();
-	doorLeft->load(elevatorAssets->getAsset("Elevator Door Left"));
+	doorLeft->load(elevatorDoorAssets->getAsset("Elevator Door Left"));
 	doorpos.x -= doorLeft->getWidth() / 2;
 	doorLeft->setPosition(doorpos);
 	originalPositionLeft = doorpos;
@@ -33,7 +33,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	endPositionLeft.x -= doorLeft->getWidth() - 6;
 
 	doorRight = make_unique<Sprite>();
-	doorRight->load(elevatorAssets->getAsset("Elevator Door Right"));
+	doorRight->load(elevatorDoorAssets->getAsset("Elevator Door Right"));
 	doorpos.x += doorRight->getWidth();
 	doorRight->setPosition(doorpos);
 	originalPositionRight = doorpos;
@@ -60,9 +60,51 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	floorLabel->setTint(Color(0, 0, 0));
 	floorLabel->moveBy(Vector2(0, -floorLabel->getHeight() / 2));
 
+
+	indicatorAssets = gfxAssets->getAssetSet("Direction Indicators");
+
+
+	indicatorScale = Vector2(.9, .9);
+
+
+	upIndicatorOn = make_unique<Sprite>();
+	upIndicatorOn->load(indicatorAssets->getAsset("Direction Indicator Up On"));
+	upIndicatorOn->setScale(indicatorScale);
+
+	Vector2 upIndicatorPos = Vector2(elev->getShaftPosition().x, floorPosition.y);
+	upIndicatorPos.x += (elev->getWidth() - upIndicatorOn->getWidth()) / 2;
+	upIndicatorPos.y -= BuildingData::FLOOR_HEIGHT - upIndicatorOn->getHeight();
+	Vector2 downIndicatorPos = upIndicatorPos;
+	downIndicatorPos.x = elev->getShaftPosition().x + elev->getWidth()
+		- (elev->getWidth() - upIndicatorOn->getWidth()) / 2;
+
+	upIndicatorOn->setPosition(upIndicatorPos);
+
+
+	upIndicatorOff = make_unique<Sprite>();
+	upIndicatorOff->load(indicatorAssets->getAsset("Direction Indicator Up Off"));
+	upIndicatorOff->setPosition(upIndicatorPos);
+	upIndicatorOff->setScale(indicatorScale);
+
+	downIndicatorOn = make_unique<Sprite>();
+	downIndicatorOn->load(indicatorAssets->getAsset("Direction Indicator Down On"));
+	downIndicatorOn->setPosition(downIndicatorPos);
+	downIndicatorOn->setScale(indicatorScale);
+
+	downIndicatorOff = make_unique<Sprite>();
+	downIndicatorOff->load(indicatorAssets->getAsset("Direction Indicator Down Off"));
+	downIndicatorOff->setPosition(downIndicatorPos);
+	downIndicatorOff->setScale(indicatorScale);
+
+
+	upIndicatorLight = upIndicatorOff.get();
+	downIndicatorLight = downIndicatorOff.get();
+
 }
 
 Floor::~Floor() {
+
+	ridersWaiting.clear();
 }
 
 
@@ -80,6 +122,8 @@ void Floor::update(double deltaTime) {
 			if (doorLeft->getPosition().x <= endPositionLeft.x) {
 				doorState = open;
 				timeOpen = 0;
+				for (Rider* rider : ridersWaiting)
+					rider->enterElevator(elevator.get());
 			}
 			break;
 
@@ -127,20 +171,32 @@ void Floor::draw(SpriteBatch* batch) {
 	callButtons->draw(batch);
 	floorLabel->draw(batch);
 
+	upIndicatorLight->draw(batch);
+	downIndicatorLight->draw(batch);
 }
 
 int Floor::callButtonLocation() {
 	return callButtons->getPosition().x;
 }
 
-void Floor::pushUpButton() {
+void Floor::pushUpButton(Rider* rider) {
 
 	callButtons->pushUpButton();
 	elevator->callElevatorTo(floorNumber, true);
+	ridersWaiting.push_back(rider);
 }
 
 void Floor::elevatorArrived() {
 
 	elevatorOnFloor = true;
 
+}
+
+void Floor::elevatorApproaching(bool riderGoingUp) {
+
+	if (riderGoingUp) {
+		upIndicatorLight = upIndicatorOn.get();
+
+	} else
+		downIndicatorLight = downIndicatorOn.get();
 }
