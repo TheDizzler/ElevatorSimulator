@@ -24,7 +24,7 @@ BuildingData::BuildingData(USHORT numFloors) {
 }
 
 
-
+unique_ptr<TriangleFrame> test;
 
 #include "../Engine/GameEngine.h"
 Building::Building(unsigned short numFloors) {
@@ -62,6 +62,10 @@ Building::Building(unsigned short numFloors) {
 	riderStartFloor = floors[0];
 
 	generateRider();
+
+	test.reset(guiFactory->createTriangleFrame(Vector2(-50, 0), Vector2(0, 100), Vector2(100, -50)));
+	test->setPosition(Vector2(-300, 100));
+	test->setScale(Vector2(4,4));
 }
 
 Building::~Building() {
@@ -107,6 +111,8 @@ void Building::draw(SpriteBatch* batch) {
 
 	// draw building
 	outline->draw(batch);
+
+	test->draw(batch);
 }
 
 

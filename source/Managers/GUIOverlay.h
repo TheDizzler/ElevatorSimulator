@@ -26,4 +26,6 @@ private:
 
 	unique_ptr<Dialog> currentFloorDisplay;
 
+	
+
 };

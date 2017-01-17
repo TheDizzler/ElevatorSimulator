@@ -39,6 +39,8 @@ GUIOverlay::GUIOverlay() {
 	upQueueDialog->open();
 	downQueueDialog->open();
 	currentFloorDisplay->open();
+
+	
 }
 
 GUIOverlay::~GUIOverlay() {
@@ -59,6 +61,8 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	upQueueDialog->draw(batch);
 	downQueueDialog->draw(batch);
 	currentFloorDisplay->draw(batch);
+
+	
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {

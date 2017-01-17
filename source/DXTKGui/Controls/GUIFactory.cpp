@@ -148,6 +148,15 @@ RectangleFrame* GUIFactory::createRectangleFrame(const Vector2& position,
 	return frame;
 }
 
+TriangleFrame* GUIFactory::createTriangleFrame(const Vector2& pt1, const Vector2& pt2,
+	const Vector2& pt3, USHORT thickness) {
+
+	TriangleFrame* triangle = new TriangleFrame(getAsset("White Pixel"));
+	triangle->setDimensions(pt1, pt2, pt3, thickness);
+
+	return triangle;
+}
+
 TextLabel* GUIFactory::createTextLabel(const Vector2& position,
 	const char_t* fontName) {
 

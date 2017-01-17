@@ -55,7 +55,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	Vector2 labelPos = Vector2(floorPosition.x + 32, floorPosition.y - BuildingData::FLOOR_HEIGHT / 2);
 	floorLabel.reset(guiFactory->createTextLabel(labelPos));
 	wostringstream wss;
-	wss << floorNumber << " at " << floorPosition.y;
+	wss << floorNumber << " at (" << floorPosition.x << ", " << floorPosition.y << ")";
 	floorLabel->setText(wss);
 	floorLabel->setTint(Color(0, 0, 0));
 	floorLabel->moveBy(Vector2(0, -floorLabel->getHeight() / 2));

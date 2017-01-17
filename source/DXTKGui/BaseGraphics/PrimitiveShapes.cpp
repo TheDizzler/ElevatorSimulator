@@ -243,6 +243,161 @@ void Line::setTint(const Color& color) {
 void Line::draw(SpriteBatch* batch) {
 
 	batch->Draw(pixel.Get(), position, &lineRect,
-		tint, 0.0f, Vector2(0, 0), Vector2(1, 1),
+		tint, 0.0f, Vector2(0, 0), scale,
 		SpriteEffects_None, 0.0f);
 }
+
+
+
+
+TriangleFrame::TriangleFrame(GraphicsAsset* pixelAsset) {
+
+	pixel = pixelAsset->getTexture();
+}
+
+TriangleFrame::~TriangleFrame() {
+}
+
+void TriangleFrame::setDimensions(const Vector2& p1, const Vector2& p2,
+	const Vector2& p3, USHORT thickness) {
+
+	point1 = p1;
+	point2 = p2;
+	point3 = p3;
+
+	angle1to2 = atan2(point1.y - point2.y, point1.x - point2.x) + XM_PI;
+	angle2to3 = atan2(point2.y - point3.y, point2.x - point3.x) + XM_PI;
+	angle3to1 = atan2(point3.y - point1.y, point3.x - point1.x) + XM_PI;
+
+
+	originLine1 = Vector2::Zero;
+	originLine2 = originLine1;
+	originLine3 = originLine1;
+
+
+	Vector2 diff = point1 - point2;
+	float length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT1.left = 0;
+	lineRECT1.top = 0;
+	lineRECT1.right = length;
+	lineRECT1.bottom = thickness;
+
+	diff = point2 - point3;
+	length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT2.left = 0;
+	lineRECT2.top = 0;
+	lineRECT2.right = length;
+	lineRECT2.bottom = thickness;
+
+	diff = point3 - point1;
+	length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT3.left = 0;
+	lineRECT3.top = 0;
+	lineRECT3.right = length;
+	lineRECT3.bottom = thickness;
+}
+
+void TriangleFrame::draw(SpriteBatch* batch) {
+
+	batch->Draw(pixel.Get(), point1, &lineRECT1,
+		Color(0, 0, 0), angle1to2, originLine1, scale,
+		SpriteEffects_None, 0.0f);
+
+	batch->Draw(pixel.Get(), point2, &lineRECT2,
+		Color(0, .5, 1), angle2to3, originLine2, scale,
+		SpriteEffects_None, 0.0f);
+
+	batch->Draw(pixel.Get(), point3, &lineRECT3,
+		Color(1, .5, .5), angle3to1, originLine3, scale,
+		SpriteEffects_None, 0.0f);
+}
+
+
+const Vector2& TriangleFrame::getPosition() const {
+	return Vector2::Zero;
+}
+
+const Vector2& TriangleFrame::getOrigin() const {
+	return origin;
+}
+
+const Vector2& TriangleFrame::getScale() const {
+	return scale;
+}
+
+const float TriangleFrame::getRotation() const {
+	return rotation;
+}
+
+const Color& TriangleFrame::getTint() const {
+	return tint;
+}
+
+const float TriangleFrame::getAlpha() const {
+	return 0.0f;
+}
+
+const int TriangleFrame::getWidth() const {
+	return 0;
+}
+
+const int TriangleFrame::getHeight() const {
+	return 0;
+}
+
+void TriangleFrame::moveBy(const Vector2& moveVector) {
+
+	point1 += moveVector;
+	point2 += moveVector;
+	point3 += moveVector;
+}
+
+void TriangleFrame::setPosition(const Vector2& newPosition) {
+
+	Vector2 diff = newPosition - point1;
+	moveBy(diff);
+
+}
+
+void TriangleFrame::setOrigin(const Vector2& orgn) {
+	origin = orgn;
+}
+
+void TriangleFrame::setScale(const Vector2& scl) {
+
+	Vector2 origpos = point1;
+
+	setPosition(Vector2::Zero);
+	point2 *= scl;
+	point3 *= scl;
+
+	Vector2 diff = point1 - point2;
+	float length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT1.right = length;
+	lineRECT1.bottom *= scl.x;
+
+	diff = point2 - point3;
+	length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT2.right = length;
+	lineRECT2.bottom *= scl.x;
+
+	diff = point3 - point1;
+	length = sqrt(diff.x * diff.x + diff.y * diff.y);
+	lineRECT3.left = 0;
+	lineRECT3.top = 0;
+	lineRECT3.right = length;
+	lineRECT3.bottom *= scl.x;
+
+	setPosition(origpos);
+}
+
+void TriangleFrame::setRotation(const float rotation) {
+}
+
+void TriangleFrame::setTint(const XMFLOAT4 color) {
+}
+
+void TriangleFrame::setAlpha(const float alpha) {
+}
+
+

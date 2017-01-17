@@ -25,7 +25,7 @@ public:
 		to create textures from a GUIControl (will probably refactor this). */
 	bool initialize(ComPtr<ID3D11Device> device,
 		ComPtr<ID3D11DeviceContext> devCon, ComPtr<IDXGISwapChain> swapChain,
-		SpriteBatch* batch,	shared_ptr<MouseController> mouse,
+		SpriteBatch* batch, shared_ptr<MouseController> mouse,
 		const char_t* assetManifestFile = NULL);
 
 	unique_ptr<FontSet> getFont(const char_t* fontName);
@@ -33,13 +33,16 @@ public:
 	shared_ptr<Animation> getAnimation(const char_t* animationName);
 	GraphicsAsset* const getAsset(const char_t* assetName);
 
-	
-	Line* createLine(const Vector2& position, const Vector2& size, Color lineColor = Color(0, 0, 0 ,1));
+
+	Line* createLine(const Vector2& position, const Vector2& size, Color lineColor = Color(0, 0, 0, 1));
 
 	RectangleSprite* createRectangle(const Vector2& position, const Vector2& size);
 	RectangleFrame* createRectangleFrame(const Vector2& position,
 		const Vector2& size, USHORT frameThickness = 2,
 		Color frameColor = Color(0, 0, 0, 1));
+
+	TriangleFrame* createTriangleFrame(const Vector2& point1,
+		const Vector2& point2, const Vector2& point3, USHORT thickness = 2);
 
 	TextLabel* createTextLabel(const Vector2& position,
 		const char_t* fontName = "Default Font");

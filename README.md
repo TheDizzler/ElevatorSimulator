@@ -5,6 +5,7 @@ An experiment in elevator management and test of my GUI toolkit.
 >- changed how mouse gets used by gui controls
 >- dialog title and text positions not moving properly after a drag event
 >- createLine in PrimitiveShapes.h updated and usuable
+>- createTriangleFrame in PrimitiveShapes.h
 
 ## Need to do
 >- ~~dialog/title text does not change tint~~ (fixed)
