@@ -48,7 +48,7 @@ void Elevator::update(double deltaTime) {
 			// do nothing ?
 			break;
 		case GoingDown:
-		case GoingUp:
+		{
 			Vector2 direction = Vector2(0, nextStop->floor->position.y - getCarPosition().y);
 			direction.Normalize();
 			car->moveBy(direction*moveSpeed*deltaTime);
@@ -73,6 +73,34 @@ void Elevator::update(double deltaTime) {
 				}
 			}
 			break;
+		}
+		case GoingUp:
+		{
+			Vector2 direction = Vector2(0, nextStop->floor->position.y - getCarPosition().y);
+			direction.Normalize();
+			car->moveBy(direction*moveSpeed*deltaTime);
+
+			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
+
+				nextStop->floor->elevatorArrived();
+				state = ElevatorState::DoorsOpening;
+				stopQueue.remove(nextStop);
+				nextStop.reset();
+				guiOverlay->updateStopQueue(stopQueue);
+				guiOverlay->updateNextStopDisplay(L"-");
+
+			} else if (car->getPosition().y - car->getHeight() < (*currentFloor)->position.y - BuildingData::FLOOR_HEIGHT) {
+				++currentFloor;
+				wostringstream wss;
+				wss << (*currentFloor)->floorNumber;
+				guiOverlay->updateFloorDisplay(wss.str());
+
+				if ((*currentFloor) == nextStop->floor) {
+					nextStop->floor->elevatorApproaching(nextStop->goingUp);
+				}
+			}
+			break;
+		}
 
 	}
 
@@ -97,15 +125,15 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 	switch (state) {
 		case Waiting:
 
-			if (newStop->floor->position.y < getCarPosition().y) {
-				state = GoingDown;
+			if (newStop->floor->floorNumber > (*currentFloor)->floorNumber) {
+				state = GoingUp;
 				nextStop = newStop;
 				stopQueue.push_front(move(newStop));
 				wostringstream wssNext;
 				wssNext << nextStop->floor->floorNumber;
 				guiOverlay->updateNextStopDisplay(wssNext.str());
-			} else if (newStop->floor->position.y > getCarPosition().y) {
-				state = GoingUp;
+			} else if (newStop->floor->floorNumber < (*currentFloor)->floorNumber) {
+				state = GoingDown;
 				nextStop = newStop;
 				stopQueue.push_front(move(newStop));
 				wostringstream wssNext;
@@ -180,7 +208,7 @@ void Elevator::selectFloor(USHORT floorRequested, bool riderGoingUp) {
 		return a->floor->floorNumber < b->floor->floorNumber; });
 
 	guiOverlay->updateStopQueue(stopQueue);
-	
+
 }
 
 

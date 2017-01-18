@@ -40,12 +40,15 @@ public:
 	const Vector2& getCarPosition() const;
 
 	const int getWidth() const;
-private:
 
 	enum ElevatorState {
 		GoingDown, GoingUp, Waiting, DoorsOpening, DoorsClosing, Loading
 	};
 
+	ElevatorState state = Waiting;
+private:
+
+	
 	unique_ptr<RectangleFrame> shaft;
 	unique_ptr<RectangleFrame> car;
 
@@ -64,7 +67,6 @@ private:
 	//list<shared_ptr<Floor> > downQueue;
 	list<shared_ptr<Stop>> downQueue;
 
-	ElevatorState state = Waiting;
 
 	// use LERP for movement between floors!
 	//float currentLocation = 0;

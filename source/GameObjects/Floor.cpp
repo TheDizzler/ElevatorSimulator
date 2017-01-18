@@ -147,6 +147,14 @@ void Floor::update(double deltaTime) {
 				door1 = doorsClosed.get();
 				door2 = NULL;
 				elevator->doorsClosed();
+				switch (elevator->state) {
+					case Elevator::ElevatorState::GoingUp:
+						upIndicatorLight = upIndicatorOff.get();
+						break;
+					case Elevator::ElevatorState::GoingDown:
+						downIndicatorLight = downIndicatorOff.get();
+						break;
+				}
 			}
 			break;
 
