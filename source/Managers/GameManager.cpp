@@ -11,7 +11,6 @@ GameManager::~GameManager() {
 }
 
 
-USHORT NUM_FLOORS = 3;
 bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr<MouseController> ms) {
 
 	device = dvc;
@@ -25,7 +24,7 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 		return false;
 	}
 
-	building.reset(new Building(NUM_FLOORS));
+	building.reset(new Building());
 	camera->setBuilding(building.get());
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;

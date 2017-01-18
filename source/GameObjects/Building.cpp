@@ -2,6 +2,7 @@
 
 #include "../globals.h"
 
+USHORT NUM_FLOORS = 6;
 USHORT BuildingData::PIXELS_PER_METER = 48;
 USHORT BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
 USHORT BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
@@ -25,10 +26,10 @@ BuildingData::BuildingData(USHORT numFloors) {
 
 
 #include "../Engine/GameEngine.h"
-Building::Building(unsigned short numFloors) {
+Building::Building() {
 
 	// build building data	
-	BuildingData::BuildingData(numFloors);
+	BuildingData::BuildingData(NUM_FLOORS);
 
 	// construct building
 	outline.reset(guiFactory->createRectangleFrame(

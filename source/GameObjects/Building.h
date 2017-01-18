@@ -31,7 +31,7 @@ struct BuildingData {
 /** A Simulate Building populated with elevators and riders. */
 class Building {
 public:
-	Building(unsigned short numFloors);
+	Building();
 	~Building();
 
 
