@@ -41,13 +41,13 @@ Building::Building() {
 	Vector2 shaftTop = BuildingData::BUILDING_POSITION;
 	shaftTop.x += BuildingData::BUILDING_LENGTH / 2;
 
-	elevator = make_shared<Elevator>(shaftTop, numFloors);
+	elevator = make_shared<Elevator>(shaftTop, NUM_FLOORS);
 
 
 	Vector2 floorPos = BuildingData::BUILDING_POSITION;
 	floorPos.y += BuildingData::BUILDING_HEIGHT - BuildingData::BUILDING_WALL_THICKNESS / 2;
 
-	for (int floorNum = 1; floorNum <= numFloors; ++floorNum) {
+	for (int floorNum = 1; floorNum <= NUM_FLOORS; ++floorNum) {
 
 		shared_ptr<Floor> floor = make_shared<Floor>(floorNum, floorPos, elevator);
 		floors.push_back(move(floor));
