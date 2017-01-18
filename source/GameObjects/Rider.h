@@ -30,6 +30,8 @@ private:
 	unsigned short finalDestination;
 	shared_ptr<Floor> currentFloor;
 
+	Elevator* elevator = NULL;
+
 	double timeAlive = 0;
 	double timeWaiting = 0;
 	double timeInElevator = 0;

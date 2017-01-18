@@ -56,7 +56,11 @@ void Elevator::update(double deltaTime) {
 			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
 
 				nextStop->floor->elevatorArrived();
-				state = State::DoorsOpening;
+				state = ElevatorState::DoorsOpening;
+				stopQueue.remove(nextStop);
+				nextStop.reset();
+				guiOverlay->updateStopQueue(stopQueue);
+				guiOverlay->updateNextStopDisplay(L"-");
 
 			} else if (car->getPosition().y > (*currentFloor)->position.y) {
 				--currentFloor;
@@ -64,13 +68,13 @@ void Elevator::update(double deltaTime) {
 				wss << (*currentFloor)->floorNumber;
 				guiOverlay->updateFloorDisplay(wss.str());
 
-				if ((*currentFloor) == nextStop->floor)
+				if ((*currentFloor) == nextStop->floor) {
 					nextStop->floor->elevatorApproaching(nextStop->goingUp);
+				}
 			}
 			break;
 
 	}
-
 
 
 }
@@ -88,7 +92,7 @@ void Elevator::draw(SpriteBatch* batch) {
 
 void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 
-	shared_ptr<Stop> newStop = make_shared<Stop>(floors[newFloorNumberToQueue - 1], riderGoingUp);
+	shared_ptr<Stop> newStop = make_shared<Stop>(floors[newFloorNumberToQueue - 1], riderGoingUp, false);
 
 	switch (state) {
 		case Waiting:
@@ -97,12 +101,18 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 				state = GoingDown;
 				nextStop = newStop;
 				stopQueue.push_front(move(newStop));
+				wostringstream wssNext;
+				wssNext << nextStop->floor->floorNumber;
+				guiOverlay->updateNextStopDisplay(wssNext.str());
 			} else if (newStop->floor->position.y > getCarPosition().y) {
 				state = GoingUp;
 				nextStop = newStop;
 				stopQueue.push_front(move(newStop));
+				wostringstream wssNext;
+				wssNext << nextStop->floor->floorNumber;
+				guiOverlay->updateNextStopDisplay(wssNext.str());
 			} else {
-				state = State::DoorsOpening;
+				state = ElevatorState::DoorsOpening;
 				newStop->floor->elevatorArrived();
 			}
 
@@ -157,7 +167,40 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 	guiOverlay->updateStopQueue(stopQueue);
 	guiOverlay->updateUpQueue(upQueue);
 	guiOverlay->updateDownQueue(downQueue);
+	wostringstream wssNext;
+	wssNext << nextStop->floor->floorNumber;
+	guiOverlay->updateNextStopDisplay(wssNext.str());
 }
+
+
+void Elevator::selectFloor(USHORT floorRequested, bool riderGoingUp) {
+
+	stopQueue.push_front(make_shared<Stop>(floors[floorRequested - 1], riderGoingUp, true));
+	stopQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
+		return a->floor->floorNumber < b->floor->floorNumber; });
+
+	guiOverlay->updateStopQueue(stopQueue);
+	
+}
+
+
+bool Elevator::hasNextStop() {
+	return stopQueue.size() > 0;
+}
+
+void Elevator::doorsClosed() {
+
+	nextStop = stopQueue.front();
+	if (nextStop->floor->floorNumber > (*currentFloor)->floorNumber)
+		state = ElevatorState::GoingUp;
+	else
+		state = ElevatorState::GoingDown;
+
+	wostringstream wssNext;
+	wssNext << nextStop->floor->floorNumber;
+	guiOverlay->updateNextStopDisplay(wssNext.str());
+}
+
 
 const Vector2& Elevator::getShaftPosition() const {
 

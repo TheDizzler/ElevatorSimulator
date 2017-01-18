@@ -11,7 +11,7 @@ GameManager::~GameManager() {
 }
 
 
-USHORT NUM_FLOORS = 6;
+USHORT NUM_FLOORS = 3;
 bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr<MouseController> ms) {
 
 	device = dvc;

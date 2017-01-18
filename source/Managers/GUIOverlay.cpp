@@ -32,14 +32,18 @@ GUIOverlay::GUIOverlay() {
 	dialogPos = Vector2((Globals::WINDOW_WIDTH - dialogSize.x) / 2, 10);
 	dialogSize.y = 96;
 	currentFloorDisplay->setDimensions(dialogPos, dialogSize);
-	currentFloorDisplay->setTitle(L"Current Floor");
+	currentFloorDisplay->setTitle(L"Current Floor:");
 
+	nextStopDisplay.reset(guiFactory->createDialog(false, true));
+	dialogPos.y = Globals::WINDOW_HEIGHT - dialogPos.y - dialogSize.y;
+	nextStopDisplay->setDimensions(dialogPos, dialogSize);
+	nextStopDisplay->setTitle(L"Next Stop:");
 
 	stopQueueDialog->open();
 	upQueueDialog->open();
 	downQueueDialog->open();
 	currentFloorDisplay->open();
-
+	nextStopDisplay->open();
 	
 }
 
@@ -53,6 +57,7 @@ void GUIOverlay::update(double deltaTime) {
 	upQueueDialog->update(deltaTime);
 	downQueueDialog->update(deltaTime);
 	currentFloorDisplay->update(deltaTime);
+	nextStopDisplay->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -61,13 +66,17 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	upQueueDialog->draw(batch);
 	downQueueDialog->draw(batch);
 	currentFloorDisplay->draw(batch);
-
+	nextStopDisplay->draw(batch);
 	
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {
 
 	currentFloorDisplay->setText(floorNumber);
+}
+
+void GUIOverlay::updateNextStopDisplay(wstring floorNumber) {
+	nextStopDisplay->setText(floorNumber);
 }
 
 #include "../GameObjects/Elevator.h"

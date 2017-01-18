@@ -7,12 +7,14 @@ class Rider;
 
 struct Stop {
 
-	Stop(shared_ptr<Floor> stop, bool riderGoingUp) : floor(stop), goingUp(riderGoingUp) {
+	Stop(shared_ptr<Floor> stopFloor, bool riderGoingUp, bool stopIsDropOff)
+		: floor(stopFloor), goingUp(riderGoingUp), dropOff(stopIsDropOff) {
 	}
 	~Stop() {
 	}
 	shared_ptr<Floor> floor;
 	bool goingUp;
+	bool dropOff;
 
 };
 
@@ -29,6 +31,10 @@ public:
 
 
 	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
+	void selectFloor(USHORT floorRequested, bool riderGoingUp);
+
+	bool hasNextStop();
+	void doorsClosed();
 
 	const Vector2& getShaftPosition() const;
 	const Vector2& getCarPosition() const;
@@ -36,7 +42,7 @@ public:
 	const int getWidth() const;
 private:
 
-	enum State {
+	enum ElevatorState {
 		GoingDown, GoingUp, Waiting, DoorsOpening, DoorsClosing, Loading
 	};
 
@@ -58,7 +64,7 @@ private:
 	//list<shared_ptr<Floor> > downQueue;
 	list<shared_ptr<Stop>> downQueue;
 
-	State state = Waiting;
+	ElevatorState state = Waiting;
 
 	// use LERP for movement between floors!
 	//float currentLocation = 0;

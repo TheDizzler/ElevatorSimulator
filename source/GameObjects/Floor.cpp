@@ -129,7 +129,7 @@ void Floor::update(double deltaTime) {
 
 		case open:
 			timeOpen += deltaTime;
-			if (timeOpen >= timeToStayOpen) {
+			if (timeOpen >= timeToStayOpen && elevator->hasNextStop()) {
 				doorState = closing;
 				timeOpen = 0;
 			}
@@ -146,6 +146,7 @@ void Floor::update(double deltaTime) {
 				doorState = closed;
 				door1 = doorsClosed.get();
 				door2 = NULL;
+				elevator->doorsClosed();
 			}
 			break;
 
