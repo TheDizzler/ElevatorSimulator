@@ -1,18 +1,19 @@
 #include "../pch.h"
 #pragma once
 
+#include "Exit.h"
 #include "CallButtons.h"
 
-class IndicatorLight {
-public:
-	IndicatorLight();
-	~IndicatorLight();
-
-	void draw(SpriteBatch* batch);
-
-private:
-
-};
+//class IndicatorLight {
+//public:
+//	IndicatorLight();
+//	~IndicatorLight();
+//
+//	void draw(SpriteBatch* batch);
+//
+//private:
+//
+//};
 
 class Floor {
 public:
@@ -33,12 +34,14 @@ public:
 	void pushUpButton(Rider* rider);
 
 	bool elevatorOnFloor = false;
-	void elevatorArrived();
+	void elevatorArrived(bool elevatorGoingUp);
 	void elevatorApproaching(bool riderGoingUp);
 
 private:
 
 	vector<Rider*> ridersWaiting;
+
+	unique_ptr<Exit> exit;
 
 	unique_ptr<Line> line; // this is the floor
 	unique_ptr<CallButtons> callButtons;

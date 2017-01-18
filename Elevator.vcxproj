@@ -176,6 +176,7 @@
     <ClCompile Include="source\GameObjects\Building.cpp" />
     <ClCompile Include="source\GameObjects\CallButtons.cpp" />
     <ClCompile Include="source\GameObjects\Elevator.cpp" />
+    <ClCompile Include="source\GameObjects\Exit.cpp" />
     <ClCompile Include="source\GameObjects\Floor.cpp" />
     <ClCompile Include="source\GameObjects\Rider.cpp" />
     <ClCompile Include="source\Managers\GameManager.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="source\GameObjects\Building.h" />
     <ClInclude Include="source\GameObjects\CallButtons.h" />
     <ClInclude Include="source\GameObjects\Elevator.h" />
+    <ClInclude Include="source\GameObjects\Exit.h" />
     <ClInclude Include="source\GameObjects\Floor.h" />
     <ClInclude Include="source\GameObjects\Rider.h" />
     <ClInclude Include="source\globals.h" />

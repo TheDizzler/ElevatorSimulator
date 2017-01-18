@@ -21,6 +21,7 @@
 #include <Audio.h>
 #include <pugixml.hpp>
 #include <list>
+#include <random>
 
 #include "DXTKGui\Controls\GUIFactory.h"
 

@@ -141,8 +141,11 @@ void Dialog::setTitle(wstring text, const Vector2& scale,
 void Dialog::calculateDialogTextPos() {
 
 	Vector2 dialogtextsize = dialogText->measureString();
-	if (dialogtextsize.x <= 0)
+	if (dialogtextsize.x <= 0) {
+		// if text changed from something to empty texturepanel needs to be reset
+		panel->setDimensions(Vector2::Zero, Vector2::Zero);
 		return;
+	}
 
 	TextLabel formattedText(Vector2::Zero, dialogText->getText(), dialogText->getFont());
 	int scrollBarBuffer = 0;

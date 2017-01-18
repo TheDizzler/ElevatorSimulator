@@ -31,7 +31,7 @@ public:
 
 
 	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
-	void selectFloor(USHORT floorRequested, bool riderGoingUp);
+	void enterElevator(Rider* rider);
 
 	bool hasNextStop();
 	void doorsClosed();
@@ -48,6 +48,7 @@ public:
 	ElevatorState state = Waiting;
 private:
 
+	void selectFloor(USHORT floorRequested, bool riderGoingUp);
 	
 	unique_ptr<RectangleFrame> shaft;
 	unique_ptr<RectangleFrame> car;

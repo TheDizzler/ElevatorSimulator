@@ -13,6 +13,10 @@ public:
 
 
 	void pushUpButton();
+	void pushDownButton();
+
+	void elevatorArrivedGoingUp();
+	void elevatorArivedGoingDown();
 
 private:
 

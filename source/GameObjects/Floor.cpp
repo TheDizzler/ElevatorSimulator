@@ -100,6 +100,32 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	upIndicatorLight = upIndicatorOff.get();
 	downIndicatorLight = downIndicatorOff.get();
 
+
+	// create at least one exit
+
+	exit = make_unique<Exit>();
+	Vector2 exitpos = floorPosition;
+	exitpos.y -= exit->getHeight() / 2;
+	mt19937 rng;
+	rng.seed(random_device{}());
+	bernoulli_distribution dist;
+
+	bool leftSide = dist(rng);
+
+	int min, max;
+	if (leftSide) {
+		min = floorPosition.x + exit->getWidth() / 2;
+		max = buttonpos.x - exit->getWidth() / 2;
+	} else {
+		min = elevator->getShaftPosition().x + elevator->getWidth() + exit->getWidth() / 2;
+		max = floorPosition.x + BuildingData::BUILDING_LENGTH - exit->getWidth() / 2;
+	}
+
+	uniform_int_distribution<mt19937::result_type> rand(min, max);
+	exitpos.x = rand(rng);
+
+	exit->setPosition(exitpos);
+
 }
 
 Floor::~Floor() {
@@ -150,9 +176,11 @@ void Floor::update(double deltaTime) {
 				switch (elevator->state) {
 					case Elevator::ElevatorState::GoingUp:
 						upIndicatorLight = upIndicatorOff.get();
+						callButtons->elevatorArrivedGoingUp();
 						break;
 					case Elevator::ElevatorState::GoingDown:
 						downIndicatorLight = downIndicatorOff.get();
+						callButtons->elevatorArivedGoingDown();
 						break;
 				}
 			}
@@ -182,6 +210,8 @@ void Floor::draw(SpriteBatch* batch) {
 
 	upIndicatorLight->draw(batch);
 	downIndicatorLight->draw(batch);
+
+	exit->draw(batch);
 }
 
 int Floor::callButtonLocation() {
@@ -195,9 +225,13 @@ void Floor::pushUpButton(Rider* rider) {
 	ridersWaiting.push_back(rider);
 }
 
-void Floor::elevatorArrived() {
+void Floor::elevatorArrived(bool elevatorGoingUp) {
 
 	elevatorOnFloor = true;
+	if (elevatorGoingUp)
+		callButtons->elevatorArrivedGoingUp();
+	else
+		callButtons->elevatorArivedGoingDown();
 
 }
 

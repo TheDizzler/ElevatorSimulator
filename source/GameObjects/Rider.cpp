@@ -18,9 +18,14 @@ void Rider::enterElevator(Elevator* awaitingElevator) {
 	riderState = RiderState::EnteringElevator;
 	elevator = awaitingElevator;
 	originalPosition = sprite->getPosition();
-	wayPoint = Vector2(elevator->getCarPosition().x + elevator->getWidth(), originalPosition.y);
+	wayPoint = Vector2(elevator->getCarPosition().x + elevator->getWidth()/2, originalPosition.y);
 
 
+}
+
+
+void Rider::moveBy(const Vector2& moveAmount) {
+	sprite->moveBy(moveAmount);
 }
 
 double timeTravelling = 0;
@@ -52,7 +57,8 @@ void Rider::update(double deltaTime) {
 			sprite->setPosition(Vector2::Lerp(originalPosition, wayPoint, 2 * timeTravelling));
 			if (abs(sprite->getPosition().x - wayPoint.x) <= 10) {
 				riderState = RiderState::InElevator;
-				elevator->selectFloor(finalDestination, currentFloor->floorNumber < finalDestination);
+				elevator->enterElevator(this);
+				//elevator->selectFloor(finalDestination, currentFloor->floorNumber < finalDestination);
 			}
 
 

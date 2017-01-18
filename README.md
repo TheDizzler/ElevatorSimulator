@@ -3,11 +3,13 @@ An experiment in elevator management and test of my GUI toolkit.
 
 ##Updates made to DXTKGui that have not been pushed to DXTKGui project
 >- changed how mouse gets used by gui controls
->- dialog title and text positions not moving properly after a drag event
+>- dialog title and text positions now moving properly after a drag event
+>- dialog properly updates when text changes to blank text
 >- createLine in PrimitiveShapes.h updated and usuable
 >- createTriangleFrame in PrimitiveShapes.h
 
 ## Need to do
+>- allow GUIcontrols to use depth attribute in spritebatch
 >- ~~dialog/title text does not change tint~~ (fixed)
 >- ~~dialog text bg color doesn't match text bg if tint not set manually~~ (fixed)
 >- dialog parser to handle a word that doesn't fit on a line (fixed?)

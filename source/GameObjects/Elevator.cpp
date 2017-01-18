@@ -51,11 +51,14 @@ void Elevator::update(double deltaTime) {
 		{
 			Vector2 direction = Vector2(0, nextStop->floor->position.y - getCarPosition().y);
 			direction.Normalize();
-			car->moveBy(direction*moveSpeed*deltaTime);
+			Vector2 moveBy = direction*moveSpeed*deltaTime;
+			car->moveBy(moveBy);
+			for each (Rider* rider in ridersRiding)
+				rider->moveBy(moveBy);
 
 			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
 
-				nextStop->floor->elevatorArrived();
+				nextStop->floor->elevatorArrived(nextStop->goingUp);
 				state = ElevatorState::DoorsOpening;
 				stopQueue.remove(nextStop);
 				nextStop.reset();
@@ -78,11 +81,14 @@ void Elevator::update(double deltaTime) {
 		{
 			Vector2 direction = Vector2(0, nextStop->floor->position.y - getCarPosition().y);
 			direction.Normalize();
-			car->moveBy(direction*moveSpeed*deltaTime);
+			Vector2 moveBy = direction*moveSpeed*deltaTime;
+			car->moveBy(moveBy);
+			for each (Rider* rider in ridersRiding)
+				rider->moveBy(moveBy);
 
 			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
 
-				nextStop->floor->elevatorArrived();
+				nextStop->floor->elevatorArrived(nextStop->goingUp);
 				state = ElevatorState::DoorsOpening;
 				stopQueue.remove(nextStop);
 				nextStop.reset();
@@ -141,7 +147,7 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 				guiOverlay->updateNextStopDisplay(wssNext.str());
 			} else {
 				state = ElevatorState::DoorsOpening;
-				newStop->floor->elevatorArrived();
+				newStop->floor->elevatorArrived(riderGoingUp);
 			}
 
 
@@ -198,6 +204,13 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 	wostringstream wssNext;
 	wssNext << nextStop->floor->floorNumber;
 	guiOverlay->updateNextStopDisplay(wssNext.str());
+}
+
+void Elevator::enterElevator(Rider* rider) {
+	
+	selectFloor(rider->finalDestination, rider->currentFloor->floorNumber < rider->finalDestination);
+	rider->currentFloor.reset();
+	ridersRiding.push_back(rider);
 }
 
 

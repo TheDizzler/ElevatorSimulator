@@ -12,9 +12,13 @@ public:
 	~Rider();
 
 	void enterElevator(Elevator* awaitingElevator);
+	void moveBy(const Vector2& moveAmount);
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
+
+	unsigned short finalDestination;
+	shared_ptr<Floor> currentFloor;
 
 private:
 	enum RiderState {
@@ -27,8 +31,7 @@ private:
 	Vector2 wayPoint;
 	Vector2 originalPosition;
 
-	unsigned short finalDestination;
-	shared_ptr<Floor> currentFloor;
+	
 
 	Elevator* elevator = NULL;
 
