@@ -2,7 +2,7 @@
 
 #include "../globals.h"
 
-USHORT NUM_FLOORS = 5;
+USHORT NUM_FLOORS = 3;
 USHORT BuildingData::PIXELS_PER_METER = 48;
 USHORT BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
 USHORT BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
@@ -114,9 +114,9 @@ void Building::draw(SpriteBatch* batch) {
 
 void Building::generateRider() {
 
-	unsigned short destinationFloor = 2;
+	unsigned short destinationFloorNum = 2;
 
-	Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, destinationFloor);
+	Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum -1 ]->getExit());
 	//rider->setSprite(gfxAssets->getAsset("Rider"));
 	//rider->setFloor(riderStartFloor);
 

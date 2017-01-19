@@ -103,7 +103,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 
 	// create at least one exit
 
-	exit = make_unique<Exit>();
+	exit = make_shared<Exit>(floorNumber);
 	Vector2 exitpos = floorPosition;
 	exitpos.y -= exit->getHeight() / 2;
 	mt19937 rng;
@@ -133,6 +133,10 @@ Floor::~Floor() {
 	ridersWaiting.clear();
 }
 
+shared_ptr<Exit> Floor::getExit() {
+	return exit;
+}
+
 
 void Floor::update(double deltaTime) {
 
@@ -148,8 +152,21 @@ void Floor::update(double deltaTime) {
 			if (doorLeft->getPosition().x <= endPositionLeft.x) {
 				doorState = open;
 				timeOpen = 0;
-				for (Rider* rider : ridersWaiting)
-					rider->enterElevator(elevator.get());
+				for (Rider* rider : elevator->ridersDisembarking(floorNumber)) {
+					rider->exitElevator(elevator->getSharedFloor());
+				}
+
+				// load up riders going in proper direction
+				for (Rider* rider : ridersWaiting) {
+					if ((/*elevator->state == Elevator::ElevatorState::GoingUp*/
+						elevatorDirection == NextStopDirection::Up
+						&& rider->finalDestination->floorNumber > floorNumber)
+						|| (/*elevator->state == Elevator::ElevatorState::GoingDown*/
+							elevatorDirection == NextStopDirection::Down
+							&& rider->finalDestination->floorNumber < floorNumber))
+
+						rider->enterElevator(elevator.get());
+				}
 			}
 			break;
 
@@ -237,6 +254,7 @@ void Floor::elevatorArrived(bool elevatorGoingUp) {
 
 void Floor::elevatorApproaching(NextStopDirection nsd) {
 
+	elevatorDirection = nsd;
 	switch (nsd) {
 		case NextStopDirection::Up:
 			upIndicatorLight = upIndicatorOn.get();

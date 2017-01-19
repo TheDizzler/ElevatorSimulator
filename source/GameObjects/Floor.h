@@ -13,6 +13,7 @@ public:
 	Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elevator);
 	~Floor();
 
+	shared_ptr<Exit> getExit();
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
@@ -32,9 +33,11 @@ public:
 
 private:
 
+	NextStopDirection elevatorDirection = NextStopDirection::None;
+
 	vector<Rider*> ridersWaiting;
 
-	unique_ptr<Exit> exit;
+	shared_ptr<Exit> exit;
 
 	unique_ptr<Line> line; // this is the floor
 	unique_ptr<CallButtons> callButtons;

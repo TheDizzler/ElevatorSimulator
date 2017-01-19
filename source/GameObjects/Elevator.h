@@ -34,6 +34,9 @@ public:
 	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
 	void enterElevator(Rider* rider);
 
+	vector<Rider*> ridersDisembarking(USHORT floorNumber);
+	shared_ptr<Floor> getSharedFloor();
+
 	bool hasNextStop();
 	void doorsClosed();
 

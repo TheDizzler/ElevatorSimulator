@@ -4,15 +4,19 @@
 
 class Exit {
 public:
-	Exit();
+	Exit(USHORT floorNumber);
 	~Exit();
 
 	void setPosition(const Vector2& position);
+
+	const Vector2& getPosition();
 	const int getWidth();
 	const int getHeight();
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
+
+	USHORT floorNumber;
 
 private:
 

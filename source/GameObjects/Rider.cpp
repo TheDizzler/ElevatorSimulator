@@ -1,12 +1,13 @@
 #include "Rider.h"
 
-Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> floor, unsigned short destination) {
+Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> floor, shared_ptr<Exit> destination) {
 
 	sprite.reset(new Sprite());
 	sprite->load(gfxAsset);
 
 	setFloor(floor);
-	setDestinationFloor(destination);
+	finalDestination = destination;
+	setWaypoint();
 
 }
 
@@ -18,15 +19,22 @@ void Rider::enterElevator(Elevator* awaitingElevator) {
 	riderState = RiderState::EnteringElevator;
 	elevator = awaitingElevator;
 	originalPosition = sprite->getPosition();
-	wayPoint = Vector2(elevator->getCarPosition().x + elevator->getWidth()/2, originalPosition.y);
+	wayPoint = Vector2(elevator->getCarPosition().x + elevator->getWidth() / 2, originalPosition.y);
 
 
+}
+
+
+void Rider::exitElevator(shared_ptr<Floor> floor) {
+	currentFloor = floor;
+	setWaypoint();
 }
 
 
 void Rider::moveBy(const Vector2& moveAmount) {
 	sprite->moveBy(moveAmount);
 }
+
 
 double timeTravelling = 0;
 void Rider::update(double deltaTime) {
@@ -58,6 +66,7 @@ void Rider::update(double deltaTime) {
 			if (abs(sprite->getPosition().x - wayPoint.x) <= 10) {
 				riderState = RiderState::InElevator;
 				elevator->enterElevator(this);
+				currentFloor.reset();
 				//elevator->selectFloor(finalDestination, currentFloor->floorNumber < finalDestination);
 			}
 
@@ -87,18 +96,20 @@ void Rider::setFloor(shared_ptr<Floor> floor) {
 
 }
 
-void Rider::setDestinationFloor(unsigned short destination) {
 
-	finalDestination = destination;
-	if (finalDestination != currentFloor->floorNumber) {
-		// setPathTo callButton
+void Rider::setWaypoint() {
+
+	if (finalDestination->floorNumber != currentFloor->floorNumber) {
+		// set path to CallButton
 		wayPoint = sprite->getPosition();
 		wayPoint.x = currentFloor->callButtonLocation();
 		riderState = GoingToElevator;
 	} else {
 		// set path to destination room
+		wayPoint = finalDestination->getPosition();
+		riderState = RiderState::GoingToDestination;
 
 	}
+
+
 }
-
-

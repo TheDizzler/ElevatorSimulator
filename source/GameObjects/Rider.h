@@ -8,16 +8,18 @@
 	to a mysterious room in a building. Or to exit the building never to be seen again... */
 class Rider {
 public:
-	Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> currentFloor, unsigned short destinationFloor);
+	Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> currentFloor, shared_ptr<Exit> destinationFloor);
 	~Rider();
 
 	void enterElevator(Elevator* awaitingElevator);
+	void exitElevator(shared_ptr<Floor> floor);
 	void moveBy(const Vector2& moveAmount);
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
-	unsigned short finalDestination;
+	//unsigned short finalDestination;
+	shared_ptr<Exit> finalDestination;
 	shared_ptr<Floor> currentFloor;
 
 private:
@@ -43,5 +45,6 @@ private:
 	float moveSpeed = 100;
 
 	void setFloor(shared_ptr<Floor> floor);
-	void setDestinationFloor(unsigned short destination);
+	void setWaypoint();
+	
 };

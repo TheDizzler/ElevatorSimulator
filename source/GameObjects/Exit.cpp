@@ -1,17 +1,22 @@
 #include "Exit.h"
 
 #include "../Engine/GameEngine.h"
-Exit::Exit() {
+Exit::Exit(USHORT floorNum) {
 
 	door = move(gfxAssets->getSpriteFromAsset("Office Door"));
-	
+	floorNumber = floorNum;
+
 }
 
 Exit::~Exit() {
 }
 
-void Exit::setPosition(const Vector2 & position) {
+void Exit::setPosition(const Vector2& position) {
 	door->setPosition(position);
+}
+
+const Vector2 & Exit::getPosition() {
+	return door->getPosition();
 }
 
 const int Exit::getWidth() {
