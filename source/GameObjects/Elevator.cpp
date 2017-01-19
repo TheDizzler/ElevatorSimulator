@@ -235,27 +235,16 @@ vector<Rider*> Elevator::ridersDisembarking(USHORT floorNumber) {
 	if (ridersRiding.size() <= 0)
 		return disembarking;
 
-	for (vector<Rider*>::iterator ridingRider = ridersRiding.end() - 1;
-		ridingRider != ridersRiding.begin() - 1; --ridingRider) {
 
-		Rider* rider = *ridingRider;
-		if (rider->finalDestination->floorNumber == floorNumber) {
-			disembarking.push_back(rider);
-			//ridersRiding.erase(remove(ridersRiding.begin(), ridersRiding.end(), rider), ridersRiding.end());
-			vector<Rider*>::iterator position = find(ridersRiding.begin(), ridersRiding.end(), rider);
-			if (position != ridersRiding.end()) // == myVector.end() means the element was not found
-				ridersRiding.erase(position);
-			//--ridingRider;
 
-		}
-	}
-
-	/*for (Rider* rider : ridersRiding)
+	for (Rider* rider : ridersRiding)
 		if (rider->finalDestination->floorNumber == floorNumber)
 			disembarking.push_back(rider);
 
-	ridersRiding.erase(remove_if(ridersRiding.begin(), ridersRiding.end(),
-		[](const Rider* rider) { return disembarking.; }), ridersRiding.end());*/
+	for (Rider* rider : disembarking)
+		ridersRiding.remove(rider);
+
+
 	return disembarking;
 }
 

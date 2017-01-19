@@ -27,6 +27,10 @@ const int Exit::getHeight() {
 	return door->getHeight();
 }
 
+const HitArea* Exit::getHitArea() {
+	return door->getHitArea();
+}
+
 
 void Exit::update(double deltaTime) {
 }

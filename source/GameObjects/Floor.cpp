@@ -158,11 +158,9 @@ void Floor::update(double deltaTime) {
 
 				// load up riders going in proper direction
 				for (Rider* rider : ridersWaiting) {
-					if ((/*elevator->state == Elevator::ElevatorState::GoingUp*/
-						elevatorDirection == NextStopDirection::Up
+					if ((elevatorDirection == NextStopDirection::Up
 						&& rider->finalDestination->floorNumber > floorNumber)
-						|| (/*elevator->state == Elevator::ElevatorState::GoingDown*/
-							elevatorDirection == NextStopDirection::Down
+						|| (elevatorDirection == NextStopDirection::Down
 							&& rider->finalDestination->floorNumber < floorNumber))
 
 						rider->enterElevator(elevator.get());

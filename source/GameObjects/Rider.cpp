@@ -37,6 +37,7 @@ void Rider::moveBy(const Vector2& moveAmount) {
 
 
 double timeTravelling = 0;
+Vector2 direction;
 void Rider::update(double deltaTime) {
 
 	switch (riderState) {
@@ -73,10 +74,15 @@ void Rider::update(double deltaTime) {
 
 			break;
 		}
-		case InElevator:
-
+		case GoingToDestination:
+		{
+			sprite->moveBy(direction*moveSpeed*deltaTime);
+			if (sprite->getHitArea()->collision(finalDestination->getHitArea())) {
+				++finalDestination->numRidersExited;
+				riderState = RiderState::Exited;
+			}
 			break;
-
+		}
 	}
 }
 
@@ -107,6 +113,8 @@ void Rider::setWaypoint() {
 	} else {
 		// set path to destination room
 		wayPoint = finalDestination->getPosition();
+		direction = wayPoint - sprite->getPosition();
+		direction.Normalize();
 		riderState = RiderState::GoingToDestination;
 
 	}

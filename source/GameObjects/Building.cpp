@@ -68,8 +68,8 @@ Building::Building() {
 
 Building::~Building() {
 
-	for each (Rider* rider in riders)
-		delete rider;
+	/*for each (Rider* rider in riders)
+		delete rider;*/
 
 	riders.clear();
 
@@ -81,11 +81,19 @@ void Building::update(double deltaTime) {
 	// update floors
 	for each (auto& floor in floors)
 		floor->update(deltaTime);
-	//update riders
-	for each (Rider* rider in riders)
-		rider->update(deltaTime);
 
-// update elevator
+	//update riders
+	list<shared_ptr<Rider> > exitedRiders;
+	for each (shared_ptr<Rider> rider in riders) {
+		rider->update(deltaTime);
+		if (rider->riderState == Rider::RiderState::Exited)
+			exitedRiders.push_back(rider);
+	}
+
+	for (shared_ptr<Rider> rider : exitedRiders)
+		riders.remove(rider);
+
+	// update elevator
 	elevator->update(deltaTime);
 
 }
@@ -103,7 +111,7 @@ void Building::draw(SpriteBatch* batch) {
 
 
 	// draw riders
-	for each (Rider* rider in riders)
+	for each (shared_ptr<Rider> rider in riders)
 		rider->draw(batch);
 
 
@@ -116,9 +124,8 @@ void Building::generateRider() {
 
 	unsigned short destinationFloorNum = 2;
 
-	Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum -1 ]->getExit());
-	//rider->setSprite(gfxAssets->getAsset("Rider"));
-	//rider->setFloor(riderStartFloor);
+	//Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum - 1]->getExit());
+	shared_ptr<Rider> rider = make_shared<Rider>(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum - 1]->getExit());
 
 	riders.push_back(rider);
 }

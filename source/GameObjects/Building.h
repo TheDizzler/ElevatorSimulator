@@ -42,7 +42,7 @@ public:
 
 private:
 
-	vector<Rider*> riders;
+	list<shared_ptr<Rider>> riders;
 	shared_ptr<Elevator> elevator;
 
 	unique_ptr<RectangleFrame> outline;

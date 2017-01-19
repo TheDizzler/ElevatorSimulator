@@ -18,22 +18,25 @@ public:
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
-	//unsigned short finalDestination;
+	
 	shared_ptr<Exit> finalDestination;
 	shared_ptr<Floor> currentFloor;
 
-private:
 	enum RiderState {
-		GoingToElevator, WaitingForElevator, EnteringElevator, InElevator, ExitingElevator, GoingToDestination
+		GoingToElevator, WaitingForElevator, EnteringElevator,
+		InElevator, ExitingElevator, GoingToDestination, Exited
 	};
 	RiderState riderState = GoingToElevator;
+
+private:
+	
 
 	unique_ptr<Sprite> sprite;
 
 	Vector2 wayPoint;
 	Vector2 originalPosition;
 
-	
+
 
 	Elevator* elevator = NULL;
 
@@ -46,5 +49,5 @@ private:
 
 	void setFloor(shared_ptr<Floor> floor);
 	void setWaypoint();
-	
+
 };

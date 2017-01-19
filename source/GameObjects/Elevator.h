@@ -82,7 +82,7 @@ private:
 
 	float moveSpeed = 50;
 
-	vector<Rider*> ridersRiding;
+	list<Rider*> ridersRiding;
 
 };
 

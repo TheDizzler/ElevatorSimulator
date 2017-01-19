@@ -13,16 +13,20 @@ public:
 	const int getWidth();
 	const int getHeight();
 
+	const HitArea* getHitArea();
+
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
 	USHORT floorNumber;
 
+	UINT numRidersExited = 0;
+	UINT numRuidersGenerated = 0;
+
 private:
 
 	unique_ptr<Sprite> door;
 
-	UINT numRidersExited = 0;
-	UINT numRuidersGenerated = 0;
+	
 
 };
