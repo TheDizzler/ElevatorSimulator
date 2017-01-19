@@ -235,11 +235,16 @@ void Floor::elevatorArrived(bool elevatorGoingUp) {
 
 }
 
-void Floor::elevatorApproaching(bool riderGoingUp) {
+void Floor::elevatorApproaching(NextStopDirection nsd) {
 
-	if (riderGoingUp) {
-		upIndicatorLight = upIndicatorOn.get();
-
-	} else
-		downIndicatorLight = downIndicatorOn.get();
+	switch (nsd) {
+		case NextStopDirection::Up:
+			upIndicatorLight = upIndicatorOn.get();
+			break;
+		case NextStopDirection::Down:
+			downIndicatorLight = downIndicatorOn.get();
+			break;
+		case NextStopDirection::None:
+			break;
+	}
 }

@@ -44,7 +44,7 @@ GUIOverlay::GUIOverlay() {
 	downQueueDialog->open();
 	currentFloorDisplay->open();
 	nextStopDisplay->open();
-	
+
 }
 
 GUIOverlay::~GUIOverlay() {
@@ -67,7 +67,7 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	downQueueDialog->draw(batch);
 	currentFloorDisplay->draw(batch);
 	nextStopDisplay->draw(batch);
-	
+
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {
@@ -83,9 +83,18 @@ void GUIOverlay::updateNextStopDisplay(wstring floorNumber) {
 void GUIOverlay::updateStopQueue(list<shared_ptr<Stop>> stopQueue) {
 
 	wostringstream wss;
-	//for each (shared_ptr<Floor> floor in stopQueue)
-	for each (auto& stop in stopQueue)
-		wss << stop->floor->floorNumber << "\n";
+	for each (auto& stop in stopQueue) {
+		wss << stop->floor->floorNumber;
+		wss << " (";
+		if (stop->dropOff) {
+			wss << "DropOff";
+			if (stop->pickUp)
+				wss << "&";
+		}
+		if (stop->pickUp)
+			wss << "Pickup";
+		wss << ")" << "\n";
+	}
 	stopQueueDialog->setText(wss.str());
 }
 

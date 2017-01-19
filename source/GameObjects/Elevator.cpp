@@ -72,7 +72,14 @@ void Elevator::update(double deltaTime) {
 				guiOverlay->updateFloorDisplay(wss.str());
 
 				if ((*currentFloor) == nextStop->floor) {
-					nextStop->floor->elevatorApproaching(nextStop->goingUp);
+					NextStopDirection nsd;
+					if (stopQueue.size() <= 1 && !nextStop->pickUp)
+						nsd = NextStopDirection::None;
+					else if (nextStop->goingUp)
+						nsd = NextStopDirection::Up;
+					else
+						nsd = NextStopDirection::Down;
+					nextStop->floor->elevatorApproaching(nsd);
 				}
 			}
 			break;
@@ -102,7 +109,14 @@ void Elevator::update(double deltaTime) {
 				guiOverlay->updateFloorDisplay(wss.str());
 
 				if ((*currentFloor) == nextStop->floor) {
-					nextStop->floor->elevatorApproaching(nextStop->goingUp);
+					NextStopDirection nsd;
+					if (stopQueue.size() <= 1 && !nextStop->pickUp)
+						nsd = NextStopDirection::None;
+					else if (nextStop->goingUp)
+						nsd = NextStopDirection::Up;
+					else
+						nsd = NextStopDirection::Down;
+					nextStop->floor->elevatorApproaching(nsd);
 				}
 			}
 			break;
@@ -126,7 +140,7 @@ void Elevator::draw(SpriteBatch* batch) {
 
 void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 
-	shared_ptr<Stop> newStop = make_shared<Stop>(floors[newFloorNumberToQueue - 1], riderGoingUp, false);
+	shared_ptr<Stop> newStop = make_shared<Stop>(floors[newFloorNumberToQueue - 1], riderGoingUp, false, true);
 
 	switch (state) {
 		case Waiting:
@@ -207,7 +221,7 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 }
 
 void Elevator::enterElevator(Rider* rider) {
-	
+
 	selectFloor(rider->finalDestination, rider->currentFloor->floorNumber < rider->finalDestination);
 	rider->currentFloor.reset();
 	ridersRiding.push_back(rider);
@@ -216,7 +230,7 @@ void Elevator::enterElevator(Rider* rider) {
 
 void Elevator::selectFloor(USHORT floorRequested, bool riderGoingUp) {
 
-	stopQueue.push_front(make_shared<Stop>(floors[floorRequested - 1], riderGoingUp, true));
+	stopQueue.push_front(make_shared<Stop>(floors[floorRequested - 1], riderGoingUp, true, false));
 	stopQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
 		return a->floor->floorNumber < b->floor->floorNumber; });
 

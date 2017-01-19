@@ -7,14 +7,15 @@ class Rider;
 
 struct Stop {
 
-	Stop(shared_ptr<Floor> stopFloor, bool riderGoingUp, bool stopIsDropOff)
-		: floor(stopFloor), goingUp(riderGoingUp), dropOff(stopIsDropOff) {
+	Stop(shared_ptr<Floor> stopFloor, bool riderGoingUp, bool stopIsDropOff, bool stopIsPickup)
+		: floor(stopFloor), goingUp(riderGoingUp), dropOff(stopIsDropOff), pickUp(stopIsPickup) {
 	}
 	~Stop() {
 	}
 	shared_ptr<Floor> floor;
 	bool goingUp;
 	bool dropOff;
+	bool pickUp;
 
 };
 
@@ -53,24 +54,18 @@ private:
 	unique_ptr<RectangleFrame> shaft;
 	unique_ptr<RectangleFrame> car;
 
-	// This array corresponds to CallButtons that have been pushed
-	//bool* floorCalls;
 	vector<shared_ptr<Floor>> floors;
 
 	/* Current going to list. */
-	//list<shared_ptr<Floor> > stopQueue;
 	list<shared_ptr<Stop>> stopQueue;
 
 	/* Floors with riders waiting to go up that IS NOT in the stopQueue. */
-	//list<shared_ptr<Floor> > upQueue;
 	list<shared_ptr<Stop>> upQueue;
 	/* Floors with riders waiting to go down that IS NOT in the stopQueue. */
-	//list<shared_ptr<Floor> > downQueue;
 	list<shared_ptr<Stop>> downQueue;
 
 
 	// use LERP for movement between floors!
-	//float currentLocation = 0;
 	/* The current floor that the car is travelling through. */
 	vector<shared_ptr<Floor>>::iterator currentFloor;
 

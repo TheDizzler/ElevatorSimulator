@@ -4,16 +4,9 @@
 #include "Exit.h"
 #include "CallButtons.h"
 
-//class IndicatorLight {
-//public:
-//	IndicatorLight();
-//	~IndicatorLight();
-//
-//	void draw(SpriteBatch* batch);
-//
-//private:
-//
-//};
+enum NextStopDirection {
+	Up, Down, None
+};
 
 class Floor {
 public:
@@ -35,7 +28,7 @@ public:
 
 	bool elevatorOnFloor = false;
 	void elevatorArrived(bool elevatorGoingUp);
-	void elevatorApproaching(bool riderGoingUp);
+	void elevatorApproaching(NextStopDirection direction);
 
 private:
 
