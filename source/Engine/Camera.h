@@ -12,7 +12,7 @@ public:
 	Camera(const Vector2& viewport);
 	~Camera();
 
-	void updateViewport(const Vector2& viewport, bool zoomToFitBuilding);
+	void updateViewport(const Vector2& viewportArea, const Vector2& viewportPosition, bool zoomToFitBuilding);
 
 
 	Viewport* viewport;
@@ -20,6 +20,7 @@ public:
 
 	float rotation = 0.0f;
 
+	Vector2 viewportPosition;
 	int viewportWidth;
 	int viewportHeight;
 	Vector3 viewportCenter;

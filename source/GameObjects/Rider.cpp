@@ -16,61 +16,76 @@ Rider::~Rider() {
 
 void Rider::enterElevator(Elevator* awaitingElevator) {
 
-	riderState = RiderState::EnteringElevator;
 	elevator = awaitingElevator;
-	originalPosition = sprite->getPosition();
-	wayPoint = Vector2(elevator->getCarPosition().x + elevator->getWidth() / 2, originalPosition.y);
-
+	//originalPosition = sprite->getPosition();
+	waypoint = sprite->getPosition();
+	waypoint.x = elevator->getCarPosition().x + elevator->getWidth() / 2;
+	direction = waypoint - sprite->getPosition();
+	direction.Normalize();
+	riderState = RiderState::EnteringElevator;
 
 }
 
 
 void Rider::exitElevator(shared_ptr<Floor> floor) {
 	currentFloor = floor;
+	riderState = RiderState::GoingToDestination;
 	setWaypoint();
 }
 
+void Rider::setWaypoint() {
+
+	waypoint = sprite->getPosition();
+
+
+	if (finalDestination->floorNumber != currentFloor->floorNumber) {
+		// set path to CallButton
+
+		waypoint.x = currentFloor->callButtonLocation();
+		direction = waypoint - sprite->getPosition();
+		direction.Normalize();
+		riderState = RiderState::GoingToElevator;
+	} else {
+		// set path to destination room
+		waypoint.x = finalDestination->getPosition().x;
+		direction = waypoint - sprite->getPosition();
+		direction.Normalize();
+		riderState = RiderState::GoingToDestination;
+
+	}
+
+
+}
 
 void Rider::moveBy(const Vector2& moveAmount) {
 	sprite->moveBy(moveAmount);
 }
 
 
-double timeTravelling = 0;
-Vector2 direction;
 void Rider::update(double deltaTime) {
 
 	switch (riderState) {
 		case GoingToElevator:
 		{
-			int buttonLoc = currentFloor->callButtonLocation();
-			Vector2 pos = sprite->getPosition();
-			if (abs(buttonLoc - pos.x) <= 15) {
+			if ((sprite->getPosition().x - waypoint.x) * direction.x >= 10) {
 				riderState = WaitingForElevator;
 				currentFloor->pushUpButton(this);
 			} else {
-
-				Vector2 newpos = pos;
-				Vector2 dir = Vector2(buttonLoc - pos.x, 0);
-				dir.Normalize();
-				newpos += dir*moveSpeed*deltaTime;
-				sprite->setPosition(newpos);
-
+				sprite->moveBy(direction*moveSpeed*deltaTime);
 			}
 			break;
 		}
 		case EnteringElevator:
 		{
 
-			timeTravelling += deltaTime;
-			sprite->setPosition(Vector2::Lerp(originalPosition, wayPoint, 2 * timeTravelling));
-			if (abs(sprite->getPosition().x - wayPoint.x) <= 10) {
+
+			sprite->moveBy(direction*moveSpeed*deltaTime);
+			if ((sprite->getPosition().x - waypoint.x) * direction.x >= 10) {
+				// gone too far
 				riderState = RiderState::InElevator;
 				elevator->enterElevator(this);
 				currentFloor.reset();
-				//elevator->selectFloor(finalDestination, currentFloor->floorNumber < finalDestination);
 			}
-
 
 			break;
 		}
@@ -78,7 +93,8 @@ void Rider::update(double deltaTime) {
 		{
 			sprite->moveBy(direction*moveSpeed*deltaTime);
 			if (sprite->getHitArea()->collision(finalDestination->getHitArea())) {
-				++finalDestination->numRidersExited;
+
+				finalDestination->riderArrived(this);
 				riderState = RiderState::Exited;
 			}
 			break;
@@ -103,21 +119,4 @@ void Rider::setFloor(shared_ptr<Floor> floor) {
 }
 
 
-void Rider::setWaypoint() {
 
-	if (finalDestination->floorNumber != currentFloor->floorNumber) {
-		// set path to CallButton
-		wayPoint = sprite->getPosition();
-		wayPoint.x = currentFloor->callButtonLocation();
-		riderState = GoingToElevator;
-	} else {
-		// set path to destination room
-		wayPoint = finalDestination->getPosition();
-		direction = wayPoint - sprite->getPosition();
-		direction.Normalize();
-		riderState = RiderState::GoingToDestination;
-
-	}
-
-
-}

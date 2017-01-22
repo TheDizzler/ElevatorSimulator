@@ -1,6 +1,27 @@
 #include "../pch.h"
 #pragma once
 
+class Rider;
+
+class Counter {
+public:
+	Counter(const Vector2& counterPosition);
+	~Counter();
+
+	void update(double deltaTime);
+	void draw(SpriteBatch* batch);
+
+	bool isAlive = true;
+private:
+
+	unique_ptr<TextLabel> label;
+
+	double timeAlive = 0;
+
+	static int counterSpeed;
+	static Color originalColor;
+	static Color endColor;
+};
 
 class Exit {
 public:
@@ -20,13 +41,15 @@ public:
 
 	USHORT floorNumber;
 
-	UINT numRidersExited = 0;
-	UINT numRuidersGenerated = 0;
+	void riderArrived(Rider* rider);
+
 
 private:
 
 	unique_ptr<Sprite> door;
 
-	
+	vector<unique_ptr<Counter>> counters;
 
+	UINT numRidersExited = 0;
+	UINT numRuidersGenerated = 0;
 };

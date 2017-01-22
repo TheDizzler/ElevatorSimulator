@@ -25,14 +25,16 @@ Camera::Camera(const Vector2& viewport) {
 Camera::~Camera() {
 }
 
-void Camera::updateViewport(const Vector2& viewport, bool zoomToFit) {
+void Camera::updateViewport(const Vector2& viewport, const Vector2& viewportPos, bool zoomToFit) {
 
-	viewportWidth = viewport.x;
-	viewportHeight = viewport.y;
-	viewportCenter = Vector3(viewportWidth * .5, viewportHeight * .5, 0);
+	viewportWidth = viewport.x - viewportPos.x;
+	viewportHeight = viewport.y - viewportPos.y;
+	viewportPosition = viewportPos;
+	viewportCenter = Vector3((viewportWidth) * .5 + viewportPosition.x,
+		(viewportHeight) * .5 + viewportPosition.y, 0);
 
-	viewX = (viewportWidth / zoom / 2);
-	viewY = (viewportHeight / zoom / 2);
+	viewX = (viewportWidth) / zoom / 2;
+	viewY = (viewportHeight) / zoom / 2;
 	if (zoomToFit)
 		zoomToFitBuilding();
 }

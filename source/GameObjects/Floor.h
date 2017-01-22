@@ -27,6 +27,7 @@ public:
 
 	void pushUpButton(Rider* rider);
 
+	/* Used for triggering the doors to open. As soon as the doors start to open, this is set to false. */
 	bool elevatorOnFloor = false;
 	void elevatorArrived(bool elevatorGoingUp);
 	void elevatorApproaching(NextStopDirection direction);

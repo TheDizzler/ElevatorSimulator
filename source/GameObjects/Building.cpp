@@ -62,8 +62,7 @@ Building::Building() {
 
 	generateRider();
 
-	/*test.reset(guiFactory->createTriangleFrame(Vector2(-50, 0), Vector2(0, 100), Vector2(100, -50)));
-	test->setPosition(Vector2(-300, 100));*/
+	guiOverlay->newRiderButton->setOnClickListener(new NewRiderButtonListener(this));
 }
 
 Building::~Building() {
@@ -122,10 +121,16 @@ void Building::draw(SpriteBatch* batch) {
 
 void Building::generateRider() {
 
-	unsigned short destinationFloorNum = 2;
+	int min = 1;
+	int max = floors.size();
+	mt19937 rng;
+	rng.seed(random_device{}());
+	uniform_int_distribution<mt19937::result_type> rand(min, max);
+	unsigned short destinationFloorNum = rand(rng);
 
-	//Rider* rider = new Rider(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum - 1]->getExit());
-	shared_ptr<Rider> rider = make_shared<Rider>(gfxAssets->getAsset("Rider"), riderStartFloor, floors[destinationFloorNum - 1]->getExit());
+	shared_ptr<Rider> rider = make_shared<Rider>(gfxAssets->getAsset("Rider"),
+		riderStartFloor, floors[destinationFloorNum - 1]->getExit());
+
 
 	riders.push_back(rider);
 }

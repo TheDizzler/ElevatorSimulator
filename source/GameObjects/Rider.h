@@ -33,8 +33,11 @@ private:
 
 	unique_ptr<Sprite> sprite;
 
-	Vector2 wayPoint;
-	Vector2 originalPosition;
+	double timeTravelling = 0;
+	Vector2 direction;
+
+	Vector2 waypoint;
+	//Vector2 originalPosition;
 
 
 

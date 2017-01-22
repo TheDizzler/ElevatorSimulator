@@ -19,6 +19,10 @@ public:
 	void updateDownQueue(list<shared_ptr<Stop>>  list);
 	/* get area not covered by GUI */
 	const Vector2& getPlayArea() const;
+	const Vector2& getPlayPosition() const;
+
+	unique_ptr<Button> newRiderButton;
+
 
 private:
 	unique_ptr<Dialog> stopQueueDialog;
@@ -27,6 +31,7 @@ private:
 
 	unique_ptr<Dialog> currentFloorDisplay;
 	unique_ptr<Dialog> nextStopDisplay;
+
 	
 
 };

@@ -35,7 +35,7 @@ public:
 	void enterElevator(Rider* rider);
 
 	vector<Rider*> ridersDisembarking(USHORT floorNumber);
-	shared_ptr<Floor> getSharedFloor();
+	shared_ptr<Floor> getCurrentFloor();
 
 	bool hasNextStop();
 	void doorsClosed();
@@ -46,7 +46,7 @@ public:
 	const int getWidth() const;
 
 	enum ElevatorState {
-		GoingDown, GoingUp, Waiting, DoorsOpening, DoorsClosing, Loading
+		GoingDown, GoingUp, Waiting/*, DoorsOpening, DoorsClosing, Loading*/
 	};
 
 	ElevatorState state = Waiting;

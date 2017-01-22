@@ -83,7 +83,8 @@ bool GameEngine::initEngine(HWND hw, HINSTANCE hInstance) {
 
 	
 	Vector2 viewarea = guiOverlay->getPlayArea(); // for some reason this step is necessary
-	camera->updateViewport(viewarea, true);
+	Vector2 viewposition = guiOverlay->getPlayPosition();
+	camera->updateViewport(viewarea, viewposition, true);
 
 	ShowCursor(false);
 

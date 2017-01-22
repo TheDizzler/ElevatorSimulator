@@ -11,6 +11,8 @@ public:
 	CallButtons(bool hasUpButton = true, bool hasDownButton = true);
 	~CallButtons();
 
+	bool upButtonPressed = false;
+	bool downButtonPressed = false;
 
 	void pushUpButton();
 	void pushDownButton();
@@ -20,8 +22,7 @@ public:
 
 private:
 
-	bool upButtonPressed = false;
-	bool downButtonPressed = false;
+	
 
 	Elevator* elevator;
 

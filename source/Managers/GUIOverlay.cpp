@@ -45,7 +45,14 @@ GUIOverlay::GUIOverlay() {
 	currentFloorDisplay->open();
 	nextStopDisplay->open();
 
+
+	newRiderButton.reset(guiFactory->createButton(
+		Vector2(0, Globals::WINDOW_HEIGHT / 2),
+		Vector2(10, 59), L"Create\nNew Rider"));
+	
 }
+
+
 
 GUIOverlay::~GUIOverlay() {
 }
@@ -58,6 +65,7 @@ void GUIOverlay::update(double deltaTime) {
 	downQueueDialog->update(deltaTime);
 	currentFloorDisplay->update(deltaTime);
 	nextStopDisplay->update(deltaTime);
+	newRiderButton->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -67,7 +75,7 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	downQueueDialog->draw(batch);
 	currentFloorDisplay->draw(batch);
 	nextStopDisplay->draw(batch);
-
+	newRiderButton->draw(batch);
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {
@@ -113,8 +121,12 @@ void GUIOverlay::updateDownQueue(list<shared_ptr<Stop>>  downQueue) {
 }
 
 const Vector2& GUIOverlay::getPlayArea() const {
-
 	Vector2 viewArea(Globals::WINDOW_WIDTH - stopQueueDialog->getWidth(),
-		Globals::WINDOW_HEIGHT /*- stopQueueDialog->getHeight()*/);
+		Globals::WINDOW_HEIGHT);
 	return viewArea;
+}
+
+const Vector2 & GUIOverlay::getPlayPosition() const {
+	Vector2 viewPosition(newRiderButton->getPosition().x + newRiderButton->getWidth(), 0);
+	return viewPosition;
 }

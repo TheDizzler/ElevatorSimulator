@@ -55,7 +55,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	Vector2 labelPos = Vector2(floorPosition.x + 32, floorPosition.y - BuildingData::FLOOR_HEIGHT / 2);
 	floorLabel.reset(guiFactory->createTextLabel(labelPos));
 	wostringstream wss;
-	wss << floorNumber << " at (" << floorPosition.x << ", " << floorPosition.y << ")";
+	wss << floorNumber/* << " at (" << floorPosition.x << ", " << floorPosition.y << ")"*/;
 	floorLabel->setText(wss);
 	floorLabel->setTint(Color(0, 0, 0));
 	floorLabel->moveBy(Vector2(0, -floorLabel->getHeight() / 2));
@@ -140,6 +140,8 @@ shared_ptr<Exit> Floor::getExit() {
 
 void Floor::update(double deltaTime) {
 
+	exit->update(deltaTime);
+
 	double moveTime;
 	switch (doorState) {
 
@@ -153,7 +155,7 @@ void Floor::update(double deltaTime) {
 				doorState = open;
 				timeOpen = 0;
 				for (Rider* rider : elevator->ridersDisembarking(floorNumber)) {
-					rider->exitElevator(elevator->getSharedFloor());
+					rider->exitElevator(elevator->getCurrentFloor());
 				}
 
 				// load up riders going in proper direction
@@ -161,10 +163,15 @@ void Floor::update(double deltaTime) {
 					if ((elevatorDirection == NextStopDirection::Up
 						&& rider->finalDestination->floorNumber > floorNumber)
 						|| (elevatorDirection == NextStopDirection::Down
-							&& rider->finalDestination->floorNumber < floorNumber))
+							&& rider->finalDestination->floorNumber < floorNumber)) {
 
 						rider->enterElevator(elevator.get());
+					}
 				}
+				ridersWaiting.erase(remove_if(ridersWaiting.begin(), ridersWaiting.end(),
+					[](const Rider* rider) {
+					return rider->riderState == Rider::RiderState::EnteringElevator;
+				}), ridersWaiting.end());
 			}
 			break;
 
@@ -235,8 +242,16 @@ int Floor::callButtonLocation() {
 
 void Floor::pushUpButton(Rider* rider) {
 
-	callButtons->pushUpButton();
-	elevator->callElevatorTo(floorNumber, true);
+
+	if (!callButtons->upButtonPressed) {
+
+		if (elevator->getCurrentFloor().get() == this && elevator->state == Elevator::ElevatorState::Waiting) {
+			doorState = DoorState::opening;
+		} else {
+			callButtons->pushUpButton();
+			elevator->callElevatorTo(floorNumber, true);
+		}
+	}
 	ridersWaiting.push_back(rider);
 }
 

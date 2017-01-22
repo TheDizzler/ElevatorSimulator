@@ -51,7 +51,7 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 	auto state = Keyboard::Get().GetState();
 	keyTracker.Update(state);
 	if (keyTracker.IsKeyReleased(Keyboard::Escape))
-		GameEngine::showWarningDialog(L"Really Exit?", L"Exit?");
+		pause();
 
 	Vector2 cameraMove = Vector2::Zero;
 	if (state.A)
@@ -111,8 +111,9 @@ void GameManager::loadMainMenu() {
 
 void GameManager::pause() {
 
-	if (currentScreen != NULL)
-		currentScreen->pause();
+	/*if (currentScreen != NULL)
+		currentScreen->pause();*/
+	GameEngine::showWarningDialog(L"Really Exit?", L"Exit?");
 }
 
 void GameManager::exit() {
