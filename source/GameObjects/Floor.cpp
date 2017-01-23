@@ -153,33 +153,50 @@ void Floor::update(double deltaTime) {
 
 			if (doorLeft->getPosition().x <= endPositionLeft.x) {
 				doorState = open;
-				timeOpen = 0;
-				for (Rider* rider : elevator->ridersDisembarking(floorNumber)) {
-					rider->exitElevator(elevator->getCurrentFloor());
-				}
+				elevator->startUnloading();
+				stillLoadingElevator = true;
 
-				// load up riders going in proper direction
-				for (Rider* rider : ridersWaiting) {
-					if ((elevatorDirection == NextStopDirection::Up
-						&& rider->finalDestination->floorNumber > floorNumber)
-						|| (elevatorDirection == NextStopDirection::Down
-							&& rider->finalDestination->floorNumber < floorNumber)) {
-
-						rider->enterElevator(elevator.get());
-					}
-				}
-				ridersWaiting.erase(remove_if(ridersWaiting.begin(), ridersWaiting.end(),
-					[](const Rider* rider) {
-					return rider->riderState == Rider::RiderState::EnteringElevator;
-				}), ridersWaiting.end());
 			}
 			break;
 
 		case open:
-			timeOpen += deltaTime;
-			if (timeOpen >= timeToStayOpen && elevator->hasNextStop()) {
-				doorState = closing;
-				timeOpen = 0;
+			if (stillLoadingElevator) { // elevator in its update does unloading
+
+				if (elevator->stillUnloading())
+					break;
+
+				timeUntilNextTransfer -= deltaTime;
+				if (timeUntilNextTransfer <= 0) {
+
+					stillLoadingElevator = false;
+					timeUntilNextTransfer = elevator->TIME_BETWEEN_TRANSFER;
+
+					 // load up riders going in proper direction
+					for (int i = 0; i < elevator->MAX_RIDERS_TRANSFERRING && i < ridersWaiting.size(); ++i) {
+						Rider* rider = ridersWaiting.back();
+						ridersWaiting.pop_back();
+						if ((elevatorDirection == NextStopDirection::Up
+							&& rider->finalDestination->floorNumber > floorNumber)
+							|| (elevatorDirection == NextStopDirection::Down
+								&& rider->finalDestination->floorNumber < floorNumber)) {
+
+							rider->enterElevator(elevator.get());
+							stillLoadingElevator = true;
+						}
+					}
+
+					if (!stillLoadingElevator) {
+						timeUntilNextTransfer = 0;
+						elevator->doneTransferring();
+					}
+				}
+			} else {
+
+				timeOpen += deltaTime;
+				if (timeOpen >= timeToStayOpen && elevator->hasNextStop()) {
+					doorState = closing;
+					timeOpen = 0;
+				}
 			}
 			break;
 
@@ -205,16 +222,18 @@ void Floor::update(double deltaTime) {
 						callButtons->elevatorArivedGoingDown();
 						break;
 				}
+				elevatorOnFloor = false;
+				elevatorDirection = NextStopDirection::None;
 			}
 			break;
 
 		case closed:
 
-			if (elevatorOnFloor) {
+			if (openDoors) {
 				doorState = opening;
 				door1 = doorLeft.get();
 				door2 = doorRight.get();
-				elevatorOnFloor = false;
+				openDoors = false;
 			}
 			break;
 	}
@@ -240,24 +259,61 @@ int Floor::callButtonLocation() {
 	return callButtons->getPosition().x;
 }
 
+bool Floor::doorsOpen() {
+	return doorState != DoorState::closed;
+}
+
 void Floor::pushUpButton(Rider* rider) {
 
 
 	if (!callButtons->upButtonPressed) {
 
-		if (elevator->getCurrentFloor().get() == this && elevator->state == Elevator::ElevatorState::Waiting) {
+		if (elevator->getCurrentFloor().get() == this) {
 			doorState = DoorState::opening;
 		} else {
 			callButtons->pushUpButton();
 			elevator->callElevatorTo(floorNumber, true);
 		}
 	}
+
 	ridersWaiting.push_back(rider);
 }
+
+
+void Floor::pushDownButton(Rider* rider) {
+
+	if (!callButtons->downButtonPressed) {
+
+		if (elevator->getCurrentFloor().get() == this) {
+			doorState = DoorState::opening;
+		} else {
+			callButtons->pushUpButton();
+			elevator->callElevatorTo(floorNumber, false);
+		}
+	}
+
+	ridersWaiting.push_back(rider);
+}
+
+void Floor::getInElevator(Rider* rider) {
+	ridersWaiting.push_back(rider);
+}
+
+bool Floor::elevatorGoingUpDoorOpen() {
+	return doorState == DoorState::open &&
+		(elevatorDirection == NextStopDirection::Up || elevatorDirection == NextStopDirection::None);
+}
+
+bool Floor::elevatorGoingDownDoorOpen() {
+	return doorState == DoorState::open &&
+		(elevatorDirection == NextStopDirection::Down || elevatorDirection == NextStopDirection::None);
+}
+
 
 void Floor::elevatorArrived(bool elevatorGoingUp) {
 
 	elevatorOnFloor = true;
+	openDoors = true;
 	if (elevatorGoingUp)
 		callButtons->elevatorArrivedGoingUp();
 	else

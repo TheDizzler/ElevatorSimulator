@@ -17,12 +17,13 @@ Rider::~Rider() {
 void Rider::enterElevator(Elevator* awaitingElevator) {
 
 	elevator = awaitingElevator;
-	//originalPosition = sprite->getPosition();
+
+	riderState = RiderState::EnteringElevator;
 	waypoint = sprite->getPosition();
 	waypoint.x = elevator->getCarPosition().x + elevator->getWidth() / 2;
 	direction = waypoint - sprite->getPosition();
 	direction.Normalize();
-	riderState = RiderState::EnteringElevator;
+
 
 }
 
@@ -69,7 +70,17 @@ void Rider::update(double deltaTime) {
 		{
 			if ((sprite->getPosition().x - waypoint.x) * direction.x >= 10) {
 				riderState = WaitingForElevator;
-				currentFloor->pushUpButton(this);
+				if (currentFloor->floorNumber < finalDestination->floorNumber) {
+					if (currentFloor->elevatorGoingUpDoorOpen()) // if up elevator already here
+						currentFloor->getInElevator(this);
+					else
+						currentFloor->pushUpButton(this);
+				} else {
+					if (currentFloor->elevatorGoingDownDoorOpen()) // if up elevator already here
+						currentFloor->getInElevator(this);
+					else
+						currentFloor->pushDownButton(this);
+				}
 			} else {
 				sprite->moveBy(direction*moveSpeed*deltaTime);
 			}

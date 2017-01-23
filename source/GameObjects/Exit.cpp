@@ -94,7 +94,7 @@ void Counter::update(double deltaTime) {
 	label->moveBy(Vector2(0, -counterSpeed * deltaTime));
 	Color newTint = Color::Lerp(originalColor, endColor, timeAlive / 3);
 	label->setTint(newTint);
-	if (newTint.w <= .01)
+	if (/*newTint.w <= .01*/ timeAlive >= 3)
 		isAlive = false;
 }
 

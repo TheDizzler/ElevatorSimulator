@@ -24,10 +24,14 @@ public:
 
 	USHORT floorNumber;
 
+	bool doorsOpen();
 
 	void pushUpButton(Rider* rider);
+	void pushDownButton(Rider* rider);
+	void getInElevator(Rider* rider);
 
-	/* Used for triggering the doors to open. As soon as the doors start to open, this is set to false. */
+	bool elevatorGoingUpDoorOpen();
+	bool elevatorGoingDownDoorOpen();
 	bool elevatorOnFloor = false;
 	void elevatorArrived(bool elevatorGoingUp);
 	void elevatorApproaching(NextStopDirection direction);
@@ -60,6 +64,8 @@ private:
 		closed, opening, open, closing
 	};
 	DoorState doorState = closed;
+	/* Used for triggering the doors to open. As soon as the doors start to open, this is set to false. */
+	bool openDoors = false;
 
 	shared_ptr<AssetSet> indicatorAssets;
 
@@ -81,6 +87,9 @@ private:
 
 	double timeToStayOpen = 3.0;
 	double timeOpen = 0.0;
+
+	bool stillLoadingElevator = false;
+	double timeUntilNextTransfer = 0;
 
 	Vector2 originalPositionLeft;
 	Vector2 endPositionLeft;

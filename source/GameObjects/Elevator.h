@@ -5,6 +5,7 @@ class Elevator;
 class Floor;
 class Rider;
 
+
 struct Stop {
 
 	Stop(shared_ptr<Floor> stopFloor, bool riderGoingUp, bool stopIsDropOff, bool stopIsPickup)
@@ -34,7 +35,11 @@ public:
 	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
 	void enterElevator(Rider* rider);
 
-	vector<Rider*> ridersDisembarking(USHORT floorNumber);
+	//vector<Rider*> ridersDisembarking(USHORT floorNumber);
+	void startUnloading();
+	bool stillUnloading();
+	void doneTransferring();
+
 	shared_ptr<Floor> getCurrentFloor();
 
 	bool hasNextStop();
@@ -46,12 +51,18 @@ public:
 	const int getWidth() const;
 
 	enum ElevatorState {
-		GoingDown, GoingUp, Waiting/*, DoorsOpening, DoorsClosing, Loading*/
+		GoingDown, GoingUp, Idle, /*WaitingForDoors,*/ Transferring/*, DoorsOpening, DoorsClosing, Loading*/
 	};
 
-	ElevatorState state = Waiting;
+	ElevatorState state = Idle;
+
+	/* Time between "waves" of riders disembarking/loading. */
+	const double TIME_BETWEEN_TRANSFER = 1.0;
+	/* Maximum amount of riders that can enter or exit an elevator simultaneously. */
+	const USHORT MAX_RIDERS_TRANSFERRING = 2;
 private:
 
+	bool nextStopDirectionUp();
 	void selectFloor(USHORT floorRequested, bool riderGoingUp);
 	
 	unique_ptr<RectangleFrame> shaft;
@@ -72,11 +83,14 @@ private:
 	/* The current floor that the car is travelling through. */
 	vector<shared_ptr<Floor>>::iterator currentFloor;
 
-	//shared_ptr<Floor> nextStop = NULL;
+	vector<Rider*> disembarking;
+	double timeUntilNextTransfer = 0;
+
+	
+	
+
 	shared_ptr<Stop> nextStop = NULL;
 
-	// tells elevator to get ready to move
-	//void wakeUp(shared_ptr<Floor> nextFloor);
 
 	Vector2 shaftTop;
 
