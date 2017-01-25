@@ -22,15 +22,9 @@ public:
 
 private:
 
-	
-
 	Elevator* elevator;
 
 	// call button sprites
 	shared_ptr<AssetSet> gfxSet;
-	/*unique_ptr<Sprite> offoff;
-	unique_ptr<Sprite> offon;
-	unique_ptr<Sprite> onoff;
-	unique_ptr<Sprite> onon;*/
 
 };

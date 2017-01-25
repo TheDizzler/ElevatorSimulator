@@ -99,6 +99,10 @@ const RECT Sprite::getRect() const {
 	return sourceRect;
 }
 
+const float Sprite::getLayerDepth() const {
+	return layerDepth;
+}
+
 const int Sprite::getWidth() const {
 	return width;
 }
@@ -173,6 +177,10 @@ void Sprite::setTint(const XMFLOAT4 colr) {
 
 void Sprite::setAlpha(const float alpha) {
 	tint.w = alpha;
+}
+
+void Sprite::setLayerDepth(const float depth) {
+	layerDepth = depth;
 }
 
 

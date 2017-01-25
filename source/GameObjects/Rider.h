@@ -1,7 +1,6 @@
 #include "../pch.h"
 #pragma once
 
-//#include "../DXTKGui/BaseGraphics/Sprite.h"
 #include "Floor.h"
 
 /* A simulant designed for riding elevators. It's only function is to use an elevator to get
@@ -37,8 +36,6 @@ private:
 	Vector2 direction;
 
 	Vector2 waypoint;
-	//Vector2 originalPosition;
-
 
 
 	Elevator* elevator = NULL;

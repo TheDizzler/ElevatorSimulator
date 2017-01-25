@@ -22,7 +22,7 @@ public:
 	const Vector2& getPlayPosition() const;
 
 	unique_ptr<Button> newRiderButton;
-
+	unique_ptr<ImageButton> imageButton;
 
 private:
 	unique_ptr<Dialog> stopQueueDialog;

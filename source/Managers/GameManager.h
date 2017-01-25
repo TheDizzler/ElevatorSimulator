@@ -6,6 +6,7 @@
 #include "../GameObjects/Building.h"
 
 
+extern unique_ptr<Building> building;
 
 class GameEngine;
 
@@ -59,7 +60,7 @@ private:
 	ComPtr<ID3D11Device> device;
 
 
-	unique_ptr<Building> building;
+	/*unique_ptr<Building> building;*/
 
 	shared_ptr<Camera> camera;
 

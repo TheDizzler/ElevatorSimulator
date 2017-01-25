@@ -1,5 +1,6 @@
 #include "GameManager.h"
 
+unique_ptr<Building> building;
 
 #include "../Engine/GameEngine.h"
 GameManager::GameManager(GameEngine* gmngn) {
@@ -25,6 +26,7 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 	}
 
 	building.reset(new Building());
+	building->initBuilding();
 	camera->setBuilding(building.get());
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;

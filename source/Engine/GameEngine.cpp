@@ -201,8 +201,7 @@ void GameEngine::render(double deltaTime) {
 	batch->Begin(SpriteSortMode_Deferred, NULL, NULL, NULL, NULL, NULL, camera->translationMatrix());
 	{
 		game->draw(batch.get());
-		/*showDialog->draw(batch.get());
-		mouse->draw(batch.get());*/
+
 	}
 	batch->End();
 

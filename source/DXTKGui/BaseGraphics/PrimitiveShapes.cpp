@@ -101,22 +101,22 @@ void RectangleFrame::draw(SpriteBatch* batch) {
 	// draw top horizontal bar
 	batch->Draw(pixel.Get(), frameTopPos, &frameHorizontal,
 		tint, rotation, origin, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 
 	// draw bottom horizontal bar
 	batch->Draw(pixel.Get(), frameBottomPos, &frameHorizontal,
 		tint, rotation, origin, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 
 	// draw left vertical bar
 	batch->Draw(pixel.Get(), frameLeftPos, &frameVertical,
 		tint, rotation, origin, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 
 	// draw right vertical bar
 	batch->Draw(pixel.Get(), frameRightPos, &frameVertical,
 		tint, rotation, origin, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 }
 
 void RectangleFrame::setPosition(const Vector2& newPosition) {
@@ -154,6 +154,10 @@ const int RectangleFrame::getHeight() const {
 
 const int RectangleFrame::getThickness() const {
 	return frameThickness;
+}
+
+const float RectangleFrame::getLayerDepth() const {
+	return layerDepth;
 }
 
 const Vector2& RectangleFrame::getOrigin() const {
@@ -198,6 +202,10 @@ void RectangleFrame::setAlpha(const float alpha) {
 	tint.w = alpha;
 }
 
+void RectangleFrame::setLayerDepth(const float depth) {
+	layerDepth = depth;
+}
+
 bool RectangleFrame::contains(const Vector2& point) {
 
 	return hitArea->contains(point);
@@ -207,7 +215,7 @@ bool RectangleFrame::contains(const Vector2& point) {
 
 
 
-
+/** ***** LINE START ***** **/
 Line::Line(GraphicsAsset* pixelAsset) {
 
 	pixel = pixelAsset->getTexture();
@@ -223,16 +231,22 @@ Line::Line(GraphicsAsset* pixelAsset,
 Line::~Line() {
 }
 
+const float Line::getRotation() const {
+	return rotation;
+}
+
 void Line::setDimensions(const Vector2& pos, const Vector2& size) {
 
 	position = pos;
-	/*position.x -= size.x / 2;
-	position.y -= size.y / 2;*/
 
 	lineRect.left = 0;
 	lineRect.top = 0;
 	lineRect.right = size.x;
 	lineRect.bottom = size.y;
+}
+
+void Line::setRotation(const float rot) {
+	rotation = rot;
 }
 
 void Line::setTint(const Color& color) {
@@ -243,13 +257,14 @@ void Line::setTint(const Color& color) {
 void Line::draw(SpriteBatch* batch) {
 
 	batch->Draw(pixel.Get(), position, &lineRect,
-		tint, 0.0f, Vector2(0, 0), scale,
-		SpriteEffects_None, 0.0f);
+		tint, rotation, Vector2(0, 0), scale,
+		SpriteEffects_None, layerDepth);
 }
+/** ***** END LINE ***** **/
 
 
 
-
+/** ***** TRIANGLEFRAME START ***** **/
 TriangleFrame::TriangleFrame(GraphicsAsset* pixelAsset) {
 
 	pixel = pixelAsset->getTexture();
@@ -265,9 +280,9 @@ void TriangleFrame::setDimensions(const Vector2& p1, const Vector2& p2,
 	point2 = p2;
 	point3 = p3;
 
-	angle1to2 = atan2(point1.y - point2.y, point1.x - point2.x) + XM_PI;
-	angle2to3 = atan2(point2.y - point3.y, point2.x - point3.x) + XM_PI;
-	angle3to1 = atan2(point3.y - point1.y, point3.x - point1.x) + XM_PI;
+	angle1to2 = atan2(point1.y - point2.y, point1.x - point2.x) + XM_PI + rotation;
+	angle2to3 = atan2(point2.y - point3.y, point2.x - point3.x) + XM_PI + rotation;
+	angle3to1 = atan2(point3.y - point1.y, point3.x - point1.x) + XM_PI + rotation;
 
 
 	originLine1 = Vector2::Zero;
@@ -301,20 +316,20 @@ void TriangleFrame::draw(SpriteBatch* batch) {
 
 	batch->Draw(pixel.Get(), point1, &lineRECT1,
 		tint, angle1to2, originLine1, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 
 	batch->Draw(pixel.Get(), point2, &lineRECT2,
 		tint, angle2to3, originLine2, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 
 	batch->Draw(pixel.Get(), point3, &lineRECT3,
 		tint, angle3to1, originLine3, scale,
-		SpriteEffects_None, 0.0f);
+		SpriteEffects_None, layerDepth);
 }
 
 
 const Vector2& TriangleFrame::getPosition() const {
-	return Vector2::Zero;
+	return point1;
 }
 
 const Vector2& TriangleFrame::getOrigin() const {
@@ -334,7 +349,7 @@ const Color& TriangleFrame::getTint() const {
 }
 
 const float TriangleFrame::getAlpha() const {
-	return 0.0f;
+	return tint.w;
 }
 
 const int TriangleFrame::getWidth() const {
@@ -343,6 +358,10 @@ const int TriangleFrame::getWidth() const {
 
 const int TriangleFrame::getHeight() const {
 	return 0;
+}
+
+const float TriangleFrame::getLayerDepth() const {
+	return layerDepth;
 }
 
 void TriangleFrame::moveBy(const Vector2& moveVector) {
@@ -391,13 +410,23 @@ void TriangleFrame::setScale(const Vector2& scl) {
 	setPosition(origpos);
 }
 
-void TriangleFrame::setRotation(const float rotation) {
+void TriangleFrame::setRotation(const float rot) {
+	rotation = rot;
+	angle1to2 += rot;
+	angle2to3 += rot;
+	angle3to1 += rot;
 }
 
 void TriangleFrame::setTint(const XMFLOAT4 color) {
+	tint = color;
 }
 
 void TriangleFrame::setAlpha(const float alpha) {
+	tint.w = alpha;
 }
 
+void TriangleFrame::setLayerDepth(const float depth) {
+	layerDepth = depth;
+}
+/** ***** END TRIANGLEFRAME ***** **/
 

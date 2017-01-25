@@ -46,7 +46,8 @@ public:
 
 private:
 
-	unique_ptr<Sprite> door;
+	//unique_ptr<Sprite> door;
+	unique_ptr<ImageButton> door;
 
 	vector<unique_ptr<Counter>> counters;
 

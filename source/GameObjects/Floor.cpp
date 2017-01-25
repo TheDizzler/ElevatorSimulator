@@ -105,7 +105,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 
 	exit = make_shared<Exit>(floorNumber);
 	Vector2 exitpos = floorPosition;
-	exitpos.y -= exit->getHeight() / 2;
+	exitpos.y -= exit->getHeight() /*/ 2*/;
 	mt19937 rng;
 	rng.seed(random_device{}());
 	bernoulli_distribution dist;
@@ -125,7 +125,6 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	exitpos.x = rand(rng);
 
 	exit->setPosition(exitpos);
-
 }
 
 Floor::~Floor() {
@@ -175,9 +174,9 @@ void Floor::update(double deltaTime) {
 					for (int i = 0; i < elevator->MAX_RIDERS_TRANSFERRING && i < ridersWaiting.size(); ++i) {
 						Rider* rider = ridersWaiting.back();
 						ridersWaiting.pop_back();
-						if ((elevatorDirection == NextStopDirection::Up
+						if ((elevatorDirection == Elevator::NextStopDirection::Up
 							&& rider->finalDestination->floorNumber > floorNumber)
-							|| (elevatorDirection == NextStopDirection::Down
+							|| (elevatorDirection == Elevator::NextStopDirection::Down
 								&& rider->finalDestination->floorNumber < floorNumber)) {
 
 							rider->enterElevator(elevator.get());
@@ -214,16 +213,18 @@ void Floor::update(double deltaTime) {
 				elevator->doorsClosed();
 				switch (elevator->state) {
 					case Elevator::ElevatorState::GoingUp:
-						upIndicatorLight = upIndicatorOff.get();
+						//upIndicatorLight = upIndicatorOff.get();
 						callButtons->elevatorArrivedGoingUp();
+						elevatorDeparting = true;
 						break;
 					case Elevator::ElevatorState::GoingDown:
-						downIndicatorLight = downIndicatorOff.get();
+						//downIndicatorLight = downIndicatorOff.get();
 						callButtons->elevatorArivedGoingDown();
+						elevatorDeparting = true;
 						break;
 				}
 				elevatorOnFloor = false;
-				elevatorDirection = NextStopDirection::None;
+				elevatorDirection = Elevator::NextStopDirection::None;
 			}
 			break;
 
@@ -234,6 +235,10 @@ void Floor::update(double deltaTime) {
 				door1 = doorLeft.get();
 				door2 = doorRight.get();
 				openDoors = false;
+			} else if (elevatorDeparting) {
+				downIndicatorLight = downIndicatorOff.get();
+				upIndicatorLight = upIndicatorOff.get();
+				elevatorDeparting = false;
 			}
 			break;
 	}
@@ -268,7 +273,8 @@ void Floor::pushUpButton(Rider* rider) {
 
 	if (!callButtons->upButtonPressed) {
 
-		if (elevator->getCurrentFloor().get() == this) {
+		if (/*elevator->getCurrentFloor().get() == this*/
+			doorState != DoorState::closed) {
 			doorState = DoorState::opening;
 		} else {
 			callButtons->pushUpButton();
@@ -297,16 +303,19 @@ void Floor::pushDownButton(Rider* rider) {
 
 void Floor::getInElevator(Rider* rider) {
 	ridersWaiting.push_back(rider);
+	stillLoadingElevator = true;
 }
 
 bool Floor::elevatorGoingUpDoorOpen() {
 	return doorState == DoorState::open &&
-		(elevatorDirection == NextStopDirection::Up || elevatorDirection == NextStopDirection::None);
+		(elevatorDirection == Elevator::NextStopDirection::Up
+			|| elevatorDirection == Elevator::NextStopDirection::None);
 }
 
 bool Floor::elevatorGoingDownDoorOpen() {
 	return doorState == DoorState::open &&
-		(elevatorDirection == NextStopDirection::Down || elevatorDirection == NextStopDirection::None);
+		(elevatorDirection == Elevator::NextStopDirection::Down
+			|| elevatorDirection == Elevator::NextStopDirection::None);
 }
 
 
@@ -321,17 +330,17 @@ void Floor::elevatorArrived(bool elevatorGoingUp) {
 
 }
 
-void Floor::elevatorApproaching(NextStopDirection nsd) {
+void Floor::elevatorApproaching(Elevator::NextStopDirection nsd) {
 
 	elevatorDirection = nsd;
 	switch (nsd) {
-		case NextStopDirection::Up:
+		case Elevator::NextStopDirection::Up:
 			upIndicatorLight = upIndicatorOn.get();
 			break;
-		case NextStopDirection::Down:
+		case Elevator::NextStopDirection::Down:
 			downIndicatorLight = downIndicatorOn.get();
 			break;
-		case NextStopDirection::None:
+		case Elevator::NextStopDirection::None:
 			break;
 	}
 }

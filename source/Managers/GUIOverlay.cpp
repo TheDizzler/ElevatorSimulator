@@ -49,7 +49,9 @@ GUIOverlay::GUIOverlay() {
 	newRiderButton.reset(guiFactory->createButton(
 		Vector2(0, Globals::WINDOW_HEIGHT / 2),
 		Vector2(10, 59), L"Create\nNew Rider"));
-	
+
+	/*imageButton.reset((ImageButton*)guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
+	imageButton->setPosition(Vector2(100, 100));*/
 }
 
 
@@ -66,6 +68,7 @@ void GUIOverlay::update(double deltaTime) {
 	currentFloorDisplay->update(deltaTime);
 	nextStopDisplay->update(deltaTime);
 	newRiderButton->update(deltaTime);
+	//imageButton->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -76,6 +79,7 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	currentFloorDisplay->draw(batch);
 	nextStopDisplay->draw(batch);
 	newRiderButton->draw(batch);
+	//imageButton->draw(batch);
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {

@@ -40,6 +40,7 @@ public:
 	const int getWidth() const;
 	const int getHeight() const;
 	const int getThickness() const;
+	virtual const float getLayerDepth() const override;
 
 	virtual const Vector2& getOrigin() const override;
 	virtual const Vector2& getScale() const override;
@@ -50,6 +51,7 @@ public:
 	virtual void setScale(const Vector2& scale) override;
 	virtual void setRotation(const float rotation) override;
 	virtual void setAlpha(const float alpha) override;
+	virtual void setLayerDepth(const float depth) override;
 
 	bool contains(const Vector2& point);
 private:
@@ -68,7 +70,7 @@ private:
 	float rotation = 0.0f;
 	Color tint = Colors::Black;
 	int frameThickness;
-
+	float layerDepth = 1.0f;
 	unique_ptr<HitArea> hitArea;
 };
 
@@ -82,22 +84,27 @@ public:
 	void setDimensions(const Vector2& point1, const Vector2& point2, const Vector2& point3,
 		USHORT thickness);
 
-	virtual const Vector2 & getPosition() const override;
-	virtual const Vector2 & getOrigin() const override;
-	virtual const Vector2 & getScale() const override;
+	virtual const Vector2& getPosition() const override;
+	virtual const Vector2& getOrigin() const override;
+	virtual const Vector2& getScale() const override;
 	virtual const float getRotation() const override;
-	virtual const Color & getTint() const override;
+	virtual const Color& getTint() const override;
 	virtual const float getAlpha() const override;
+	/* Returns 0.... */
 	virtual const int getWidth() const override;
+	/* Returns 0.... */
 	virtual const int getHeight() const override;
+	virtual const float getLayerDepth() const override;
 
 	virtual void moveBy(const Vector2 & moveVector) override;
+	/* Returns position of point1. */
 	virtual void setPosition(const Vector2 & position) override;
 	virtual void setOrigin(const Vector2 & origin) override;
 	virtual void setScale(const Vector2 & scale) override;
 	virtual void setRotation(const float rotation) override;
 	virtual void setTint(const XMFLOAT4 color) override;
 	virtual void setAlpha(const float alpha) override;
+	virtual void setLayerDepth(const float depth) override;
 
 	virtual void draw(SpriteBatch * batch) override;
 
@@ -113,7 +120,7 @@ private:
 
 	float rotation = 0.0f;
 	int lengthBuffer;
-
+	float layerDepth = 1.0;
 	Vector2 scale = Vector2(1, 1);
 	Color tint;
 };
@@ -127,8 +134,11 @@ public:
 		const Vector2& pos, const Vector2& size);
 	~Line();
 
+	const float getRotation() const;
+
 	void setDimensions(const Vector2& position, const Vector2& size);
 
+	void setRotation(const float rotation);
 	void setTint(const Color& color);
 
 	void draw(SpriteBatch* batch);
@@ -139,6 +149,7 @@ private:
 	RECT lineRect;
 	Vector2 position;
 	Vector2 scale = Vector2(1, 1);
-
+	float rotation = 0.0f;
+	float layerDepth = 1;
 	Color tint;
 };

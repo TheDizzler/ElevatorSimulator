@@ -47,6 +47,14 @@ bool GUIControl::contains(const Vector2& point) {
 }
 
 #include "GUIFactory.h"
+const float GUIControl::getLayerDepth() const {
+	return layerDepth;
+}
+
+const HitArea* GUIControl::getHitArea() const {
+	return hitArea.get();
+}
+
 GraphicsAsset* GUIControl::createTexture() {
 	return guiFactory->createTextureFromIElement2D(this);
 
@@ -66,5 +74,9 @@ void GUIControl::setTint(const XMFLOAT4 color) {
 
 void GUIControl::setAlpha(const float alpha) {
 	tint.w = alpha;
+}
+
+void GUIControl::setLayerDepth(const float depth) {
+	layerDepth = depth;
 }
 

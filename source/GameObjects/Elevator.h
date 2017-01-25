@@ -26,6 +26,10 @@ public:
 	Elevator(const Vector2& shaftTop, unsigned short numFloors);
 	~Elevator();
 
+	enum NextStopDirection {
+		Up, Down, None
+	};
+
 	void setFloors(vector<shared_ptr<Floor>> floors);
 
 	void update(double deltaTime);
@@ -50,8 +54,10 @@ public:
 
 	const int getWidth() const;
 
+	
 	enum ElevatorState {
-		GoingDown, GoingUp, Idle, /*WaitingForDoors,*/ Transferring/*, DoorsOpening, DoorsClosing, Loading*/
+		GoingDown, GoingUp, Idle, WaitingForDoors, Transferring
+		/* Idle: When nothing leftin any queues. */
 	};
 
 	ElevatorState state = Idle;
@@ -62,7 +68,8 @@ public:
 	const USHORT MAX_RIDERS_TRANSFERRING = 2;
 private:
 
-	bool nextStopDirectionUp();
+	NextStopDirection nextStopDirection;
+	
 	void selectFloor(USHORT floorRequested, bool riderGoingUp);
 	
 	unique_ptr<RectangleFrame> shaft;
@@ -79,7 +86,7 @@ private:
 	list<shared_ptr<Stop>> downQueue;
 
 
-	// use LERP for movement between floors!
+	// use LERP for movement between floors?
 	/* The current floor that the car is travelling through. */
 	vector<shared_ptr<Floor>>::iterator currentFloor;
 
@@ -88,9 +95,10 @@ private:
 
 	
 	
-
+	/* The stop right after the current stop (may change). */
 	shared_ptr<Stop> nextStop = NULL;
-
+	/* The stop currently travelling to or on. */
+	shared_ptr<Stop> currentStop = NULL;
 
 	Vector2 shaftTop;
 
@@ -99,9 +107,3 @@ private:
 	list<Rider*> ridersRiding;
 
 };
-
-
-
-
-// When going up to a destination
-	// check each floor in between to see if rider is waiting to go same direction

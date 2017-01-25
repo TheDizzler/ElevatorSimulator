@@ -82,10 +82,39 @@ void Elevator::update(double deltaTime) {
 
 			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
 
+				bool pickingUp = nextStop->pickUp;
+
 				nextStop->floor->elevatorArrived(nextStop->goingUp);
 				state = ElevatorState::Transferring;
 				stopQueue.remove(nextStop);
 				nextStop.reset();
+
+				if (stopQueue.size() == 0 && !pickingUp) {
+					nextStopDirection = NextStopDirection::None;
+					if (upQueue.size() > 0) {
+						upQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
+							return a->floor->floorNumber < b->floor->floorNumber; });
+						stopQueue = upQueue;
+						upQueue.clear();
+						guiOverlay->updateUpQueue(upQueue);
+						if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+							nextStopDirection = NextStopDirection::Up;
+						else
+							nextStopDirection = NextStopDirection::Down;
+					} else if (downQueue.size() > 0) {
+						downQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
+							return a->floor->floorNumber > b->floor->floorNumber; });
+						stopQueue = downQueue;
+						downQueue.clear();
+						guiOverlay->updateDownQueue(downQueue);
+						if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+							nextStopDirection = NextStopDirection::Up;
+						else
+							nextStopDirection = NextStopDirection::Down;
+					}
+					(*currentFloor)->elevatorApproaching(nextStopDirection);
+				}
+
 				guiOverlay->updateStopQueue(stopQueue);
 				guiOverlay->updateNextStopDisplay(L"-");
 
@@ -96,21 +125,25 @@ void Elevator::update(double deltaTime) {
 				guiOverlay->updateFloorDisplay(wss.str());
 
 				if ((*currentFloor) == nextStop->floor) {
-					NextStopDirection nsd;
+
 					if (stopQueue.size() <= 1 && !nextStop->pickUp) {
-						nsd = NextStopDirection::None;
+						nextStopDirection = NextStopDirection::None;
 						if (upQueue.size() > 0) {
 							stopQueue = upQueue;
 							upQueue.clear();
+							guiOverlay->updateUpQueue(upQueue);
+							nextStopDirection = NextStopDirection::Up;
 						} else if (downQueue.size() > 0) {
 							stopQueue = downQueue;
 							downQueue.clear();
+							guiOverlay->updateDownQueue(downQueue);
+							nextStopDirection = NextStopDirection::Down;
 						}
 					} else if (nextStop->goingUp)
-						nsd = NextStopDirection::Up;
+						nextStopDirection = NextStopDirection::Up;
 					else
-						nsd = NextStopDirection::Down;
-					nextStop->floor->elevatorApproaching(nsd);
+						nextStopDirection = NextStopDirection::Down;
+					nextStop->floor->elevatorApproaching(nextStopDirection);
 				}
 			}
 			break;
@@ -129,51 +162,74 @@ void Elevator::update(double deltaTime) {
 
 			if ((*currentFloor) == nextStop->floor && abs(car->getPosition().y - nextStop->floor->position.y) < 2) {
 			// arrived at destination
+				bool pickingUp = nextStop->pickUp;
 				nextStop->floor->elevatorArrived(nextStop->goingUp);
 				state = ElevatorState::Transferring;
 				stopQueue.remove(nextStop);
 				nextStop.reset();
 
-				if (stopQueue.size() == 0) {
+				if (stopQueue.size() == 0 && !pickingUp) {
+					nextStopDirection = NextStopDirection::None;
 					if (downQueue.size() > 0) {
 						downQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
 							return a->floor->floorNumber > b->floor->floorNumber; });
 						stopQueue = downQueue;
 						downQueue.clear();
 						guiOverlay->updateDownQueue(downQueue);
+						if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+							nextStopDirection = NextStopDirection::Up;
+						else
+							nextStopDirection = NextStopDirection::Down;
 					} else if (upQueue.size() > 0) {
 						upQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
 							return a->floor->floorNumber < b->floor->floorNumber; });
 						stopQueue = upQueue;
 						upQueue.clear();
 						guiOverlay->updateUpQueue(upQueue);
+						if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+							nextStopDirection = NextStopDirection::Up;
+						else
+							nextStopDirection = NextStopDirection::Down;
 					}
+					(*currentFloor)->elevatorApproaching(nextStopDirection);
 				}
 				guiOverlay->updateStopQueue(stopQueue);
 				guiOverlay->updateNextStopDisplay(L"-");
 
-			} else if (car->getPosition().y - car->getHeight() < (*currentFloor)->position.y - BuildingData::FLOOR_HEIGHT) {
+			} else if (car->getPosition().y - car->getHeight() <
+				(*currentFloor)->position.y - BuildingData::FLOOR_HEIGHT) {
+
 				++currentFloor;
 				wostringstream wss;
 				wss << (*currentFloor)->floorNumber;
 				guiOverlay->updateFloorDisplay(wss.str());
 
 				if ((*currentFloor) == nextStop->floor) {
-					NextStopDirection nsd;
-					if (stopQueue.size() <= 1 && !nextStop->pickUp) {
-						nsd = NextStopDirection::None;
+					if (stopQueue.size() - 1 == 0 && !nextStop->pickUp) {
+
+						nextStopDirection = NextStopDirection::None;
 						if (downQueue.size() > 0) {
 							stopQueue = downQueue;
 							downQueue.clear();
+							guiOverlay->updateDownQueue(downQueue);
+							if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+								nextStopDirection = NextStopDirection::Up;
+							else
+								nextStopDirection = NextStopDirection::Down;
 						} else if (upQueue.size() > 0) {
 							stopQueue = upQueue;
 							upQueue.clear();
+							guiOverlay->updateUpQueue(upQueue);
+							if (stopQueue.front()->floor->floorNumber > (*currentFloor)->floorNumber)
+								nextStopDirection = NextStopDirection::Up;
+							else
+								nextStopDirection = NextStopDirection::Down;
 						}
 					} else if (nextStop->goingUp)
-						nsd = NextStopDirection::Up;
+						nextStopDirection = NextStopDirection::Up;
 					else
-						nsd = NextStopDirection::Down;
-					nextStop->floor->elevatorApproaching(nsd);
+						nextStopDirection = NextStopDirection::Down;
+					nextStop->floor->elevatorApproaching(nextStopDirection);
 				}
 			}
 			break;
@@ -194,9 +250,9 @@ void Elevator::draw(SpriteBatch* batch) {
 }
 
 
-bool Elevator::nextStopDirectionUp() {
-	return nextStop->floor->floorNumber > (*currentFloor)->floorNumber;
-}
+//bool Elevator::nextStopDirectionUp() {
+//	return nextStop->floor->floorNumber > (*currentFloor)->floorNumber;
+//}
 
 
 void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
@@ -205,7 +261,6 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 
 	switch (state) {
 		case Idle:
-
 			if (newStop->floor->floorNumber > (*currentFloor)->floorNumber) {
 				state = GoingUp;
 				nextStop = newStop;
@@ -226,23 +281,24 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 			}
 			break;
 
+		case WaitingForDoors:
 		case Transferring:
 
 			if (riderGoingUp) {
-				if (nextStopDirectionUp() && newStop->floor->floorNumber > (*currentFloor)->floorNumber) {
-					 // add to current queue
+				if (nextStopDirection == NextStopDirection::Up
+					&& newStop->floor->floorNumber > (*currentFloor)->floorNumber) {
+						 // add to current queue
 					stopQueue.push_front(move(newStop));
 					stopQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
 						return a->floor->floorNumber < b->floor->floorNumber; });
 				} else {
 					// add to UpQueue
 					upQueue.push_front(move(newStop));
-					/*upQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-						return a->floor->floorNumber < b->floor->floorNumber; });*/
 				}
 			} else {
-				if (!nextStopDirectionUp() && newStop->floor->floorNumber < (*currentFloor)->floorNumber) {
-					// add to current queue
+				if (nextStopDirection == NextStopDirection::Down
+					&& newStop->floor->floorNumber < (*currentFloor)->floorNumber) {
+						// add to current queue
 					stopQueue.push_front(move(newStop));
 					stopQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
 						return a->floor->floorNumber > b->floor->floorNumber; });
@@ -250,10 +306,7 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 				} else {
 					// add to downQueue
 					downQueue.push_front(move(newStop));
-					/*downQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-						return a->floor->floorNumber > b->floor->floorNumber; });*/
 				}
-
 			}
 			break;
 
@@ -261,7 +314,6 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 			if (riderGoingUp) {
 			// if car is below rider location
 				if (newStop->floor->position.y < car->getPosition().y) {
-
 					// add to queue and sort
 					stopQueue.push_front(move(newStop));
 					stopQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
@@ -269,14 +321,10 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 				} else { // missed it...
 					// rider below car: place in up queue for later
 					upQueue.push_front(move(newStop));
-					/*upQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-						return a->floor->floorNumber < b->floor->floorNumber; });*/
 				}
 			} else {
 				// place in to down queue
 				downQueue.push_front(move(newStop));
-				/*downQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-					return a->floor->floorNumber > b->floor->floorNumber; });*/
 			}
 			break;
 
@@ -290,15 +338,10 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 						return a->floor->floorNumber > b->floor->floorNumber; });
 				} else { // missed it...
 					downQueue.push_front(move(newStop));
-					/*downQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-						return a->floor->floorNumber > b->floor->floorNumber; });*/
 				}
 			} else {
 				// rider below car: place in up queue for later
 				upQueue.push_front(move(newStop));
-				/*upQueue.sort([](const shared_ptr<Stop> a, const shared_ptr<Stop> b) {
-					return a->floor->floorNumber < b->floor->floorNumber; });*/
-
 			}
 
 			break;
@@ -307,9 +350,11 @@ void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
 	guiOverlay->updateStopQueue(stopQueue);
 	guiOverlay->updateUpQueue(upQueue);
 	guiOverlay->updateDownQueue(downQueue);
-	wostringstream wssNext;
-	wssNext << nextStop->floor->floorNumber;
-	guiOverlay->updateNextStopDisplay(wssNext.str());
+	if (nextStop.get() != NULL) {
+		wostringstream wssNext;
+		wssNext << nextStop->floor->floorNumber;
+		guiOverlay->updateNextStopDisplay(wssNext.str());
+	}
 }
 
 
@@ -337,12 +382,20 @@ bool Elevator::stillUnloading() {
 
 void Elevator::doneTransferring() {
 	//state = ElevatorState::WaitingForDoors;
-	if (nextStop.get() == NULL)
+	//if (nextStop.get() == NULL) {
+	//if (stopQueue.size() != 0)
+
+	if (stopQueue.size() == 0 && downQueue.size() == 0 && upQueue.size() == 0)
 		state = ElevatorState::Idle;
-	else if (nextStop->floor->floorNumber > (*currentFloor)->floorNumber)
+	else
+		state = Elevator::WaitingForDoors;
+/*} else {
+
+	if (nextStop->floor->floorNumber > (*currentFloor)->floorNumber)
 		state = ElevatorState::GoingUp;
 	else
 		state = ElevatorState::GoingDown;
+}*/
 }
 
 shared_ptr<Floor> Elevator::getCurrentFloor() {

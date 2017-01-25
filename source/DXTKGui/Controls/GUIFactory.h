@@ -61,6 +61,7 @@ public:
 	Button* createImageButton(const Vector2& position,
 		const char_t* upImage, const char_t* downImage,
 		const char_t* fontName = "Default Font");
+	Button* createImageButton(unique_ptr<Sprite> upSprite, const char_t* fontName = "Default Font");
 
 	AnimatedButton* createAnimatedButton(const char_t* animatedButtonName,
 		Vector2 position = Vector2::Zero);

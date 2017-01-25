@@ -4,9 +4,6 @@
 #include "Exit.h"
 #include "CallButtons.h"
 
-enum NextStopDirection {
-	Up, Down, None
-};
 
 class Floor {
 public:
@@ -34,11 +31,13 @@ public:
 	bool elevatorGoingDownDoorOpen();
 	bool elevatorOnFloor = false;
 	void elevatorArrived(bool elevatorGoingUp);
-	void elevatorApproaching(NextStopDirection direction);
+	void elevatorApproaching(Elevator::NextStopDirection direction);
 
 private:
 
-	NextStopDirection elevatorDirection = NextStopDirection::None;
+	Elevator::NextStopDirection elevatorDirection = Elevator::NextStopDirection::None;
+	bool elevatorDeparting;
+
 
 	vector<Rider*> ridersWaiting;
 

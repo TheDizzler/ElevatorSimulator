@@ -29,8 +29,18 @@ BuildingData::BuildingData(USHORT numFloors) {
 Building::Building() {
 
 	// build building data	
-	BuildingData::BuildingData(NUM_FLOORS);
+	/*BuildingData buildingData = */BuildingData::BuildingData(NUM_FLOORS);
 
+	
+}
+
+Building::~Building() {
+
+	riders.clear();
+	floors.clear();
+}
+
+void Building::initBuilding() {
 	// construct building
 	outline.reset(guiFactory->createRectangleFrame(
 		BuildingData::BUILDING_POSITION,
@@ -57,22 +67,9 @@ Building::Building() {
 
 	elevator->setFloors(floors);
 
+	generateRider(1);
 
-	riderStartFloor = floors[0];
-
-	generateRider();
-
-	guiOverlay->newRiderButton->setOnClickListener(new NewRiderButtonListener(this));
-}
-
-Building::~Building() {
-
-	/*for each (Rider* rider in riders)
-		delete rider;*/
-
-	riders.clear();
-
-	floors.clear();
+	guiOverlay->newRiderButton->setOnClickListener(getNewRiderButton(1));
 }
 
 void Building::update(double deltaTime) {
@@ -118,8 +115,13 @@ void Building::draw(SpriteBatch* batch) {
 	outline->draw(batch);
 }
 
+NewRiderButtonListener* Building::getNewRiderButton(USHORT floorNumber) {
+	return new NewRiderButtonListener(this, floorNumber);
+}
 
-void Building::generateRider() {
+
+
+void Building::generateRider(USHORT startFloorNumber) {
 
 	int min = 1;
 	int max = floors.size();
@@ -129,7 +131,7 @@ void Building::generateRider() {
 	unsigned short destinationFloorNum = rand(rng);
 
 	shared_ptr<Rider> rider = make_shared<Rider>(gfxAssets->getAsset("Rider"),
-		riderStartFloor, floors[destinationFloorNum - 1]->getExit());
+		floors[startFloorNumber - 1], floors[destinationFloorNum - 1]->getExit());
 
 
 	riders.push_back(rider);

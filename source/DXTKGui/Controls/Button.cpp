@@ -250,10 +250,10 @@ ImageButton::ImageButton(unique_ptr<Sprite> buttonSprite,
 	setTextOffset(Vector2(0, -5), Vector2(0, 0));
 
 	normalSprite = move(buttonSprite);
-	//normalSprite->setOrigin(Vector2(0, 0));
+
 	Vector2 size = Vector2(normalSprite->getWidth(), normalSprite->getHeight());
 	width = size.x;
-	height = size.x;
+	height = size.y;
 	hitArea.reset(new HitArea(Vector2::Zero, size));
 
 	setToUnpressedState();
@@ -274,6 +274,7 @@ ImageButton::ImageButton(unique_ptr<Sprite> upButtonSprite,
 	width = size.x;
 	height = size.y;
 	hitArea.reset(new HitArea(Vector2::Zero, size));
+
 	setToUnpressedState();
 }
 
@@ -281,6 +282,32 @@ ImageButton::ImageButton(unique_ptr<Sprite> upButtonSprite,
 ImageButton::~ImageButton() {
 }
 
+
+//void ImageButton::update(double deltaTime) {
+//	if (hitArea->contains(mouse->getPosition())) {
+//		isHover = true;
+//		if (!isPressed) {
+//			onHover();
+//			setToHoverState();
+//		}
+//	} else
+//		isHover = false;
+//
+//	if (isPressed && !mouse->leftButton()) {
+//		isClicked = true;
+//		onClick();
+//		setToUnpressedState();
+//	} else {
+//		isClicked = false;
+//		if (!isHover) {
+//			isPressed = false;
+//			setToUnpressedState();
+//		} else if (mouse->pressed()) {
+//			isPressed = true;
+//			setToSelectedState();
+//		}
+//	}
+//}
 
 void ImageButton::draw(SpriteBatch* batch) {
 
@@ -296,13 +323,11 @@ void ImageButton::setText(wstring text) {
 
 void ImageButton::setPosition(const Vector2& pos) {
 
-	position = pos;
-	Button::setPosition(position);
+	Button::setPosition(pos);
 	Vector2 spritePos = position;
 	spritePos.x += normalSprite->getWidth() / 2;
 	spritePos.y += normalSprite->getHeight() / 2;
 	normalSprite->setPosition(spritePos);
-
 
 }
 

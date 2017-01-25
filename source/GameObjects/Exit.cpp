@@ -1,13 +1,14 @@
 #include "Exit.h"
 
 #include "../Engine/GameEngine.h"
+#include "Building.h"
 Exit::Exit(USHORT floorNum) {
 
-	door = move(gfxAssets->getSpriteFromAsset("Office Door"));
 	floorNumber = floorNum;
-
-
-
+	//door = move(gfxAssets->getSpriteFromAsset("Office Door"));
+	door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
+	door->setOnClickListener(building->getNewRiderButton(floorNumber));
+	
 }
 
 Exit::~Exit() {
@@ -15,19 +16,18 @@ Exit::~Exit() {
 
 void Exit::setPosition(const Vector2& position) {
 	door->setPosition(position);
-
 }
 
-const Vector2 & Exit::getPosition() {
+const Vector2& Exit::getPosition() {
 	return door->getPosition();
 }
 
 const int Exit::getWidth() {
-	return door->getWidth();
+	return door->getScaledWidth();
 }
 
 const int Exit::getHeight() {
-	return door->getHeight();
+	return door->getScaledHeight();
 }
 
 const HitArea* Exit::getHitArea() {
@@ -44,9 +44,10 @@ void Exit::update(double deltaTime) {
 		return !counter->isAlive;
 	}), counters.end());
 
+	door->update(deltaTime);
 }
 
-void Exit::draw(SpriteBatch * batch) {
+void Exit::draw(SpriteBatch* batch) {
 
 	door->draw(batch);
 	for (auto& const counter : counters)
@@ -62,7 +63,8 @@ void Exit::riderArrived(Rider* rider) {
 	mt19937 rng;
 	rng.seed(random_device{}());
 	uniform_int_distribution<mt19937::result_type> rand(0, door->getWidth() * 2);
-	pos.x -= rand(rng) - door->getWidth();
+	int rndNum = rand(rng) - door->getWidth();
+	pos.x -=  rndNum;
 	unique_ptr<Counter> counter = make_unique<Counter>(pos);
 	counters.push_back(move(counter));
 
@@ -98,6 +100,6 @@ void Counter::update(double deltaTime) {
 		isAlive = false;
 }
 
-void Counter::draw(SpriteBatch * batch) {
+void Counter::draw(SpriteBatch* batch) {
 	label->draw(batch);
 }

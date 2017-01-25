@@ -8,6 +8,7 @@
 #include "Floor.h"
 
 
+class NewRiderButtonListener;
 
 /**At default zoom 1 meter will be assumed to be 48 pixels. */
 struct BuildingData {
@@ -35,12 +36,14 @@ public:
 	Building();
 	~Building();
 
+	void initBuilding();
 
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
+	NewRiderButtonListener* getNewRiderButton(USHORT floorNumber);
 
-	void generateRider();
+	void generateRider(USHORT startFloorNumber);
 private:
 
 	list<shared_ptr<Rider>> riders;
@@ -49,21 +52,20 @@ private:
 	unique_ptr<RectangleFrame> outline;
 	vector<shared_ptr<Floor> > floors;
 
-	
 
-
-	//Vector2 riderStart;
-	shared_ptr<Floor> riderStartFloor;
 
 };
 
 class NewRiderButtonListener : public Button::OnClickListener {
 public:
-	NewRiderButtonListener(Building* build) : building(build) {
+	NewRiderButtonListener(Building* build, USHORT floorNum) : building(build), floorNumber(floorNum) {
 	}
-	virtual void onClick(Button * button) override {
-		building->generateRider();
+	virtual void onClick(Button* button) override {
+		building->generateRider(floorNumber);
 	}
 
 	Building* building;
+
+private:
+	USHORT floorNumber;
 };

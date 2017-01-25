@@ -259,6 +259,13 @@ Button* GUIFactory::createImageButton(const Vector2& position,
 	return button;
 }
 
+Button* GUIFactory::createImageButton(unique_ptr<Sprite> upSprite, const char_t* fontName) {
+
+	ImageButton* button = new ImageButton(move(upSprite), getFont(fontName));
+	button->initializeControl(this, mouseController);
+	return button;
+}
+
 AnimatedButton* GUIFactory::createAnimatedButton(const char_t* animatedButtonName,
 	Vector2 position) {
 

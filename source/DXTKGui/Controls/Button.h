@@ -131,7 +131,7 @@ public:
 		unique_ptr<Sprite> downButtonSprite, unique_ptr<FontSet> font);
 	~ImageButton();
 
-
+	//virtual void update(double deltaTime) override;
 	virtual void draw(SpriteBatch* batch) override;
 
 	virtual void setText(wstring text) override;
@@ -167,7 +167,7 @@ public:
 	virtual void setText(wstring text) override;
 	
 	virtual const Vector2& XM_CALLCONV measureString() const override;
-	virtual const Vector2 & getPosition() const override;
+	virtual const Vector2& getPosition() const override;
 	virtual const int getWidth() const override;
 	virtual const int getHeight() const override;
 
