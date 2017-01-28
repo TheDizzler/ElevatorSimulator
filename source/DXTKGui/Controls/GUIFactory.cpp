@@ -649,10 +649,15 @@ bool GUIFactory::getGUIAssetsFromXML() {
 
 		}
 
-
+		Vector2 origin = Vector2(-1000, -1000);
+		xml_node originNode = spriteNode.child("origin");
+		if (originNode) {
+			origin.x = originNode.attribute("x").as_int();
+			origin.y = originNode.attribute("y").as_int();
+		}
 		unique_ptr<GraphicsAsset> guiAsset;
 		guiAsset.reset(new GraphicsAsset());
-		if (!guiAsset->load(device, StringHelper::convertCharStarToWCharT(file))) {
+		if (!guiAsset->load(device, StringHelper::convertCharStarToWCharT(file), origin)) {
 			wstringstream wss;
 			wss << "Unable to load file: " << file;
 			MessageBox(hwnd, wss.str().c_str(), L"Critical error", MB_OK);
@@ -671,7 +676,7 @@ bool GUIFactory::getGUIAssetsFromXML() {
 		// the spritesheet itself is never saved into the map
 		unique_ptr<GraphicsAsset> masterAsset;
 		masterAsset.reset(new GraphicsAsset());
-		if (!masterAsset->load(device, StringHelper::convertCharStarToWCharT(file)))
+		if (!masterAsset->load(device, StringHelper::convertCharStarToWCharT(file), Vector2::Zero))
 			return false;
 
 
@@ -714,9 +719,16 @@ bool GUIFactory::getGUIAssetsFromXML() {
 			Vector2 size = Vector2(spriteNode.attribute("width").as_int(),
 				spriteNode.attribute("height").as_int());
 
+			Vector2 origin = Vector2(-1000, -1000);
+			xml_node originNode = spriteNode.child("origin");
+			if (originNode) {
+				origin.x = originNode.attribute("x").as_int();
+				origin.y = originNode.attribute("y").as_int();
+			}
+
 			unique_ptr<GraphicsAsset> spriteAsset;
 			spriteAsset.reset(new GraphicsAsset());
-			spriteAsset->loadAsPartOfSheet(masterAsset->getTexture(), position, size);
+			spriteAsset->loadAsPartOfSheet(masterAsset->getTexture(), position, size, origin);
 
 			assetMap[name] = move(spriteAsset);
 		}

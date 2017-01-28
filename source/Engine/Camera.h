@@ -38,7 +38,7 @@ public:
 	void centerOn(Vector2 pos, bool clampToBuilding = true);
 
 	Matrix translationMatrix();
-
+	Vector2& worldToScreen(Vector2 worldPosition);
 private:
 	float zoom;
 	float buildingWidth, buildingHeight;
@@ -51,4 +51,5 @@ private:
 	void zoomToFitBuilding();
 	void buildingClampedPosition(Vector2& position);
 	Vector2* screenToWorld(Vector2 screenPosition);
+	
 };

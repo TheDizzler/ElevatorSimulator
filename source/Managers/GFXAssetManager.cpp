@@ -106,9 +106,16 @@ bool GFXAssetManager::getGFXAssetsFromXML(ComPtr<ID3D11Device> device) {
 		const char_t* name = spriteNode.attribute("name").as_string();
 		string check = name;
 
+		Vector2 origin = Vector2(-1000, -1000);
+		xml_node originNode = spriteNode.child("origin");
+		if (originNode) {
+			origin.x = originNode.attribute("x").as_int();
+			origin.y = originNode.attribute("y").as_int();
+		}
+
 		unique_ptr<GraphicsAsset> gfxAsset;
 		gfxAsset.reset(new GraphicsAsset());
-		if (!gfxAsset->load(device, StringHelper::convertCharStarToWCharT(file))) {
+		if (!gfxAsset->load(device, StringHelper::convertCharStarToWCharT(file), origin)) {
 			wstringstream wss;
 			wss << "Unable to load texture file: " << file;
 			MessageBox(0, wss.str().c_str(), L"Critical error", MB_OK);
@@ -181,9 +188,16 @@ bool GFXAssetManager::getGFXAssetsFromXML(ComPtr<ID3D11Device> device) {
 			Vector2 size = Vector2(spriteNode.attribute("width").as_int(),
 				spriteNode.attribute("height").as_int());
 
+			Vector2 origin = Vector2(-1000, -1000);
+			xml_node originNode = spriteNode.child("origin");
+			if (originNode) {
+				origin.x = originNode.attribute("x").as_int();
+				origin.y = originNode.attribute("y").as_int();
+			}
+
 			unique_ptr<GraphicsAsset> spriteAsset;
 			spriteAsset.reset(new GraphicsAsset());
-			spriteAsset->loadAsPartOfSheet(masterAsset->getTexture(), position, size);
+			spriteAsset->loadAsPartOfSheet(masterAsset->getTexture(), position, size, origin);
 
 			if (spriteNode.attribute("set")) {
 				string setName = spriteNode.attribute("set").as_string();

@@ -5,17 +5,18 @@ MouseController::MouseController(HWND hWnd) {
 	hwnd = hWnd;
 	mouse.reset(new Mouse());
 	mouse->SetWindow(hwnd);
+
 }
 
-MouseController::MouseController(HWND hWnd, Mouse& mse) {
-
-	hwnd = hWnd;
-
-	mouse.reset(&mse);
-	hitArea.reset(new HitArea(
-		Vector2(position.x - origin.x, position.y - origin.y),
-		Vector2(width, height)));
-}
+//MouseController::MouseController(HWND hWnd, Mouse& mse) {
+//
+//	hwnd = hWnd;
+//
+//	mouse.reset(&mse);
+//	hitArea.reset(new HitArea(
+//		Vector2(position.x/* - origin.x*/, position.y/* - origin.y*/),
+//		Vector2(width, height)));
+//}
 
 
 MouseController::~MouseController() {
@@ -40,23 +41,34 @@ bool MouseController::loadMouseIcon(GUIFactory* guiFactory,
 	}
 
 	Sprite::load(mouseAsset);
-	setOrigin(Vector2::Zero);
+	setOrigin(mouseAsset->getOrigin());
+
 	return true;
 }
 
-
+#include "../../Engine/GameEngine.h"
 void MouseController::saveMouseState() {
 
 	lastState = state;
 	state = mouse->GetState();
-	setPosition(Vector2(state.x, state.y) );
+	setPosition(Vector2(state.x, state.y));
 	// This is the absolute position of the mouse relative
 	// to the upper-left corner of the window
 
 
 	isPressed = !lastState.leftButton && state.leftButton;
 	isClicked = lastState.leftButton && !state.leftButton;
+
+	wostringstream wss;
+	wss << "screen x: " << getPosition().x << " , screen y: " << getPosition().y << "\n";
+	Vector2 world = XMVector2Transform(getPosition(), camera->translationMatrix().Invert());
+	wss << "world x: " << world.x << " , world y: " << world.y;
+	guiOverlay->mousePosLabel->setText(wss);
 }
+
+//const Vector2& MouseController::getPosition() const {
+//	return hitArea->position/* * camera->translationMatrix()*/;
+//}
 
 //const Vector2 MouseController::getMovement() const {
 	/*wostringstream ws;

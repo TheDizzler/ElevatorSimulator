@@ -100,6 +100,9 @@ void Camera::centerOn(Vector2 pos, bool showWholeBuilding) {
 	position = pos;
 }
 
+Vector2& Camera::worldToScreen(Vector2 worldPosition) {
+	return Vector2::Transform(worldPosition, translationMatrix());
+}
 
 Vector2* Camera::screenToWorld(Vector2 screenPosition) {
 

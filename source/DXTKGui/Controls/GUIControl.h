@@ -6,7 +6,7 @@
 #include "../BaseGraphics/GraphicsAsset.h"
 #include "../Controllers/MouseController.h"
 
-
+class Camera;
 interface GUIControl : public IElement2D {
 public:
 
@@ -15,6 +15,8 @@ public:
 		guiFactory = factory;
 		mouse = mouseController;
 	}
+
+	void addCamera(shared_ptr<Camera> camera);
 
 	/* Deprecating */
 	enum ClickAction {
@@ -52,6 +54,9 @@ public:
 	
 	const HitArea* getHitArea() const;
 
+	virtual const Vector2& getScreenPosition(Matrix viewProjectionMatrix) const;
+	virtual const unique_ptr<HitArea> getScreenHitArea(Matrix viewProjectionMatrix) const;
+
 	bool contains(const Vector2& point);
 
 	GraphicsAsset* createTexture();
@@ -85,6 +90,8 @@ protected:
 
 	GUIFactory* guiFactory;
 	shared_ptr<MouseController> mouse;
+
+	shared_ptr<Camera> camera;
 
 };
 

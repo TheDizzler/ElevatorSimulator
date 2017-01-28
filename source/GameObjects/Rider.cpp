@@ -62,8 +62,12 @@ void Rider::moveBy(const Vector2& moveAmount) {
 	sprite->moveBy(moveAmount);
 }
 
-
+#include "../Engine/GameEngine.h"
 void Rider::update(double deltaTime) {
+
+	wostringstream wss;
+	wss << "x: " << sprite->getPosition().x << " , y: " << sprite->getPosition().y;
+	guiOverlay->testLabel->setText(wss);
 
 	switch (riderState) {
 		case GoingToElevator:

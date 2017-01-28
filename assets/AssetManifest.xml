@@ -36,7 +36,10 @@
 		</spritefonts>
 
 
-		<sprite name="Mouse Arrow" file="../gfx/Mouse Arrow.dds"/>
+		<sprite name="Mouse Arrow" file="../gfx/Mouse Arrow.dds">
+		<!-- Set origin to the point you want be the clicky part. -->
+			<origin x="2" y="2" />
+		</sprite>
 
 
 		<sprite name="Test BG" file="TestBG.dds" />

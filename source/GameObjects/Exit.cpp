@@ -8,13 +8,15 @@ Exit::Exit(USHORT floorNum) {
 	//door = move(gfxAssets->getSpriteFromAsset("Office Door"));
 	door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
 	door->setOnClickListener(building->getNewRiderButton(floorNumber));
-	
+
 }
 
 Exit::~Exit() {
 }
 
-void Exit::setPosition(const Vector2& position) {
+void Exit::setPosition(const Vector2& pos) {
+
+	Vector2 position = pos;
 	door->setPosition(position);
 }
 
@@ -64,7 +66,7 @@ void Exit::riderArrived(Rider* rider) {
 	rng.seed(random_device{}());
 	uniform_int_distribution<mt19937::result_type> rand(0, door->getWidth() * 2);
 	int rndNum = rand(rng) - door->getWidth();
-	pos.x -=  rndNum;
+	pos.x -= rndNum;
 	unique_ptr<Counter> counter = make_unique<Counter>(pos);
 	counters.push_back(move(counter));
 

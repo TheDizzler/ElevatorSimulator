@@ -52,6 +52,9 @@ GUIOverlay::GUIOverlay() {
 
 	/*imageButton.reset((ImageButton*)guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
 	imageButton->setPosition(Vector2(100, 100));*/
+
+	testLabel.reset(guiFactory->createTextLabel(Vector2(100, 150)));
+	mousePosLabel.reset(guiFactory->createTextLabel(Vector2(25, 25)));
 }
 
 
@@ -62,13 +65,15 @@ GUIOverlay::~GUIOverlay() {
 
 void GUIOverlay::update(double deltaTime) {
 
+
 	stopQueueDialog->update(deltaTime);
 	upQueueDialog->update(deltaTime);
 	downQueueDialog->update(deltaTime);
 	currentFloorDisplay->update(deltaTime);
 	nextStopDisplay->update(deltaTime);
 	newRiderButton->update(deltaTime);
-	//imageButton->update(deltaTime);
+	testLabel->update(deltaTime);
+	mousePosLabel->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -79,7 +84,8 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	currentFloorDisplay->draw(batch);
 	nextStopDisplay->draw(batch);
 	newRiderButton->draw(batch);
-	//imageButton->draw(batch);
+	testLabel->draw(batch);
+	mousePosLabel->draw(batch);
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {

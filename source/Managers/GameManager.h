@@ -62,7 +62,7 @@ private:
 
 	/*unique_ptr<Building> building;*/
 
-	shared_ptr<Camera> camera;
+	//shared_ptr<Camera> camera;
 
 	
 };

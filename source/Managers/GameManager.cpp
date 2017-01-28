@@ -5,7 +5,7 @@ unique_ptr<Building> building;
 #include "../Engine/GameEngine.h"
 GameManager::GameManager(GameEngine* gmngn) {
 	gameEngine = gmngn;
-	camera = gameEngine->camera;
+	//camera = gameEngine->camera;
 }
 
 GameManager::~GameManager() {

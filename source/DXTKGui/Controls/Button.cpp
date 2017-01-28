@@ -57,10 +57,17 @@ void Button::setDimensions(const Vector2& pos, const Vector2& size,
 
 }
 
-
+#include "../../Engine/Camera.h"
 void Button::update(double deltaTime) {
 
-	if (hitArea->contains(mouse->getPosition())) {
+	HitArea* hit;
+	if (camera.get() == NULL)
+		hit = hitArea.get();
+	else
+		hit = getScreenHitArea(camera->translationMatrix()).get();
+
+			//if (hitArea->contains(mouse->getPosition())) {
+	if (hit->contains(mouse->getPosition())) {
 		isHover = true;
 		if (!isPressed) {
 			onHover();

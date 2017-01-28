@@ -5,6 +5,8 @@
 #include "Camera.h"
 
 
+extern shared_ptr<Camera> camera;
+
 
 class GraphicsEngine {
 public:
@@ -38,7 +40,7 @@ public:
 	ComPtr<IDXGISwapChain> getSwapChain();
 	SpriteBatch* getSpriteBatch();
 
-	shared_ptr<Camera> camera;
+	//shared_ptr<Camera> camera;
 protected:
 	HWND hwnd;
 	unique_ptr<SpriteBatch> batch;

@@ -114,17 +114,25 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 
 	int min, max;
 	if (leftSide) {
-		min = floorPosition.x + exit->getWidth() / 2;
-		max = buttonpos.x - exit->getWidth() / 2;
+		min = floorPosition.x/* + exit->getWidth() / 2*/;
+		max = buttonpos.x/* - exit->getWidth() / 2*/;
 	} else {
-		min = elevator->getShaftPosition().x + elevator->getWidth() + exit->getWidth() / 2;
-		max = floorPosition.x + BuildingData::BUILDING_LENGTH - exit->getWidth() / 2;
+		min = elevator->getShaftPosition().x + elevator->getWidth() /*+ exit->getWidth() / 2*/;
+		max = floorPosition.x + BuildingData::BUILDING_LENGTH /*- exit->getWidth() / 2*/;
 	}
 
 	uniform_int_distribution<mt19937::result_type> rand(min, max);
 	exitpos.x = rand(rng);
 
 	exit->setPosition(exitpos);
+
+
+	/*door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
+	door->setPosition(exitpos);*/
+
+	door.reset(guiFactory->createButton(exitpos,
+		Vector2(10, 59), L"Create\nNew Rider"));
+	door->addCamera(camera);
 }
 
 Floor::~Floor() {
@@ -140,6 +148,7 @@ shared_ptr<Exit> Floor::getExit() {
 void Floor::update(double deltaTime) {
 
 	exit->update(deltaTime);
+	door->update(deltaTime);
 
 	double moveTime;
 	switch (doorState) {
@@ -258,6 +267,7 @@ void Floor::draw(SpriteBatch* batch) {
 	downIndicatorLight->draw(batch);
 
 	exit->draw(batch);
+	//door->draw(batch);
 }
 
 int Floor::callButtonLocation() {

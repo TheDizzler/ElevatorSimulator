@@ -1,7 +1,6 @@
 #include "GraphicsEngine.h"
 
-//#include <DirectXColors.h>
-
+shared_ptr<Camera> camera;
 
 GraphicsEngine::GraphicsEngine() {
 
