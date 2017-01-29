@@ -2,7 +2,7 @@
 
 #include "../globals.h"
 
-USHORT NUM_FLOORS = 3;
+USHORT NUM_FLOORS = 8;
 USHORT BuildingData::PIXELS_PER_METER = 48;
 USHORT BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
 USHORT BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
@@ -31,7 +31,7 @@ Building::Building() {
 	// build building data	
 	/*BuildingData buildingData = */BuildingData::BuildingData(NUM_FLOORS);
 
-	
+
 }
 
 Building::~Building() {
@@ -67,9 +67,12 @@ void Building::initBuilding() {
 
 	elevator->setFloors(floors);
 
-	generateRider(1);
+	//generateRider(1);
 
-	guiOverlay->newRiderButton->setOnClickListener(getNewRiderButton(1));
+	buildingEntrance = make_unique<Exit>(1);
+	buildingEntrance->setPosition(floors[0]->position);
+	buildingEntrance->moveBy(Vector2(0, -buildingEntrance->getHeight()));
+	guiOverlay->newRiderButton->setOnClickListener(getNewRiderButton(buildingEntrance.get()));
 }
 
 void Building::update(double deltaTime) {
@@ -115,13 +118,14 @@ void Building::draw(SpriteBatch* batch) {
 	outline->draw(batch);
 }
 
-NewRiderButtonListener* Building::getNewRiderButton(USHORT floorNumber) {
-	return new NewRiderButtonListener(this, floorNumber);
+
+
+NewRiderButtonListener* Building::getNewRiderButton(Exit* exit) {
+	return new NewRiderButtonListener(this, exit);
 }
 
 
-
-void Building::generateRider(USHORT startFloorNumber) {
+void Building::generateRider(Exit*  exit) {
 
 	int min = 1;
 	int max = floors.size();
@@ -131,9 +135,9 @@ void Building::generateRider(USHORT startFloorNumber) {
 	unsigned short destinationFloorNum = rand(rng);
 
 	shared_ptr<Rider> rider = make_shared<Rider>(gfxAssets->getAsset("Rider"),
-		floors[startFloorNumber - 1], floors[destinationFloorNum - 1]->getExit());
+		floors[exit->floorNumber - 1], exit, floors[destinationFloorNum - 1]->getExit());
 
-
+	rider->moveBy(Vector2(exit->getWidth(), exit->getHeight()));
 	riders.push_back(rider);
 }
 

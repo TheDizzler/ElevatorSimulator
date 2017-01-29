@@ -41,9 +41,11 @@ public:
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
-	NewRiderButtonListener* getNewRiderButton(USHORT floorNumber);
+	//NewRiderButtonListener* getNewRiderButton(USHORT floorNumber);
+	NewRiderButtonListener* getNewRiderButton(Exit* exit);
 
-	void generateRider(USHORT startFloorNumber);
+	//void generateRider(USHORT startFloorNumber);
+	void generateRider(Exit* exit);
 private:
 
 	list<shared_ptr<Rider>> riders;
@@ -52,20 +54,27 @@ private:
 	unique_ptr<RectangleFrame> outline;
 	vector<shared_ptr<Floor> > floors;
 
-
+	unique_ptr<Exit> buildingEntrance;
 
 };
 
 class NewRiderButtonListener : public Button::OnClickListener {
 public:
-	NewRiderButtonListener(Building* build, USHORT floorNum) : building(build), floorNumber(floorNum) {
-	}
-	virtual void onClick(Button* button) override {
-		building->generateRider(floorNumber);
+	/*NewRiderButtonListener(Building* build, USHORT floorNum) : building(build), floorNumber(floorNum) {
+	}*/
+	NewRiderButtonListener(Building* build, Exit* xt) : building(build), exit(xt) {
+
 	}
 
-	Building* building;
+
+	virtual void onClick(Button* button) override {
+		//building->generateRider(floorNumber);
+		building->generateRider(exit);
+	}
+
 
 private:
-	USHORT floorNumber;
+	//USHORT floorNumber;
+	Building* building;
+	Exit* exit;
 };

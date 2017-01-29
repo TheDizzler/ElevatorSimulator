@@ -42,7 +42,7 @@ private:
 	vector<Rider*> ridersWaiting;
 
 	shared_ptr<Exit> exit;
-	shared_ptr<Button> door;
+	//shared_ptr<Button> door;
 
 	unique_ptr<Line> line; // this is the floor
 	unique_ptr<CallButtons> callButtons;

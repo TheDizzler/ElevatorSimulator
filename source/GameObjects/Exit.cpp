@@ -5,9 +5,9 @@
 Exit::Exit(USHORT floorNum) {
 
 	floorNumber = floorNum;
-	//door = move(gfxAssets->getSpriteFromAsset("Office Door"));
 	door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
-	door->setOnClickListener(building->getNewRiderButton(floorNumber));
+	door->setOnClickListener(building->getNewRiderButton(this));
+	door->addCamera(camera);
 
 }
 
@@ -18,6 +18,11 @@ void Exit::setPosition(const Vector2& pos) {
 
 	Vector2 position = pos;
 	door->setPosition(position);
+
+}
+
+void Exit::moveBy(const Vector2& moveAmount) {
+	door->moveBy(moveAmount);
 }
 
 const Vector2& Exit::getPosition() {
@@ -47,6 +52,7 @@ void Exit::update(double deltaTime) {
 	}), counters.end());
 
 	door->update(deltaTime);
+
 }
 
 void Exit::draw(SpriteBatch* batch) {
@@ -54,6 +60,7 @@ void Exit::draw(SpriteBatch* batch) {
 	door->draw(batch);
 	for (auto& const counter : counters)
 		counter->draw(batch);
+
 }
 
 #include "Rider.h"

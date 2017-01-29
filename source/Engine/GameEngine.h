@@ -72,6 +72,11 @@ public:
 		warningDialog->setTextTint(Color(1, 1, 1, 1));
 		showDialog = warningDialog.get();
 	}
+
+	/* Critical error dialog. Exits game when dismissed. */
+	static unique_ptr<Dialog> errorDialog;
+	/* Minor error dialog. Choice between exit game and continue. */
+	static unique_ptr<Dialog> warningDialog;
 private:
 
 	unique_ptr<AudioEngine> audioEngine;
@@ -86,10 +91,7 @@ private:
 	HWND hwnd;
 	bool retryAudio;
 
-	/* Critical error dialog. Exits game when dismissed. */
-	static unique_ptr<Dialog> errorDialog;
-	/* Minor error dialog. Choice between exit game and continue. */
-	static unique_ptr<Dialog> warningDialog;
+	
 	static Dialog* showDialog;
 };
 

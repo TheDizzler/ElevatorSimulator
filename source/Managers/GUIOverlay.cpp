@@ -73,7 +73,7 @@ void GUIOverlay::update(double deltaTime) {
 	nextStopDisplay->update(deltaTime);
 	newRiderButton->update(deltaTime);
 	testLabel->update(deltaTime);
-	mousePosLabel->update(deltaTime);
+	//mousePosLabel->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {

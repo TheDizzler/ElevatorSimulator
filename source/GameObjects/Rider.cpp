@@ -1,12 +1,18 @@
 #include "Rider.h"
 
-Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> floor, shared_ptr<Exit> destination) {
+Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> startFloor,
+	Exit* startExit, shared_ptr<Exit> destinationExit) {
 
 	sprite.reset(new Sprite());
 	sprite->load(gfxAsset);
 
-	setFloor(floor);
-	finalDestination = destination;
+	//setFloor(floor);
+	currentFloor = startFloor;
+	Vector2 pos = startExit->getPosition();
+	pos.x -= sprite->getWidth() / 2;
+	pos.y -= sprite->getHeight() / 2;
+	sprite->setPosition(pos);
+	finalDestination = destinationExit;
 	setWaypoint();
 
 }
@@ -65,9 +71,9 @@ void Rider::moveBy(const Vector2& moveAmount) {
 #include "../Engine/GameEngine.h"
 void Rider::update(double deltaTime) {
 
-	wostringstream wss;
+	/*wostringstream wss;
 	wss << "x: " << sprite->getPosition().x << " , y: " << sprite->getPosition().y;
-	guiOverlay->testLabel->setText(wss);
+	guiOverlay->testLabel->setText(wss);*/
 
 	switch (riderState) {
 		case GoingToElevator:
@@ -123,15 +129,15 @@ void Rider::draw(SpriteBatch* batch) {
 }
 
 
-void Rider::setFloor(shared_ptr<Floor> floor) {
-
-	currentFloor = floor;
-	Vector2 pos = floor->position;
-	pos.x -= sprite->getWidth() / 2;
-	pos.y -= sprite->getHeight() / 2;
-	sprite->setPosition(pos);
-
-}
+//void Rider::setFloor(shared_ptr<Floor> floor) {
+//
+//	currentFloor = floor;
+//	Vector2 pos = floor->position;
+//	pos.x -= sprite->getWidth() / 2;
+//	pos.y -= sprite->getHeight() / 2;
+//	sprite->setPosition(pos);
+//
+//}
 
 
 

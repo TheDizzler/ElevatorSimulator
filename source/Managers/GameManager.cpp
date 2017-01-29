@@ -17,7 +17,7 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 	device = dvc;
 	mouse = ms;
 
-	
+
 	gameEngine->constructErrorDialogs();
 
 	if (!mouse->loadMouseIcon(guiFactory.get(), "Mouse Arrow")) {
@@ -52,26 +52,34 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 
 	auto state = Keyboard::Get().GetState();
 	keyTracker.Update(state);
-	if (keyTracker.IsKeyReleased(Keyboard::Escape))
-		pause();
+	if (keyTracker.IsKeyReleased(Keyboard::Escape)) {
+		if (GameEngine::warningDialog->isOpen)
+			GameEngine::warningDialog->close();
+		else
+			pause();
+	}
 
-	Vector2 cameraMove = Vector2::Zero;
-	if (state.A)
-		cameraMove.x -= 500 * deltaTime;
-	if (state.D)
-		cameraMove.x += 500 * deltaTime;
-	if (state.W)
-		cameraMove.y -= 500 * deltaTime;
-	if (state.S)
-		cameraMove.y += 500 * deltaTime;
-	camera->moveCamera(cameraMove, false);
+	if (GameEngine::warningDialog->isOpen) {
+		GameEngine::warningDialog->update(deltaTime);
+	} else {
+		Vector2 cameraMove = Vector2::Zero;
+		if (state.A)
+			cameraMove.x -= 500 * deltaTime;
+		if (state.D)
+			cameraMove.x += 500 * deltaTime;
+		if (state.W)
+			cameraMove.y -= 500 * deltaTime;
+		if (state.S)
+			cameraMove.y += 500 * deltaTime;
+		camera->moveCamera(cameraMove, false);
 
-	float mouseWheelDelta = mouse->scrollWheelValue();
-	if (mouseWheelDelta != 0)
-		camera->adjustZoom(mouseWheelDelta / 10);
+		float mouseWheelDelta = mouse->scrollWheelValue();
+		if (mouseWheelDelta != 0)
+			camera->adjustZoom(mouseWheelDelta / 10);
 
 
-	building->update(deltaTime);
+		building->update(deltaTime);
+	}
 }
 
 
@@ -82,7 +90,7 @@ void GameManager::draw(SpriteBatch* batch) {
 		currentScreen->draw(batch);*/
 
 	building->draw(batch);
-	
+
 }
 
 void GameManager::loadLevel(string levelName) {
@@ -115,6 +123,8 @@ void GameManager::pause() {
 
 	/*if (currentScreen != NULL)
 		currentScreen->pause();*/
+
+
 	GameEngine::showWarningDialog(L"Really Exit?", L"Exit?");
 }
 

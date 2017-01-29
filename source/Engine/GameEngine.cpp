@@ -184,9 +184,9 @@ void GameEngine::update(double deltaTime) {
 	mouse->saveMouseState();
 	keys->saveKeyboardState();
 	//guiFactory->updateMouse();
-	if (showDialog->isOpen) {
+	/*if (showDialog->isOpen) {
 		showDialog->update(deltaTime);
-	} else
+	} else*/
 		game->update(deltaTime, keys.get(), mouse.get());
 
 	guiOverlay->update(deltaTime);

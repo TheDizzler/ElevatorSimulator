@@ -600,9 +600,9 @@ GraphicsAsset* GUIFactory::createTextureFromScreen(Screen* screen, Color bgColor
 	return gfxAsset;
 }
 
-void GUIFactory::updateMouse() {
-	mouseController->saveMouseState();
-}
+//void GUIFactory::updateMouse() {
+//	mouseController->saveMouseState();
+//}
 
 
 #include "DDSTextureLoader.h"

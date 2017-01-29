@@ -29,6 +29,7 @@ public:
 	~Exit();
 
 	void setPosition(const Vector2& position);
+	void moveBy(const Vector2& moveAmount);
 
 	const Vector2& getPosition();
 	const int getWidth();
@@ -43,10 +44,8 @@ public:
 
 	void riderArrived(Rider* rider);
 
-
 private:
 
-	//unique_ptr<Sprite> door;
 	unique_ptr<ImageButton> door;
 
 	vector<unique_ptr<Counter>> counters;

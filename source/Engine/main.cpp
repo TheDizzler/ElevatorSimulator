@@ -266,7 +266,7 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			gameEngine->suspend();
 			break;
 		case WM_KILLFOCUS:
-			gameEngine->suspend();
+			//gameEngine->suspend();
 			//OutputDebugString(L"Lost Focus\n");
 			return 0;
 

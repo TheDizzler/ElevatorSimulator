@@ -55,7 +55,7 @@ public:
 	const HitArea* getHitArea() const;
 
 	virtual const Vector2& getScreenPosition(Matrix viewProjectionMatrix) const;
-	virtual const unique_ptr<HitArea> getScreenHitArea(Matrix viewProjectionMatrix) const;
+	virtual unique_ptr<HitArea> getScreenHitArea(Matrix viewProjectionMatrix) const;
 
 	bool contains(const Vector2& point);
 

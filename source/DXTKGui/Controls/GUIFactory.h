@@ -98,7 +98,7 @@ public:
 
 	GraphicsAsset* createTextureFromScreen(Screen* screen, Color bgColor = {1, 1, 1, 1});
 
-	void updateMouse();
+	//void updateMouse();
 	static bool initialized;
 private:
 	HWND hwnd;

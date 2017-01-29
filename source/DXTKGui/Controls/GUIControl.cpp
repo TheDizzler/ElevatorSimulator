@@ -67,11 +67,11 @@ const Vector2& GUIControl::getScreenPosition(Matrix viewProjectionMatrix) const 
 
 }
 
-const unique_ptr<HitArea> GUIControl::getScreenHitArea(Matrix viewProjectionMatrix) const {
+unique_ptr<HitArea> GUIControl::getScreenHitArea(Matrix viewProjectionMatrix) const {
 
 	Vector2 screenCords = getScreenPosition(viewProjectionMatrix);
 	unique_ptr<HitArea> projectedHitArea;
-	projectedHitArea.reset(new HitArea(hitArea->position + screenCords, hitArea->size));
+	projectedHitArea.reset(new HitArea(screenCords, hitArea->size*scale));
 	return projectedHitArea;
 }
 

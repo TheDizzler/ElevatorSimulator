@@ -60,34 +60,56 @@ void Button::setDimensions(const Vector2& pos, const Vector2& size,
 #include "../../Engine/Camera.h"
 void Button::update(double deltaTime) {
 
-	HitArea* hit;
-	if (camera.get() == NULL)
-		hit = hitArea.get();
-	else
-		hit = getScreenHitArea(camera->translationMatrix()).get();
 
-			//if (hitArea->contains(mouse->getPosition())) {
-	if (hit->contains(mouse->getPosition())) {
-		isHover = true;
-		if (!isPressed) {
-			onHover();
-			setToHoverState();
-		}
-	} else
-		isHover = false;
+	if (camera.get() == NULL) {
+		if (hitArea->contains(mouse->getPosition())) {
+			isHover = true;
+			if (!isPressed) {
+				onHover();
+				setToHoverState();
+			}
+		} else
+			isHover = false;
 
-	if (isPressed && !mouse->leftButton()) {
-		isClicked = true;
-		onClick();
-		setToUnpressedState();
-	} else {
-		isClicked = false;
-		if (!isHover) {
-			isPressed = false;
+		if (isPressed && !mouse->leftButton()) {
+			isClicked = true;
+			onClick();
 			setToUnpressedState();
-		} else if (mouse->pressed()) {
-			isPressed = true;
-			setToSelectedState();
+		} else {
+			isClicked = false;
+			if (!isHover) {
+				isPressed = false;
+				setToUnpressedState();
+			} else if (mouse->pressed()) {
+				isPressed = true;
+				setToSelectedState();
+			}
+		}
+	} else {
+		unique_ptr<HitArea> projectedHit;
+		projectedHit = move(getScreenHitArea(camera->translationMatrix()));
+		if (projectedHit->contains(mouse->getPosition())) {
+			isHover = true;
+			if (!isPressed) {
+				onHover();
+				setToHoverState();
+			}
+		} else
+			isHover = false;
+
+		if (isPressed && !mouse->leftButton()) {
+			isClicked = true;
+			onClick();
+			setToUnpressedState();
+		} else {
+			isClicked = false;
+			if (!isHover) {
+				isPressed = false;
+				setToUnpressedState();
+			} else if (mouse->pressed()) {
+				isPressed = true;
+				setToSelectedState();
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@
 	to a mysterious room in a building. Or to exit the building never to be seen again... */
 class Rider {
 public:
-	Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> currentFloor, shared_ptr<Exit> destinationFloor);
+	Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> startFloor, Exit* startExit, shared_ptr<Exit> destinationExit);
 	~Rider();
 
 	void enterElevator(Elevator* awaitingElevator);
@@ -47,7 +47,7 @@ private:
 
 	float moveSpeed = 100;
 
-	void setFloor(shared_ptr<Floor> floor);
+	//void setFloor(shared_ptr<Floor> floor);
 	void setWaypoint();
 
 };
