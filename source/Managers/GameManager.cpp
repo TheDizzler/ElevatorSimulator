@@ -25,13 +25,13 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 		return false;
 	}
 
-	building.reset(new Building());
+	/*building.reset(new Building());
 	building->initBuilding();
 	camera->setBuilding(building.get());
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
 	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
-	camera->centerOn(buildingCenter, false);
+	camera->centerOn(buildingCenter, false);*/
 
 
 	return true;
@@ -78,7 +78,7 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 			camera->adjustZoom(mouseWheelDelta / 10);
 
 
-		building->update(deltaTime);
+		//building->update(deltaTime);
 	}
 }
 
@@ -89,7 +89,7 @@ void GameManager::draw(SpriteBatch* batch) {
 	} else
 		currentScreen->draw(batch);*/
 
-	building->draw(batch);
+	//building->draw(batch);
 
 }
 

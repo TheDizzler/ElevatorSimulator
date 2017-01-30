@@ -2,7 +2,7 @@
 
 #include "../globals.h"
 
-USHORT NUM_FLOORS = 8;
+USHORT NUM_FLOORS;
 USHORT BuildingData::PIXELS_PER_METER = 48;
 USHORT BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
 USHORT BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
@@ -26,8 +26,9 @@ BuildingData::BuildingData(USHORT numFloors) {
 
 
 #include "../Engine/GameEngine.h"
-Building::Building() {
+Building::Building(USHORT numFloors) {
 
+	NUM_FLOORS = numFloors;
 	// build building data	
 	/*BuildingData buildingData = */BuildingData::BuildingData(NUM_FLOORS);
 

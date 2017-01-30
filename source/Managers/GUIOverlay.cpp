@@ -55,6 +55,8 @@ GUIOverlay::GUIOverlay() {
 
 	testLabel.reset(guiFactory->createTextLabel(Vector2(100, 150)));
 	mousePosLabel.reset(guiFactory->createTextLabel(Vector2(25, 25)));
+
+	spinner.reset(guiFactory->createSpinner(Vector2(10, 50), 50, 32));
 }
 
 
@@ -74,6 +76,7 @@ void GUIOverlay::update(double deltaTime) {
 	newRiderButton->update(deltaTime);
 	testLabel->update(deltaTime);
 	//mousePosLabel->update(deltaTime);
+	spinner->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -86,6 +89,7 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	newRiderButton->draw(batch);
 	testLabel->draw(batch);
 	mousePosLabel->draw(batch);
+	spinner->draw(batch);
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {

@@ -115,10 +115,10 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 	int min, max;
 	if (leftSide) {
 		min = floorPosition.x/* + exit->getWidth() / 2*/;
-		max = buttonpos.x/* - exit->getWidth() / 2*/;
+		max = buttonpos.x - callButtons->getWidth() - exit->getWidth();
 	} else {
 		min = elevator->getShaftPosition().x + elevator->getWidth() /*+ exit->getWidth() / 2*/;
-		max = floorPosition.x + BuildingData::BUILDING_LENGTH - exit->getWidth() / 2;
+		max = floorPosition.x + BuildingData::BUILDING_LENGTH - exit->getWidth();
 	}
 
 	uniform_int_distribution<mt19937::result_type> rand(min, max);

@@ -26,6 +26,8 @@ public:
 	unique_ptr<TextLabel> testLabel;
 	unique_ptr<TextLabel> mousePosLabel;
 
+	unique_ptr<Spinner> spinner;
+
 private:
 	unique_ptr<Dialog> stopQueueDialog;
 	unique_ptr<Dialog> upQueueDialog;

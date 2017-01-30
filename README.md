@@ -12,6 +12,8 @@ An experiment in elevator management and test of my GUI toolkit.
 >- added getHitArea function to GUIControl
 >- fixed a bug where height was getting value of width in ImageButton constructor
 >- added a layer depth control to GUIControls and Sprites; set GUIControl default to 1.0f and Sprite to 0.0f
+>- added spinner control
+
 
 ## Need to do
 >- allow GUIcontrols to use depth attribute in spritebatch (Implemented; not tested)

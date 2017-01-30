@@ -311,6 +311,17 @@ CheckBox* GUIFactory::createCheckBox(const Vector2& position,
 
 }
 
+
+Spinner* GUIFactory::createSpinner(const Vector2& position, const size_t width,
+	const size_t itemHeight, const char_t* upButtonAsset, const char_t* downButtonAsset, const char_t* fontName) {
+
+	Spinner* spinner = new Spinner(position, width, itemHeight);
+	spinner->initializeControl(this, mouseController);
+	spinner->initialize(fontName, getAsset("White Pixel"), upButtonAsset, downButtonAsset);
+	return spinner;
+}
+
+
 ScrollBar* GUIFactory::createScrollBar(const Vector2& position, size_t barHeight) {
 
 	ScrollBar* scrollBar = new ScrollBar(position);
@@ -599,10 +610,6 @@ GraphicsAsset* GUIFactory::createTextureFromScreen(Screen* screen, Color bgColor
 		Vector2(screenWidth - buffer, screenHeight - buffer));
 	return gfxAsset;
 }
-
-//void GUIFactory::updateMouse() {
-//	mouseController->saveMouseState();
-//}
 
 
 #include "DDSTextureLoader.h"

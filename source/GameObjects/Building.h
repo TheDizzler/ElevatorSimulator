@@ -33,7 +33,7 @@ struct BuildingData {
 /** A Simulate Building populated with elevators and riders. */
 class Building {
 public:
-	Building();
+	Building(USHORT numFloors);
 	~Building();
 
 	void initBuilding();

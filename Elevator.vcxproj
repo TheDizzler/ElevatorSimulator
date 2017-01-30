@@ -164,6 +164,7 @@
     <ClCompile Include="source\DXTKGui\Controls\GUIFactory.cpp" />
     <ClCompile Include="source\DXTKGui\Controls\ListBox.cpp" />
     <ClCompile Include="source\DXTKGui\Controls\ScrollBar.cpp" />
+    <ClCompile Include="source\DXTKGui\Controls\Spinner.cpp" />
     <ClCompile Include="source\DXTKGui\Controls\TextLabel.cpp" />
     <ClCompile Include="source\DXTKGui\Controls\TexturePanel.cpp" />
     <ClCompile Include="source\DXTKGui\Effects\ScreenTransitions.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="source\DXTKGui\Controls\GUIFactory.h" />
     <ClInclude Include="source\DXTKGui\Controls\ListBox.h" />
     <ClInclude Include="source\DXTKGui\Controls\ScrollBar.h" />
+    <ClInclude Include="source\DXTKGui\Controls\Spinner.h" />
     <ClInclude Include="source\DXTKGui\Controls\TextLabel.h" />
     <ClInclude Include="source\DXTKGui\Controls\TexturePanel.h" />
     <ClInclude Include="source\DXTKGui\Effects\ScreenTransitions.h" />

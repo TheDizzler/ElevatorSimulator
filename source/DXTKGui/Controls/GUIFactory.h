@@ -8,6 +8,7 @@
 #include "ComboBox.h"
 #include "Dialog.h"
 #include "CheckBox.h"
+#include "Spinner.h"
 
 
 using namespace pugi;
@@ -72,6 +73,11 @@ public:
 	CheckBox* createCheckBox(const Vector2& position,
 		const char_t* uncheckedImage, const char_t* checkedImage,
 		wstring text = L"", const char_t* fontName = "Default Font");
+
+	Spinner* createSpinner(const Vector2& position, const size_t width,
+		const size_t itemHeight = 32, const char_t* upButtonAsset = "Spinner Up Button",
+		const char_t* downButtonAsset = "Spinner Down Button", const char_t* fontName = "Default Font");
+
 
 	ListBox* createListBox(const Vector2& position, const int width,
 		const int itemHeight = 32, const int maxItemsShown = 7,
