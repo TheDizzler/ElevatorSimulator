@@ -131,8 +131,10 @@ public:
 		unique_ptr<Sprite> downButtonSprite, unique_ptr<FontSet> font);
 	~ImageButton();
 
-	//virtual void update(double deltaTime) override;
 	virtual void draw(SpriteBatch* batch) override;
+
+	/* Changing size will change the scale.*/
+	void setDimensions(const Vector2& position, const Vector2& size);
 
 	virtual void setText(wstring text) override;
 

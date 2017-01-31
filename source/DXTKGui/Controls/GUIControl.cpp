@@ -23,6 +23,8 @@ const wchar_t * GUIControl::getText() {
 
 void GUIControl::setScale(const Vector2& scl) {
 	scale = scl;
+	hitArea->position = Vector2(position.x - origin.x*scale.x,
+		position.y - origin.y*scale.y);
 	hitArea->size = Vector2(getWidth()*scale.x, getHeight()*scale.y);
 }
 

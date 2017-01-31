@@ -2,7 +2,7 @@
 
 //#include "../Managers/GameManager.h"
 #include "../Engine/GameEngine.h"
-Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) {
+Floor::Floor(Building* building, size_t floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) {
 
 	line.reset(guiFactory->createLine(
 		floorPosition, Vector2(BuildingData::BUILDING_LENGTH, 2)));
@@ -103,7 +103,7 @@ Floor::Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elev) 
 
 	// create at least one exit
 
-	exit = make_shared<Exit>(floorNumber);
+	exit = make_shared<Exit>(building, floorNumber);
 	Vector2 exitpos = floorPosition;
 	exitpos.y -= exit->getHeight() /*/ 2*/;
 	mt19937 rng;

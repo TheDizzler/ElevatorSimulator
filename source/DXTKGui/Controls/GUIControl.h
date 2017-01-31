@@ -101,6 +101,8 @@ protected:
 		Not actually implemented.... */
 interface GUIControlBox : public GUIControl {
 public:
-	virtual void addItem(unique_ptr<GUIControl> control) = 0;
-	virtual void addItems(vector<unique_ptr<GUIControl> > controls) = 0;
+	virtual size_t addControl(unique_ptr<GUIControl> control) = 0;
+	virtual void addControls(vector<unique_ptr<GUIControl> > controls) = 0;
+
+	virtual GUIControl* getControl(size_t controlPosition) const = 0;
 };

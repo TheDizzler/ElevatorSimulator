@@ -144,6 +144,9 @@
     <ClCompile Include="source\DXTKGui\Controls\Spinner.cpp">
       <Filter>Source Files\DXTKGui</Filter>
     </ClCompile>
+    <ClCompile Include="source\DXTKGui\Controls\Panel.cpp">
+      <Filter>Source Files\DXTKGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\DXTKGui\Controls\Button.h">
@@ -258,6 +261,9 @@
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="source\DXTKGui\Controls\Spinner.h">
+      <Filter>Header Files\DXTKGui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DXTKGui\Controls\Panel.h">
       <Filter>Header Files\DXTKGui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,13 +17,24 @@ void Spinner::initialize(const pugi::char_t* fontName, GraphicsAsset* pixelAsset
 	const pugi::char_t* upButtonName, const pugi::char_t* downButtonName) {
 
 
+	label.reset(guiFactory->createTextLabel(Vector2::Zero, fontName));
+	label->setTint(Vector4(0, 0, 0, 1));
+	label->setText("100");
+	if (label->getHeight() > itemHeight)
+		itemHeight = label->getHeight();
+
 
 	upButton.reset((ImageButton*) guiFactory->createImageButton(upButtonName));
-	downButton.reset((ImageButton*) guiFactory->createImageButton(downButtonName));
+	/*upButton->setDimensions(Vector2(position.x + width, position.y), Vector2(upButton->getWidth(), itemHeight / 2));*/
+	if (upButton->getHeight() * 2 > itemHeight)
+		itemHeight = upButton->getHeight() * 2;
 
 	upButton->setPosition(Vector2(position.x + width, position.y));
 	upButton->setOnClickListener(new SpinnerUpButtonListener(this));
-	downButton->setPosition(Vector2(position.x + width, position.y + upButton->getHeight()));
+	downButton.reset((ImageButton*) guiFactory->createImageButton(downButtonName));
+	/*downButton->setDimensions(Vector2(position.x + width, position.y + (itemHeight - upButton->getHeight())),
+		Vector2(upButton->getWidth(), itemHeight / 2));*/
+	downButton->setPosition(Vector2(position.x + width, position.y + (itemHeight - upButton->getHeight())));
 	downButton->setOnClickListener(new SpinnerDownButtonListener(this));
 
 	frame = make_unique<RectangleFrame>(pixelAsset);
@@ -32,20 +43,9 @@ void Spinner::initialize(const pugi::char_t* fontName, GraphicsAsset* pixelAsset
 	rectangle->setDimensions(position, Vector2(width, itemHeight));
 
 
-	label.reset(guiFactory->createTextLabel(Vector2::Zero, fontName));
-	label->setTint(Vector4(0, 0, 0, 1));
-	label->setText("100");
+
 	Vector2 labelpos = Vector2(position.x, position.y + (itemHeight - label->getHeight()) / 2);
 	label->setPosition(labelpos);
-
-	vector<wstring> test;
-	for (int i = 0; i < 100; ++i) {
-		wostringstream wss;
-		wss << i;
-		test.push_back(wss.str());
-	}
-
-	add(test);
 }
 
 
@@ -92,6 +92,10 @@ void Spinner::decrease() {
 	label->setText(list[selected]);
 }
 
+
+void Spinner::setScale(const Vector2& scale) {
+
+}
 
 void Spinner::setFont(const pugi::char_t* font) {
 	label->setFont(font);

@@ -118,7 +118,7 @@ void Dialog::calculateTitlePos() {
 		}
 
 		//setTitleAreaDimensions(newSize);
-		setDimensions(newPos, newSize);
+		setDimensions(newPos, newSize, frameThickness);
 		// not sure if this is necessary, but it was a fun excersize :O
 	}
 	Vector2 titlePos = Vector2(
@@ -269,22 +269,25 @@ void Dialog::setTitleAreaDimensions(const Vector2& newSize) {
 void Dialog::setConfirmButton(unique_ptr<Button> okButton,
 	bool autoPosition, bool autoSize) {
 
+
 	if (autoSize)
 		okButton->setDimensions(okButtonPosition, standardButtonSize, 3);
+
+	controls[ButtonOK].release();
+	controls[ButtonOK] = move(okButton);
 
 	if (autoPosition) {
 		okButtonPosition.x = position.x + buttonMargin;
 		if (calculateButtonPosition(okButtonPosition))
-			okButtonPosition.y -= okButton->getHeight() / 2;
+			okButtonPosition.y -= controls[ButtonOK]->getHeight() / 2;
 	} else {
-		okButtonPosition = okButton->getPosition();
+		okButtonPosition = controls[ButtonOK]->getPosition();
 	}
 
 
-	okButton->setPosition(okButtonPosition);
+	controls[ButtonOK]->setPosition(okButtonPosition);
 
-	controls[ButtonOK].release();
-	controls[ButtonOK] = move(okButton);
+	
 }
 
 void Dialog::setConfirmButton(wstring text, const pugi::char_t* font) {
@@ -315,7 +318,29 @@ void Dialog::setCancelButton(unique_ptr<Button> cancelButton,
 	bool autoPosition, bool autoSize) {
 
 
+	if (autoSize)
+		cancelButton->setDimensions(cancelButtonPosition, standardButtonSize, 3);
+
+	controls[ButtonCancel].release();
+	controls[ButtonCancel] = move(cancelButton);
+
 	if (autoPosition) {
+		cancelButtonPosition.x =
+			position.x + size.x - controls[ButtonCancel]->getWidth() - buttonMargin;
+		if (calculateButtonPosition(cancelButtonPosition))
+			cancelButtonPosition.y -= controls[ButtonCancel]->getHeight() / 2;
+	} else {
+		cancelButtonPosition = controls[ButtonCancel]->getPosition();
+	}
+
+
+	controls[ButtonCancel]->setPosition(cancelButtonPosition);
+
+
+
+
+
+	/*if (autoPosition) {
 		if (cancelButton->getWidth() == 0) {
 			cancelButton->setDimensions(cancelButtonPosition, standardButtonSize, 3);
 		}
@@ -333,7 +358,7 @@ void Dialog::setCancelButton(unique_ptr<Button> cancelButton,
 		cancelButton->setPosition(cancelButtonPosition);
 
 	controls[ButtonCancel].release();
-	controls[ButtonCancel] = move(cancelButton);
+	controls[ButtonCancel] = move(cancelButton);*/
 }
 
 void Dialog::setCancelButton(wstring text, const pugi::char_t * font) {
@@ -467,16 +492,22 @@ void Dialog::draw(SpriteBatch* batch) {
 }
 
 
-void Dialog::addItem(unique_ptr<GUIControl> control) {
+size_t Dialog::addControl(unique_ptr<GUIControl> control) {
 
+	control->moveBy(dialogFramePosition);
 	controls.push_back(move(control));
+	return controls.size() - 1;
 }
 
 /* Not too sure how this will behave....*/
-void Dialog::addItems(vector<unique_ptr<GUIControl>> newControls) {
+void Dialog::addControls(vector<unique_ptr<GUIControl>> newControls) {
 
 	for (int i = 0; i < newControls.size(); ++i)
 		controls.push_back(move(newControls[i]));
+}
+
+GUIControl* Dialog::getControl(size_t controlPosition) const {
+	return controls.at(controlPosition).get();
 }
 
 /** Not used in DialogBox */

@@ -88,7 +88,6 @@ bool GameEngine::initEngine(HWND hw, HINSTANCE hInstance) {
 
 	ShowCursor(false);
 
-	showDialog->open();
 	return true;
 }
 

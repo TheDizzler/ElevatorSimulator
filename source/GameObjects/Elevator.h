@@ -23,7 +23,7 @@ struct Stop {
 
 class Elevator {
 public:
-	Elevator(const Vector2& shaftTop, unsigned short numFloors);
+	Elevator(const Vector2& shaftTop, size_t numFloors);
 	~Elevator();
 
 	enum NextStopDirection {
@@ -36,7 +36,7 @@ public:
 	void draw(SpriteBatch* batch);
 
 
-	void callElevatorTo(USHORT newFloorToQueue, bool goingUp);
+	void callElevatorTo(size_t newFloorToQueue, bool goingUp);
 	void enterElevator(Rider* rider);
 
 	//vector<Rider*> ridersDisembarking(USHORT floorNumber);
@@ -70,7 +70,7 @@ private:
 
 	NextStopDirection nextStopDirection;
 	
-	void selectFloor(USHORT floorRequested, bool riderGoingUp);
+	void selectFloor(size_t floorRequested, bool riderGoingUp);
 	
 	unique_ptr<RectangleFrame> shaft;
 	unique_ptr<RectangleFrame> car;

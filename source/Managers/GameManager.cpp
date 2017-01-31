@@ -1,6 +1,6 @@
 #include "GameManager.h"
 
-unique_ptr<Building> building;
+//unique_ptr<Building> building;
 
 #include "../Engine/GameEngine.h"
 GameManager::GameManager(GameEngine* gmngn) {
@@ -25,17 +25,52 @@ bool GameManager::initializeGame(HWND hwnd, ComPtr<ID3D11Device> dvc, shared_ptr
 		return false;
 	}
 
-	/*building.reset(new Building());
-	building->initBuilding();
-	camera->setBuilding(building.get());
-	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
-	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
-	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
-	camera->centerOn(buildingCenter, false);*/
+
+	guiOverlay->setupDialog->setConfirmOnClickListener(new GenerateBuildingListener(this));
+
+	Vector2 controlpos = Vector2(10, 10);
+	unique_ptr<TextLabel> label;
+	label.reset(guiFactory->createTextLabel(controlpos));
+	label->setText(L"Floors: ");
+	controlpos.x += label->getWidth() + 10;
+	guiOverlay->setupDialog->addControl(move(label));
+
+
+	unique_ptr<Spinner> spinner;
+	spinner.reset(guiFactory->createSpinner(controlpos, 100, 12));
+	vector<wstring> test;
+	for (int i = 1; i <= 15; ++i) {
+		wostringstream wss;
+		wss << i;
+		test.push_back(wss.str());
+	}
+	spinner->add(test);
+	spinnerID = guiOverlay->setupDialog->addControl(move(spinner));
 
 
 	return true;
 }
+
+
+void GameManager::generateBuilding() {
+
+	Spinner* spinner = (Spinner*) guiOverlay->setupDialog->getControl(spinnerID);
+
+	wstring numfloorsStr = spinner->getSelected();
+	size_t numfloors = stoi(numfloorsStr);
+	building = make_unique<Building>(numfloors);
+	building->initBuilding();
+
+	camera->setBuilding(building.get());
+	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
+	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
+	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
+	camera->centerOn(buildingCenter, false);
+
+	guiOverlay->setupDialog->close();
+
+}
+
 
 Keyboard::KeyboardStateTracker keyTracker;
 void GameManager::update(double deltaTime, KeyboardController* keys,
@@ -61,6 +96,8 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 
 	if (GameEngine::warningDialog->isOpen) {
 		GameEngine::warningDialog->update(deltaTime);
+	} else if (guiOverlay->setupDialog->isOpen) {
+		guiOverlay->setupDialog->update(deltaTime);
 	} else {
 		Vector2 cameraMove = Vector2::Zero;
 		if (state.A)
@@ -78,7 +115,7 @@ void GameManager::update(double deltaTime, KeyboardController* keys,
 			camera->adjustZoom(mouseWheelDelta / 10);
 
 
-		//building->update(deltaTime);
+		building->update(deltaTime);
 	}
 }
 
@@ -89,7 +126,8 @@ void GameManager::draw(SpriteBatch* batch) {
 	} else
 		currentScreen->draw(batch);*/
 
-	//building->draw(batch);
+	if (building.get() != NULL)
+		building->draw(batch);
 
 }
 
@@ -181,9 +219,3 @@ size_t GameManager::getSelectedDisplayIndex() {
 size_t GameManager::getSelectedDisplayModeIndex() {
 	return gameEngine->getSelectedDisplayModeIndex();
 }
-
-
-
-
-
-

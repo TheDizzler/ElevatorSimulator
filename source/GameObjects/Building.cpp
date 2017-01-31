@@ -2,21 +2,21 @@
 
 #include "../globals.h"
 
-USHORT NUM_FLOORS;
-USHORT BuildingData::PIXELS_PER_METER = 48;
-USHORT BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
-USHORT BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
-USHORT BuildingData::BUILDING_WALL_THICKNESS = 6;
-USHORT BuildingData::BUILDING_HEIGHT;
+size_t NUM_FLOORS;
+size_t BuildingData::PIXELS_PER_METER = 48;
+size_t BuildingData::FLOOR_HEIGHT = 2.5 * PIXELS_PER_METER;
+size_t BuildingData::BUILDING_LENGTH = 10 * PIXELS_PER_METER;
+size_t BuildingData::BUILDING_WALL_THICKNESS = 6;
+size_t BuildingData::BUILDING_HEIGHT;
 Vector2 BuildingData::BUILDING_POSITION = Vector2(10, 10);
 
 
-USHORT BuildingData::SHAFT_WIDTH = 2 * PIXELS_PER_METER;
-USHORT BuildingData::SHAFT_WALL_THICKNESS = 4;
+size_t BuildingData::SHAFT_WIDTH = 2 * PIXELS_PER_METER;
+size_t BuildingData::SHAFT_WALL_THICKNESS = 4;
 
 
 
-BuildingData::BuildingData(USHORT numFloors) {
+BuildingData::BuildingData(size_t numFloors) {
 
 	BUILDING_HEIGHT = FLOOR_HEIGHT * numFloors;
 
@@ -26,7 +26,7 @@ BuildingData::BuildingData(USHORT numFloors) {
 
 
 #include "../Engine/GameEngine.h"
-Building::Building(USHORT numFloors) {
+Building::Building(size_t numFloors) {
 
 	NUM_FLOORS = numFloors;
 	// build building data	
@@ -60,7 +60,7 @@ void Building::initBuilding() {
 
 	for (int floorNum = 1; floorNum <= NUM_FLOORS; ++floorNum) {
 
-		shared_ptr<Floor> floor = make_shared<Floor>(floorNum, floorPos, elevator);
+		shared_ptr<Floor> floor = make_shared<Floor>(this, floorNum, floorPos, elevator);
 		floors.push_back(move(floor));
 
 		floorPos.y -= BuildingData::FLOOR_HEIGHT;
@@ -70,7 +70,7 @@ void Building::initBuilding() {
 
 	//generateRider(1);
 
-	buildingEntrance = make_unique<Exit>(1);
+	buildingEntrance = make_unique<Exit>(this, 1);
 	buildingEntrance->setPosition(floors[0]->position);
 	buildingEntrance->moveBy(Vector2(0, -buildingEntrance->getHeight()));
 	guiOverlay->newRiderButton->setOnClickListener(getNewRiderButton(buildingEntrance.get()));

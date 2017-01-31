@@ -2,6 +2,7 @@
 #pragma once
 
 class Rider;
+class Building;
 
 class Counter {
 public:
@@ -25,7 +26,7 @@ private:
 
 class Exit {
 public:
-	Exit(USHORT floorNumber);
+	Exit(Building* building, size_t floorNumber);
 	~Exit();
 
 	void setPosition(const Vector2& position);
@@ -40,7 +41,7 @@ public:
 	void update(double deltaTime);
 	void draw(SpriteBatch* batch);
 
-	USHORT floorNumber;
+	size_t floorNumber;
 
 	void riderArrived(Rider* rider);
 
@@ -50,6 +51,6 @@ private:
 
 	vector<unique_ptr<Counter>> counters;
 
-	UINT numRidersExited = 0;
-	UINT numRuidersGenerated = 0;
+	size_t numRidersExited = 0;
+	size_t numRuidersGenerated = 0;
 };

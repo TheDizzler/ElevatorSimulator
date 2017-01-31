@@ -13,6 +13,7 @@ An experiment in elevator management and test of my GUI toolkit.
 >- fixed a bug where height was getting value of width in ImageButton constructor
 >- added a layer depth control to GUIControls and Sprites; set GUIControl default to 1.0f and Sprite to 0.0f
 >- added spinner control
+>- fixed issue where dialog button area not re-sizing properly when pre-made button added
 
 
 ## Need to do

@@ -50,13 +50,27 @@ GUIOverlay::GUIOverlay() {
 		Vector2(0, Globals::WINDOW_HEIGHT / 2),
 		Vector2(10, 59), L"Create\nNew Rider"));
 
-	/*imageButton.reset((ImageButton*)guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
-	imageButton->setPosition(Vector2(100, 100));*/
 
 	testLabel.reset(guiFactory->createTextLabel(Vector2(100, 150)));
 	mousePosLabel.reset(guiFactory->createTextLabel(Vector2(25, 25)));
 
-	spinner.reset(guiFactory->createSpinner(Vector2(10, 50), 50, 32));
+
+	setupDialog.reset(guiFactory->createDialog());
+	dialogSize = Vector2(Globals::WINDOW_WIDTH / 2, Globals::WINDOW_HEIGHT / 2);
+	dialogPos = dialogSize;
+	dialogPos.x -= dialogSize.x / 2;
+	dialogPos.y -= dialogSize.y / 2;
+	setupDialog->setDimensions(dialogPos, dialogSize, 2);
+	setupDialog->setTint(Color(0, 120, 207));
+	unique_ptr<Button> confirmButton;
+	confirmButton.reset(guiFactory->createButton());
+	confirmButton->setText(L"Create Building");
+	setupDialog->setConfirmButton(move(confirmButton));
+
+	setupDialog->setTitle(L"Building Setup");
+	setupDialog->open();
+
+	
 }
 
 
@@ -76,7 +90,7 @@ void GUIOverlay::update(double deltaTime) {
 	newRiderButton->update(deltaTime);
 	testLabel->update(deltaTime);
 	//mousePosLabel->update(deltaTime);
-	spinner->update(deltaTime);
+	//spinner->update(deltaTime);
 }
 
 void GUIOverlay::draw(SpriteBatch* batch) {
@@ -89,7 +103,7 @@ void GUIOverlay::draw(SpriteBatch* batch) {
 	newRiderButton->draw(batch);
 	testLabel->draw(batch);
 	mousePosLabel->draw(batch);
-	spinner->draw(batch);
+	setupDialog->draw(batch);
 }
 
 void GUIOverlay::updateFloorDisplay(wstring floorNumber) {

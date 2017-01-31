@@ -2,7 +2,7 @@
 
 #include "../Engine/GameEngine.h"
 #include "Building.h"
-Exit::Exit(USHORT floorNum) {
+Exit::Exit(Building* building, size_t floorNum) {
 
 	floorNumber = floorNum;
 	door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));

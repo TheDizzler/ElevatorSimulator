@@ -312,37 +312,19 @@ ImageButton::~ImageButton() {
 }
 
 
-//void ImageButton::update(double deltaTime) {
-//	if (hitArea->contains(mouse->getPosition())) {
-//		isHover = true;
-//		if (!isPressed) {
-//			onHover();
-//			setToHoverState();
-//		}
-//	} else
-//		isHover = false;
-//
-//	if (isPressed && !mouse->leftButton()) {
-//		isClicked = true;
-//		onClick();
-//		setToUnpressedState();
-//	} else {
-//		isClicked = false;
-//		if (!isHover) {
-//			isPressed = false;
-//			setToUnpressedState();
-//		} else if (mouse->pressed()) {
-//			isPressed = true;
-//			setToSelectedState();
-//		}
-//	}
-//}
-
 void ImageButton::draw(SpriteBatch* batch) {
 
 	batch->Draw(texture, normalSprite->getPosition(), &normalSprite->getRect(),
 		tint, rotation, normalSprite->getOrigin(), scale, SpriteEffects_None, layerDepth);
 	buttonLabel->draw(batch);
+}
+
+void ImageButton::setDimensions(const Vector2& pos, const Vector2& size) {
+
+	setScale(Vector2(size.x / getWidth(), size.y / getHeight()));
+	Vector2 newpos = pos;
+	//newpos.x += hitArea->
+	setPosition(newpos);
 }
 
 void ImageButton::setText(wstring text) {

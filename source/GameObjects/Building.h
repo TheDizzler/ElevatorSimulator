@@ -13,27 +13,27 @@ class NewRiderButtonListener;
 /**At default zoom 1 meter will be assumed to be 48 pixels. */
 struct BuildingData {
 
-	BuildingData(USHORT numFloors);
+	BuildingData(size_t numFloors);
 
 	static Vector2 BUILDING_POSITION;
 
-	static USHORT BUILDING_HEIGHT;
+	static size_t BUILDING_HEIGHT;
 
-	static USHORT BUILDING_WALL_THICKNESS;
-	static USHORT FLOOR_HEIGHT;
-	static USHORT BUILDING_LENGTH;
+	static size_t BUILDING_WALL_THICKNESS;
+	static size_t FLOOR_HEIGHT;
+	static size_t BUILDING_LENGTH;
 
-	static USHORT SHAFT_WIDTH;
-	static USHORT SHAFT_WALL_THICKNESS;
+	static size_t SHAFT_WIDTH;
+	static size_t SHAFT_WALL_THICKNESS;
 
-	static USHORT PIXELS_PER_METER;
+	static size_t PIXELS_PER_METER;
 
 };
 
 /** A Simulate Building populated with elevators and riders. */
 class Building {
 public:
-	Building(USHORT numFloors);
+	Building(size_t numFloors);
 	~Building();
 
 	void initBuilding();
@@ -60,21 +60,14 @@ private:
 
 class NewRiderButtonListener : public Button::OnClickListener {
 public:
-	/*NewRiderButtonListener(Building* build, USHORT floorNum) : building(build), floorNumber(floorNum) {
-	}*/
 	NewRiderButtonListener(Building* build, Exit* xt) : building(build), exit(xt) {
-
 	}
 
-
 	virtual void onClick(Button* button) override {
-		//building->generateRider(floorNumber);
 		building->generateRider(exit);
 	}
 
-
 private:
-	//USHORT floorNumber;
 	Building* building;
 	Exit* exit;
 };

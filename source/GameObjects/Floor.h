@@ -7,7 +7,7 @@
 
 class Floor {
 public:
-	Floor(USHORT floorNum, Vector2 floorPosition, shared_ptr<Elevator> elevator);
+	Floor(Building* building, size_t floorNum, Vector2 floorPosition, shared_ptr<Elevator> elevator);
 	~Floor();
 
 	shared_ptr<Exit> getExit();
@@ -19,7 +19,7 @@ public:
 
 	Vector2 position;
 
-	USHORT floorNumber;
+	size_t floorNumber;
 
 	bool doorsOpen();
 

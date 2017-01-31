@@ -6,7 +6,7 @@
 #include "../GameObjects/Building.h"
 
 
-extern unique_ptr<Building> building;
+//extern unique_ptr<Building> building;
 
 class GameEngine;
 
@@ -20,6 +20,7 @@ public:
 
 	bool initializeGame(HWND hwnd, ComPtr<ID3D11Device> device, shared_ptr<MouseController> mouse);
 
+	void generateBuilding();
 
 	void update(double deltaTime, KeyboardController* keys, MouseController* mouse);
 	void draw(SpriteBatch* batch);
@@ -46,23 +47,36 @@ public:
 	size_t getSelectedDisplayIndex();
 	size_t getSelectedDisplayModeIndex();
 
-	
 private:
 
 	Screen* currentScreen = 0;
 	Screen* switchTo = NULL;
 	Screen* lastScreen = 0;
 
-	
+
 
 	GameEngine* gameEngine;
 	shared_ptr<MouseController> mouse;
 	ComPtr<ID3D11Device> device;
 
-
-	/*unique_ptr<Building> building;*/
+	size_t spinnerID;
+	unique_ptr<Building> building;
 
 	//shared_ptr<Camera> camera;
 
-	
+
+};
+
+
+class GenerateBuildingListener : public Button::OnClickListener {
+public:
+	GenerateBuildingListener(GameManager* gm) : game(gm) {
+	}
+	virtual void onClick(Button* button) override {
+		game->generateBuilding();
+	}
+
+private:
+	GameManager* game;
+
 };

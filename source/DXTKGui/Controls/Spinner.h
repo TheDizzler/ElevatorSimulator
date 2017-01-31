@@ -10,19 +10,23 @@ public:
 	Spinner(const Vector2& pos, const size_t len, const size_t itemHeight);
 	~Spinner();
 
+	/* Note, if itemHeight is smaller than the font height and/or the button heights (combined)
+		this controller will grow to fit everything. */
 	void initialize(const pugi::char_t* fontName, GraphicsAsset* pixelAsset,
 		const pugi::char_t* upButtonName, const pugi::char_t* downButtonName);
 
 	virtual void update(double deltaTime) override;
 	virtual void draw(SpriteBatch * batch) override;
 
-	
+
 	void add(const vector<wstring> items);
 	const wstring getSelected() const;
 
 	void increase();
 	void decrease();
 
+	/** Not yet implemented. */
+	virtual void setScale(const Vector2& scale) override;
 	virtual void setFont(const pugi::char_t * font = "Default Font") override;
 	/** Not used in Spinner. */
 	virtual void setText(wstring text) override;

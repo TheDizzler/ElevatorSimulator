@@ -3,16 +3,13 @@
 
 #include "../Engine/GameEngine.h"
 #include "Building.h"
-Elevator::Elevator(const Vector2& top, unsigned short numFloors) {
+Elevator::Elevator(const Vector2& top, size_t numFloors) {
 
 	shaftTop = top;
 
 	Vector2 shaftDimensions = Vector2(BuildingData::SHAFT_WIDTH, BuildingData::FLOOR_HEIGHT*numFloors);
 	shaft.reset(guiFactory->createRectangleFrame(
 		shaftTop, shaftDimensions, BuildingData::SHAFT_WALL_THICKNESS, Color(.5, 0, .5, 1)));
-
-
-
 }
 
 Elevator::~Elevator() {
@@ -255,7 +252,7 @@ void Elevator::draw(SpriteBatch* batch) {
 //}
 
 
-void Elevator::callElevatorTo(USHORT newFloorNumberToQueue, bool riderGoingUp) {
+void Elevator::callElevatorTo(size_t newFloorNumberToQueue, bool riderGoingUp) {
 
 	shared_ptr<Stop> newStop = make_shared<Stop>(floors[newFloorNumberToQueue - 1], riderGoingUp, false, true);
 
@@ -403,7 +400,7 @@ shared_ptr<Floor> Elevator::getCurrentFloor() {
 }
 
 
-void Elevator::selectFloor(USHORT floorRequested, bool riderGoingUp) {
+void Elevator::selectFloor(size_t floorRequested, bool riderGoingUp) {
 
 	for (list<shared_ptr<Stop>>::iterator it = stopQueue.begin(); it != stopQueue.end(); ++it) {
 		if ((*it)->floor->floorNumber == floorRequested)

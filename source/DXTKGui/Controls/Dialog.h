@@ -54,10 +54,13 @@ public:
 	virtual void update(double deltaTime);
 	virtual void draw(SpriteBatch* batch);
 
+	/* Add other GUIControls to dialog. Control position should be relative to Dialog.
+		Returns the position of control in control list. */
+	virtual size_t addControl(unique_ptr<GUIControl> control) override;
 	/* Add other GUIControls to dialog. Not Implemented Yet. */
-	virtual void addItem(unique_ptr<GUIControl> control) override;
-	/* Add other GUIControls to dialog. Not Implemented Yet. */
-	virtual void addItems(vector<unique_ptr<GUIControl>> controls) override;
+	virtual void addControls(vector<unique_ptr<GUIControl>> controls) override;
+
+	virtual GUIControl* getControl(size_t controlPosition) const override;
 
 	virtual void setFont(const pugi::char_t* font = "Default Font") override;
 	void setTextTint(const XMFLOAT4 color);
@@ -119,8 +122,6 @@ private:
 	//bool textFormated = false;
 
 	void calculateTitlePos();
-	// TODO:
-	//		If text to long, add scrollbar.
 	void calculateDialogTextPos();
 	bool calculateButtonPosition(Vector2& buttonPos);
 	int getMaxButtonHeight();
