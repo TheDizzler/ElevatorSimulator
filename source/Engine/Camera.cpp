@@ -8,6 +8,12 @@ Camera::Camera(int vwprtWdth, int vwprtHght) {
 	viewportHeight = vwprtHght;
 	viewportCenter = Vector3(viewportWidth * .5, viewportHeight * .5, 0);
 
+	buildingWidth = 100;
+	buildingHeight = 50;
+
+	viewX = (viewportWidth) / zoom / 2;
+	viewY = (viewportHeight) / zoom / 2;
+
 	position = Vector2::Zero;
 }
 
@@ -18,6 +24,12 @@ Camera::Camera(const Vector2& viewport) {
 	viewportWidth = viewport.x;
 	viewportHeight = viewport.y;
 	viewportCenter = Vector3(viewportWidth * .5, viewportHeight * .5, 0);
+
+	buildingWidth = 100;
+	buildingHeight = 50;
+
+	viewX = (viewportWidth) / zoom / 2;
+	viewY = (viewportHeight) / zoom / 2;
 
 	position = Vector2::Zero;
 }

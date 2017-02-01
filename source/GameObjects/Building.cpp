@@ -20,8 +20,9 @@ BuildingData::BuildingData(size_t numFloors) {
 
 	BUILDING_HEIGHT = FLOOR_HEIGHT * numFloors;
 
-	BUILDING_POSITION = Vector2((Globals::WINDOW_WIDTH - BUILDING_LENGTH) / 2,
-		(Globals::WINDOW_HEIGHT - BUILDING_HEIGHT) / 2);
+	float x = ((float) Globals::WINDOW_WIDTH - BUILDING_LENGTH) / 2;
+	float y = ((float) Globals::WINDOW_HEIGHT - BUILDING_HEIGHT) / 2;
+	BUILDING_POSITION = Vector2(x, y);
 }
 
 
@@ -67,8 +68,6 @@ void Building::initBuilding() {
 	}
 
 	elevator->setFloors(floors);
-
-	//generateRider(1);
 
 	buildingEntrance = make_unique<Exit>(this, 1);
 	buildingEntrance->setPosition(floors[0]->position);

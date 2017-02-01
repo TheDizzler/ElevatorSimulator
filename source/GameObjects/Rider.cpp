@@ -6,6 +6,8 @@ Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> startFloor,
 	sprite.reset(new Sprite());
 	sprite->load(gfxAsset);
 
+
+
 	//setFloor(floor);
 	currentFloor = startFloor;
 	Vector2 pos = startExit->getPosition();
@@ -15,6 +17,17 @@ Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> startFloor,
 	finalDestination = destinationExit;
 	setWaypoint();
 
+
+	thoughtBubble = make_unique<RiderBubble>();
+	pos.x += sprite->getWidth();
+	pos.y -= (sprite->getHeight() - thoughtBubble->getHeight() / 2);
+	thoughtBubble->setPosition(pos);
+
+	wostringstream goingTo;
+	goingTo << destinationExit->floorNumber;
+	thoughtBubble->setThought(goingTo.str());
+
+	sprite->setAlpha(0);
 }
 
 Rider::~Rider() {
@@ -66,14 +79,14 @@ void Rider::setWaypoint() {
 
 void Rider::moveBy(const Vector2& moveAmount) {
 	sprite->moveBy(moveAmount);
+	thoughtBubble->moveBy(moveAmount);
 }
 
 #include "../Engine/GameEngine.h"
 void Rider::update(double deltaTime) {
 
-	/*wostringstream wss;
-	wss << "x: " << sprite->getPosition().x << " , y: " << sprite->getPosition().y;
-	guiOverlay->testLabel->setText(wss);*/
+
+	thoughtBubble->update(deltaTime);
 
 	switch (riderState) {
 		case GoingToElevator:
@@ -92,15 +105,15 @@ void Rider::update(double deltaTime) {
 						currentFloor->pushDownButton(this);
 				}
 			} else {
-				sprite->moveBy(direction*moveSpeed*deltaTime);
+				moveBy(direction*moveSpeed*deltaTime);
 			}
 			break;
 		}
 		case EnteringElevator:
 		{
 
+			moveBy(direction*moveSpeed*deltaTime);
 
-			sprite->moveBy(direction*moveSpeed*deltaTime);
 			if ((sprite->getPosition().x - waypoint.x) * direction.x >= 10) {
 				// gone too far
 				riderState = RiderState::InElevator;
@@ -112,7 +125,7 @@ void Rider::update(double deltaTime) {
 		}
 		case GoingToDestination:
 		{
-			sprite->moveBy(direction*moveSpeed*deltaTime);
+			moveBy(direction*moveSpeed*deltaTime);
 			if (sprite->getHitArea()->collision(finalDestination->getHitArea())) {
 
 				finalDestination->riderArrived(this);
@@ -126,6 +139,7 @@ void Rider::update(double deltaTime) {
 
 void Rider::draw(SpriteBatch* batch) {
 	sprite->draw(batch);
+	thoughtBubble->draw(batch);
 }
 
 

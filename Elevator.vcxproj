@@ -181,6 +181,7 @@
     <ClCompile Include="source\GameObjects\Exit.cpp" />
     <ClCompile Include="source\GameObjects\Floor.cpp" />
     <ClCompile Include="source\GameObjects\Rider.cpp" />
+    <ClCompile Include="source\GameObjects\Rider Bubble.cpp" />
     <ClCompile Include="source\Managers\GameManager.cpp" />
     <ClCompile Include="source\Managers\GFXAssetManager.cpp" />
     <ClCompile Include="source\Managers\GUIOverlay.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="source\GameObjects\Exit.h" />
     <ClInclude Include="source\GameObjects\Floor.h" />
     <ClInclude Include="source\GameObjects\Rider.h" />
+    <ClInclude Include="source\GameObjects\Rider Bubble.h" />
     <ClInclude Include="source\globals.h" />
     <ClInclude Include="source\Managers\GameManager.h" />
     <ClInclude Include="source\Managers\GFXAssetManager.h" />

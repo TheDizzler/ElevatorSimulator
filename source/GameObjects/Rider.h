@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Floor.h"
+#include "Rider Bubble.h"
 
 /* A simulant designed for riding elevators. It's only function is to use an elevator to get
 	to a mysterious room in a building. Or to exit the building never to be seen again... */
@@ -47,7 +48,8 @@ private:
 
 	float moveSpeed = 100;
 
-	//void setFloor(shared_ptr<Floor> floor);
 	void setWaypoint();
+
+	unique_ptr<RiderBubble> thoughtBubble;
 
 };

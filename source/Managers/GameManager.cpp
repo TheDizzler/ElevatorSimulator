@@ -65,7 +65,7 @@ void GameManager::generateBuilding() {
 	Vector2 buildingCenter = BuildingData::BUILDING_POSITION;
 	buildingCenter.x += BuildingData::BUILDING_LENGTH / 2;
 	buildingCenter.y += BuildingData::BUILDING_HEIGHT / 2;
-	camera->centerOn(buildingCenter, false);
+	camera->centerOn(buildingCenter, true);
 
 	guiOverlay->setupDialog->close();
 

@@ -16,7 +16,7 @@ public:
 
 
 	Viewport* viewport;
-	Vector2 position;
+	
 
 	float rotation = 0.0f;
 
@@ -40,8 +40,12 @@ public:
 	Matrix translationMatrix();
 	Vector2& worldToScreen(Vector2 worldPosition);
 private:
+
+	Vector2 position;
+
 	float zoom;
-	float buildingWidth, buildingHeight;
+	float buildingWidth;
+	float buildingHeight;
 
 	float viewX = (viewportWidth / zoom / 2);
 	float viewY = (viewportHeight / zoom / 2);

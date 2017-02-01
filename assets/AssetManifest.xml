@@ -4,7 +4,11 @@
 
 	<gfx dir="gfx/">
 
-		<sprite name="Rider" file="Rider.dds" />
+		<spritesheet name="Rider Sheet" file="Rider Sheet.dds">
+			<sprite name="Rider" x="1" y="1" width="30" height="63"/>
+			<sprite name="Thought Bubble" x="33" y="1" width="40" height="40" />
+		</spritesheet>
+
 
 		<spritesheet name="Elevator Objects" file="Elevator Sheet.dds">
 			<sprite name="Call Buttons Off/Off" set="Call Buttons" x="2" y="2" width="22" height="32" />
