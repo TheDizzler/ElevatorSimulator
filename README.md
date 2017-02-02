@@ -3,8 +3,9 @@ An experiment in elevator management and test of my GUI toolkit.
 
 ##Updates made to DXTKGui that have not been pushed to DXTKGui project
 >- changed how mouse gets used by gui controls
->- added an addCamera function to gui controls so controls can exist in world space as well as
 screen space (have to reconsider how this is implemented for reusability in other projects)
+>- ~~added an addCamera function to gui controls so controls can exist in world space as well as screen space~~
+Changed to setMatrixFunction() to allow user to use (or not use) their own camera class
 >- dialog title and text positions now moving properly after a drag event
 >- dialog properly updates when text changes to blank text
 >- createLine in PrimitiveShapes.h updated and usuable

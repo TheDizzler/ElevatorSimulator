@@ -17,7 +17,6 @@ Button::Button(GraphicsAsset* pixelAsset,
 	if (pixelAsset != NULL)
 		setToUnpressedState();	// this always calls Button::setToUnpressedState
 								// even if it is an ImageButton
-
 }
 
 
@@ -49,7 +48,7 @@ void Button::setDimensions(const Vector2& pos, const Vector2& size,
 	}
 
 	hitArea->size = newSize;
-
+	projectedHitArea->size = newSize;
 	width = newSize.x;
 	height = newSize.y;
 
@@ -57,11 +56,11 @@ void Button::setDimensions(const Vector2& pos, const Vector2& size,
 
 }
 
-#include "../../Engine/Camera.h"
+
 void Button::update(double deltaTime) {
 
 
-	if (camera.get() == NULL) {
+	/*if (camera.get() == NULL) {
 		if (hitArea->contains(mouse->getPosition())) {
 			isHover = true;
 			if (!isPressed) {
@@ -85,33 +84,35 @@ void Button::update(double deltaTime) {
 				setToSelectedState();
 			}
 		}
-	} else {
-		unique_ptr<HitArea> projectedHit;
-		projectedHit = move(getScreenHitArea(camera->translationMatrix()));
-		if (projectedHit->contains(mouse->getPosition())) {
-			isHover = true;
-			if (!isPressed) {
-				onHover();
-				setToHoverState();
-			}
-		} else
-			isHover = false;
+	} else {*/
 
-		if (isPressed && !mouse->leftButton()) {
-			isClicked = true;
-			onClick();
+		/*unique_ptr<HitArea> projectedHit;
+		projectedHit = move(getScreenHitArea(viewProjectionMatrix));*/
+	updateProjectedHitArea();
+	if (projectedHitArea->contains(mouse->getPosition())) {
+		isHover = true;
+		if (!isPressed) {
+			onHover();
+			setToHoverState();
+		}
+	} else
+		isHover = false;
+
+	if (isPressed && !mouse->leftButton()) {
+		isClicked = true;
+		onClick();
+		setToUnpressedState();
+	} else {
+		isClicked = false;
+		if (!isHover) {
+			isPressed = false;
 			setToUnpressedState();
-		} else {
-			isClicked = false;
-			if (!isHover) {
-				isPressed = false;
-				setToUnpressedState();
-			} else if (mouse->pressed()) {
-				isPressed = true;
-				setToSelectedState();
-			}
+		} else if (mouse->pressed()) {
+			isPressed = true;
+			setToSelectedState();
 		}
 	}
+//}
 }
 
 void Button::draw(SpriteBatch* batch) {

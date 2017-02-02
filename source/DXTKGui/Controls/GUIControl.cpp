@@ -12,12 +12,8 @@ void GUIControl::setPosition(const Vector2& pos) {
 	hitArea->size = Vector2(getWidth()*scale.x, getHeight()*scale.y);
 }
 
-#include "../../Engine/Camera.h"
-void GUIControl::addCamera(shared_ptr<Camera> cam) {
-	camera = cam;
-}
 
-const wchar_t * GUIControl::getText() {
+const wchar_t* GUIControl::getText() {
 	return L"";
 }
 
@@ -62,6 +58,14 @@ const HitArea* GUIControl::getHitArea() const {
 	return hitArea.get();
 }
 
+
+void GUIControl::updateProjectedHitArea() {
+
+	Vector2 screenCords = getScreenPosition(translationMatrix());
+	projectedHitArea->position = screenCords;
+	projectedHitArea->size = hitArea->size;
+}
+
 const Vector2& GUIControl::getScreenPosition(Matrix viewProjectionMatrix) const {
 
 	Vector2 screenCords = XMVector2Transform(position, viewProjectionMatrix);
@@ -76,6 +80,7 @@ unique_ptr<HitArea> GUIControl::getScreenHitArea(Matrix viewProjectionMatrix) co
 	projectedHitArea.reset(new HitArea(screenCords, hitArea->size*scale));
 	return projectedHitArea;
 }
+
 
 GraphicsAsset* GUIControl::createTexture() {
 	return guiFactory->createTextureFromIElement2D(this);

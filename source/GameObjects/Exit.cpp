@@ -7,7 +7,7 @@ Exit::Exit(Building* building, size_t floorNum) {
 	floorNumber = floorNum;
 	door.reset((ImageButton*) guiFactory->createImageButton(move(gfxAssets->getSpriteFromAsset("Office Door"))));
 	door->setOnClickListener(building->getNewRiderButton(this));
-	door->addCamera(camera);
+	door->setMatrixFunction([&]() -> Matrix { return camera->translationMatrix(); });
 
 }
 

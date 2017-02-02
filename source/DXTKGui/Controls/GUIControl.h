@@ -6,7 +6,6 @@
 #include "../BaseGraphics/GraphicsAsset.h"
 #include "../Controllers/MouseController.h"
 
-class Camera;
 interface GUIControl : public IElement2D {
 public:
 
@@ -14,15 +13,17 @@ public:
 		shared_ptr<MouseController> mouseController) {
 		guiFactory = factory;
 		mouse = mouseController;
-	}
+		projectedHitArea.reset(new HitArea(Vector2::Zero, Vector2::Zero));
 
-	void addCamera(shared_ptr<Camera> camera);
+		translationMatrix = [&]() -> Matrix { return Matrix::Identity; };
+	}
 
 	/* Deprecating */
 	enum ClickAction {
 		EXIT, PLAY, SETTINGS, CANCEL, OK, UP, DOWN, NONE, CONFIRM,
 		NEUTRAL, SELECTION_CHANGED
 	};
+	
 
 	virtual void update(double deltaTime) = 0;
 
@@ -54,6 +55,13 @@ public:
 	
 	const HitArea* getHitArea() const;
 
+
+	void setMatrixFunction(function<Matrix ()> translationMat ) {
+		translationMatrix = translationMat;
+	}
+
+	virtual void updateProjectedHitArea();
+
 	virtual const Vector2& getScreenPosition(Matrix viewProjectionMatrix) const;
 	virtual unique_ptr<HitArea> getScreenHitArea(Matrix viewProjectionMatrix) const;
 
@@ -71,7 +79,11 @@ public:
 
 
 protected:
+	function<Matrix ()> translationMatrix;
 	unique_ptr<HitArea> hitArea;
+
+	unique_ptr<HitArea> projectedHitArea;
+
 	Vector2 position = Vector2::Zero;
 	Vector2 scale = Vector2(1, 1);
 
@@ -90,8 +102,6 @@ protected:
 
 	GUIFactory* guiFactory;
 	shared_ptr<MouseController> mouse;
-
-	shared_ptr<Camera> camera;
 
 };
 

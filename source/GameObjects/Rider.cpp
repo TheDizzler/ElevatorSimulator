@@ -27,7 +27,7 @@ Rider::Rider(GraphicsAsset* gfxAsset, shared_ptr<Floor> startFloor,
 	goingTo << destinationExit->floorNumber;
 	thoughtBubble->setThought(goingTo.str());
 
-	sprite->setAlpha(0);
+	//sprite->setAlpha(0);
 }
 
 Rider::~Rider() {
